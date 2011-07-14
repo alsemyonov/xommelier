@@ -4,6 +4,8 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
+  gem 'rb-inotify'
+  gem 'libnotify'
   gem 'rspec'
   gem 'guard'
   gem 'guard-rspec'
