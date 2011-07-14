@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Xommelier::VERSION
   s.authors     = ["Alexander Semyonov"]
   s.email       = ["al@semyonov.us"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.homepage    = "http://github.com/alsemyonov/xommelier"
+  s.summary     = %q{XML-Object Mapper}
+  s.description = %q{XML-Object Mapper with many built-in XML formats supported}
 
   s.rubyforge_project = "xommelier"
 
@@ -17,4 +17,6 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
+
+  s.add_dependency 'nokogiri', '~> 1.5.0'
 end
