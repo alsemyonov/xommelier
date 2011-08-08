@@ -1,4 +1,4 @@
-root = $:<< File.expand_path('../..', __FILE__)
+root = File.expand_path('../..', __FILE__)
 $:<< File.join(root, 'lib')
 require 'rspec'
 

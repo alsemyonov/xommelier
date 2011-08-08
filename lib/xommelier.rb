@@ -1,5 +1,8 @@
 require 'xommelier/version'
+require 'xommelier/core_ext'
 
 module Xommelier
-  # Your code goes here...
+  autoload :Collection, 'xommelier/collection'
+  autoload :Xml,  'xommelier/xml'
+  autoload :Atom, 'xommelier/atom'
 end
