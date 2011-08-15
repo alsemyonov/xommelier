@@ -14,6 +14,5 @@ module Xommelier
 
     autoload :Namespace,  'xommelier/xml/namespace'
     autoload :Element,    'xommelier/xml/element'
-    autoload :Attribute,  'xommelier/xml/attribute'
   end
 end
