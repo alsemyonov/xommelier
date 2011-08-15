@@ -5,12 +5,12 @@ module Xommelier
     class Element
       module DSL
         def element(name, options = {})
-          self.elements[name] = options
+          self.elements[name] = DEFAULT_OPTIONS.merge(options)
           define_element_accessors(name)
         end
 
         def attribute(name, options = {})
-          self.attributes[name] = options
+          self.attributes[name] = DEFAULT_OPTIONS.merge(options)
           define_attribute_accessors(name)
         end
 

@@ -6,7 +6,11 @@ module NamespacedModule
   class EmptyRoot < Xommelier::Xml::Element
   end
 
-  class Root < Xommelier::Xml::Element
+  class RootWithSimpleSubelement < Xommelier::Xml::Element
     element :some
+  end
+
+  class RootWithAttribute < Xommelier::Xml::Element
+    attribute :another
   end
 end

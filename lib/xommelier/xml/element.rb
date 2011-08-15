@@ -7,6 +7,10 @@ require 'active_support/core_ext/class/attribute'
 
 module Xommelier
   module Xml
+    DEFAULT_OPTIONS = {
+      type: String
+    }
+
     class Element
       extend Xommelier::Xml::Element::DSL
 
@@ -49,7 +53,7 @@ module Xommelier
       end
 
       def initialize(contents = {}, options = {})
-        @options = DEFAULT_ELEMENT_OPTIONS.merge(options)
+        @options = DEFAULT_OPTIONS.merge(options)
 
         @elements = {}
         @attributes = {}
@@ -69,6 +73,10 @@ module Xommelier
         self.class.elements[name]
       end
 
+      def attribute(name)
+        self.class.attributes[name]
+      end
+
       def element_name
         self.class.element_name
       end
@@ -80,15 +88,22 @@ module Xommelier
       def to_xml(builder_options = {})
         if builder_options[:builder] # Non-root element
           builder = builder_options.delete(:builder)
-          attributes = {}
+          attribute_values = {}
         else # Root element
           builder = Nokogiri::XML::Builder.new(builder_options)
-          attributes = {xmlns: xmlns.to_s}
+          attribute_values = {xmlns: xmlns.to_s}
         end
-        builder.send(element_name, attributes) do |xml|
+        attributes.each do |name, value|
+          attribute = self.attribute(name)
+          unless value.is_a?(attribute[:type])
+            value = attribute[:type].new(value)
+          end
+          attribute_values[name] = value.to_xommelier
+        end
+        builder.send(element_name, attribute_values) do |xml|
           elements.each do |name, value|
             element = self.element(name)
-            case element
+            case element[:type]
             when Xommelier::Xml::Element
               element.to_xml(builder: xml)
             else
@@ -101,9 +116,5 @@ module Xommelier
         builder.to_xml
       end
     end
-
-    DEFAULT_ELEMENT_OPTIONS = {
-      type: String
-    }
   end
 end

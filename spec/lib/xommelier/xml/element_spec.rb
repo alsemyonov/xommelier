@@ -15,7 +15,7 @@ describe Xommelier::Xml::Element do
   end
 
   describe 'DSL' do
-    subject { NamespacedModule::Root }
+    subject { NamespacedModule::RootWithSimpleSubelement }
 
     it { should respond_to(:element) }
     it 'defines subelement' do
@@ -33,12 +33,20 @@ describe Xommelier::Xml::Element do
     it { should respond_to(:to_xml) }
     it { subject.to_xml.should == %(<?xml version="1.0"?>\n<empty-root xmlns="http://example.org/"/>\n) }
 
-    describe 'with subelements' do
-      subject { NamespacedModule::Root.new(some: 'Text') }
+    describe 'with simple subelements' do
+      subject { NamespacedModule::RootWithSimpleSubelement.new(some: 'Text') }
 
       it { should respond_to(:some) }
       it { subject.some.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root xmlns="http://example.org/">\n  <some>Text</some>\n</root>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-simple-subelement xmlns="http://example.org/">\n  <some>Text</some>\n</root-with-simple-subelement>\n) }
+    end
+
+    describe 'with attribute' do
+      subject { NamespacedModule::RootWithAttribute.new(another: 'Difference') }
+
+      it { should respond_to(:another) }
+      it { subject.another.should == 'Difference' }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n) }
     end
   end
 end
