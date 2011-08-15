@@ -17,7 +17,6 @@ module Xommelier
         @uri        = uri
         @options    = {}
         @elements   = Xommelier::Collection.new(Xommelier::Xml::Element)
-        @attributes = Xommelier::Collection.new(Xommelier::Xml::Attribute)
         @as         = options.delete(:as)
 
         Xommelier::Xml::Namespace.registry[as] = self
