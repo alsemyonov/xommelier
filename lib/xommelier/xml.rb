@@ -6,8 +6,6 @@ module Xommelier
   module Xml
     extend ActiveSupport::Concern
 
-    Infinity = 1.0 / 0
-
     included do
       instance_variable_set :@_xmlns, nil
     end
