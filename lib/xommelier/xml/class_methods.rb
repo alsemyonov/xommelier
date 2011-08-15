@@ -8,31 +8,11 @@ module Xommelier
       end
 
       # Defines namespace used in formats
-      def namespace(uri, options = {}, &block)
-        Xommelier::Xml::Namespace.new(uri, options, &block)
-      end
-
-      def element(name, options = {})
-        options = {count: must, root: false}.merge(options)
-        elements[name] = options
-        yield
-      end
-
-      def attribute(name, options = {})
-        options = {count: must, type: String}.merge(options)
-        attributes[name] = options
-      end
-
-      def any
-        0..Infinity
-      end
-
-      def may
-        0..1
-      end
-
-      def must
-        1..1
+      def xmlns(uri = nil, options = {}, &block)
+        if uri
+          instance_variable_set :@_xmlns, Xommelier::Xml::Namespace.new(uri, options, &block)
+        end
+        instance_variable_get :@_xmlns
       end
     end
   end

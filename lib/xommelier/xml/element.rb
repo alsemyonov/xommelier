@@ -1,106 +1,109 @@
 require 'xommelier/xml'
-require 'active_support/core_ext/object/with_options'
+require 'xommelier/xml/element/dsl'
+require 'nokogiri'
+require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/extract_options'
+require 'active_support/core_ext/class/attribute'
 
 module Xommelier
   module Xml
-    Infinity = 1.0 / 0
-
     class Element
-      attr_reader :name, :namespace, :elements, :attributes, :options, :as
+      extend Xommelier::Xml::Element::DSL
 
-      def initialize(name, options = {}, &block)
-        @name           = name
-        @elements       = []
-        @attributes     = []
-        @options        = {}
-        @scope_options  = {}
-        self.options    = {count: 1..1, root: false, type: nil, as: @name}.merge(options)
-        scoped(&block) if block_given?
-      end
+      class_attribute :elements, :attributes
+      self.elements = {}
+      self.attributes = {}
 
-      def ns
-        Xommelier::Xml::Namespace.registry
-      end
-
-      def namespace=(namespace)
-        @namespace = namespace
-        @namespace.elements[name] = self
-      end
-
-      def options=(options)
-        self.namespace  = options.delete(:ns) if options.key?(:ns)
-        @type           = options.delete(:type) if options.key?(:type)
-        @as             = options.delete(:as) if options.key?(:as)
-        @options.merge!(options)
-      end
-
-      def scoped(&block)
-        instance_exec(&block)
-      end
-
-      def element(*names, &block)
-        @namespace.with_options @scope_options do |scope|
-          scope.element(*names, &block).tap do |elements|
-            @elements += elements
+      class << self
+        def xmlns(value = nil)
+          if value
+            @xmlns = case ns
+                     when Module
+                       ns.xmlns
+                     else
+                       ns
+                     end
           end
+          @xmlns ||= find_namespace
+        end
+        alias xmlns= xmlns
+
+        def element_name(element_name = nil)
+          @element_name = element_name if element_name
+          @element_name ||= find_element_name
+        end
+
+        private
+
+        def containing_module
+          @containing_module ||= ("::#{name.gsub(/::[^:]+$/, '')}").constantize
+        end
+
+        def find_namespace
+          containing_module.xmlns
+        end
+
+        def find_element_name
+          name.demodulize.tableize.dasherize
         end
       end
 
-      def attribute(*names)
-        @namespace.with_options @scope_options do |scope|
-          scope.attribute(*names).tap do |attribute|
-            @attributes += attributes
+      def initialize(contents = {}, options = {})
+        @options = DEFAULT_ELEMENT_OPTIONS.merge(options)
+
+        @elements = {}
+        @attributes = {}
+        @text = nil
+
+        case contents
+        when Hash
+          contents.each do |name, value|
+            send("#{name}=", value)
           end
+        else
+          send(:text=, contents)
         end
       end
 
-      def may(&block)
-        old_scope, @scope_options = @scope_options, @scope_options.merge(count: 0..1)
-        scoped(&block)
-        @scope_options = old_scope
+      def element(name)
+        self.class.elements[name]
       end
 
-      def any(&block)
-        old_scope, @scope_options = @scope_options, @scope_options.merge(count: 0..Infinity)
-        scoped(&block)
-        @scope_options = old_scope
+      def element_name
+        self.class.element_name
       end
 
-      def inspect
-        inspect_attributes = if attributes.any?
-                               " #{attributes.map(&:inspect).join ' '}"
-                             else
-                               nil
-                             end
-        inspect_elements = if elements.any?
-                             " #{elements.map(&:inspect).join(' ')} "
-                           else
-                             nil
-                           end
-
-        inspect_type = if @type.nil?
-                         nil
-                       else
-                         @type.inspect
-                       end
-        inspect_count = if options[:count].eql? 0..1
-                          '?'
-                        elsif options[:count].eql? 0..Infinity
-                          '*'
-                        else
-                          ''
-                        end
-        "<#{namespace.as}:#{as}#{inspect_attributes}" +
-          (inspect_elements || inspect_type ? ">#{inspect_elements}#{inspect_type}</#{namespace.as}:#{as}>" : " />") +
-          inspect_count
+      def xmlns
+        self.class.xmlns
       end
 
-      def root?
-        options[:root]
+      def to_xml(builder_options = {})
+        if builder_options[:builder] # Non-root element
+          builder = builder_options.delete(:builder)
+          attributes = {}
+        else # Root element
+          builder = Nokogiri::XML::Builder.new(builder_options)
+          attributes = {xmlns: xmlns.to_s}
+        end
+        builder.send(element_name, attributes) do |xml|
+          elements.each do |name, value|
+            element = self.element(name)
+            case element
+            when Xommelier::Xml::Element
+              element.to_xml(builder: xml)
+            else
+              xml.send(name) do
+                xml.text value.to_xommelier
+              end
+            end
+          end
+        end
+        builder.to_xml
       end
-
-      protected
     end
+
+    DEFAULT_ELEMENT_OPTIONS = {
+      type: String
+    }
   end
 end

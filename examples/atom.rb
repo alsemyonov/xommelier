@@ -3,13 +3,11 @@ require 'open-uri'
 
 # Reading a feed
 feed = Xommelier::Atom::Feed.parse(open('http://example.com/blog.atom'))
-puts feed.id, feed.title
-puts feed.updated
+puts feed.id, feed.title, feed.updated
 
 feed.each(:entry) do |entry|
-  puts feed.id, feed.title
+  puts feed.id, feed.title, feed.published, feed.updated
   puts feed.content || feed.summary
-  puts feed.published, feed.updated
 end
 
 # Building a feed

@@ -11,6 +11,7 @@ module Xommelier
       end
 
       attr_reader :uri, :options, :as, :elements, :attributes
+      alias to_s uri
 
       def initialize(uri, options = {}, &block)
         @uri        = uri
@@ -61,10 +62,6 @@ module Xommelier
 
       def inspect
         %(xmlns:#{as}="#{uri}")
-      end
-
-      def to_s
-        uri
       end
     end
   end
