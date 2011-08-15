@@ -1,6 +1,7 @@
 require 'xommelier'
 
 require 'xommelier/core_ext/boolean'
+require 'xommelier/core_ext/date'
 require 'xommelier/core_ext/float'
 require 'xommelier/core_ext/integer'
 require 'xommelier/core_ext/string'

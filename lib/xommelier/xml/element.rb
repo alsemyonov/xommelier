@@ -10,6 +10,9 @@ module Xommelier
     DEFAULT_OPTIONS = {
       type: String
     }
+    DEFAULT_ELEMENT_OPTIONS = DEFAULT_OPTIONS.merge(
+      count: :one
+    )
 
     class Element
       extend Xommelier::Xml::Element::DSL
@@ -69,11 +72,33 @@ module Xommelier
         end
       end
 
-      def element(name)
+      def to_xml(options = {})
+        element_name = options.delete(:element_name) { self.element_name }
+        if options[:builder] # Non-root element
+          builder = options.delete(:builder)
+          attribute_values = {}
+        else # Root element
+          builder = Nokogiri::XML::Builder.new(options)
+          attribute_values = {xmlns: xmlns.to_s}
+        end
+        attributes.each do |name, value|
+          serialize_attribute(name, value, attribute_values)
+        end
+        builder.send(element_name, attribute_values) do |xml|
+          elements.each do |name, value|
+            serialize_element(name, value, xml)
+          end
+        end
+        builder.to_xml
+      end
+
+      protected
+
+      def element_options(name)
         self.class.elements[name]
       end
 
-      def attribute(name)
+      def attribute_options(name)
         self.class.attributes[name]
       end
 
@@ -85,35 +110,28 @@ module Xommelier
         self.class.xmlns
       end
 
-      def to_xml(builder_options = {})
-        if builder_options[:builder] # Non-root element
-          builder = builder_options.delete(:builder)
-          attribute_values = {}
-        else # Root element
-          builder = Nokogiri::XML::Builder.new(builder_options)
-          attribute_values = {xmlns: xmlns.to_s}
-        end
-        attributes.each do |name, value|
-          attribute = self.attribute(name)
-          unless value.is_a?(attribute[:type])
-            value = attribute[:type].new(value)
-          end
-          attribute_values[name] = value.to_xommelier
-        end
-        builder.send(element_name, attribute_values) do |xml|
-          elements.each do |name, value|
-            element = self.element(name)
-            case element[:type]
-            when Xommelier::Xml::Element
-              element.to_xml(builder: xml)
-            else
-              xml.send(name) do
-                xml.text value.to_xommelier
-              end
-            end
+      def serialize_attribute(name, value, attributes)
+        attribute_options = self.attribute_options(name)
+        attribute_class = attribute_options[:type]
+        value = attribute_class.new(value) unless value.is_a?(attribute_class)
+        attributes[name] = value.to_xommelier
+      end
+
+      def serialize_element(name, value, xml, element_options = nil)
+        element_options ||= self.element_options(name)
+        if element_options[:count] == :many
+          single_element = element_options.merge(count: :one)
+          value.each { |item| serialize_element(name, item, xml, single_element) }
+        else
+          element_class = element_options[:type]
+          value = element_class.new(value) unless value.is_a?(element_class)
+          case value
+          when Xommelier::Xml::Element
+            value.to_xml(builder: xml, element_name: name)
+          else
+            xml.send(name) { xml.text value.to_xommelier }
           end
         end
-        builder.to_xml
       end
     end
   end

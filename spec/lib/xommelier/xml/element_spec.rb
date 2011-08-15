@@ -19,10 +19,14 @@ describe Xommelier::Xml::Element do
 
     it { should respond_to(:element) }
     it 'defines subelement' do
-      subject.elements.should have_key(:some)
+      NamespacedModule::RootWithSimpleSubelement.elements.should have_key(:some)
     end
+
     it { should respond_to(:attribute) }
-    it 'defines attribute'
+    it 'defines attribute' do
+      NamespacedModule::RootWithAttribute.attributes.should have_key(:another)
+    end
+
     it { should respond_to(:text) }
     it 'defines as containing text'
   end
@@ -41,12 +45,37 @@ describe Xommelier::Xml::Element do
       it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-simple-subelement xmlns="http://example.org/">\n  <some>Text</some>\n</root-with-simple-subelement>\n) }
     end
 
+    describe 'with many simple subelements' do
+      subject do
+        NamespacedModule::RootWithManySimpleSubelements.new(foo: ['bar', 'baz'])
+      end
+
+      it { should respond_to(:foo) }
+      it { subject.foo.should == ['bar', 'baz'] }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
+    end
+
     describe 'with attribute' do
       subject { NamespacedModule::RootWithAttribute.new(another: 'Difference') }
 
       it { should respond_to(:another) }
       it { subject.another.should == 'Difference' }
       it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n) }
+    end
+
+    describe 'with subelements' do
+      subject do
+        NamespacedModule::RootWithSubelement.new(
+          one: Date.new(2011, 8, 15),
+          two: '2',
+          some: 'Text',
+          another: {some: 'Text'}
+        )
+      end
+
+      it { should respond_to(:one) }
+      it { subject.another.should == {some: 'Text'} }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n) }
     end
   end
 end

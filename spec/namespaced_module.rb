@@ -11,6 +11,18 @@ module NamespacedModule
   end
 
   class RootWithAttribute < Xommelier::Xml::Element
+    attribute :one, type: Date
     attribute :another
+  end
+
+  class RootWithManySimpleSubelements < Xommelier::Xml::Element
+    element :foo, count: :many
+  end
+
+  class RootWithSubelement < Xommelier::Xml::Element
+    attribute :one, type: Date
+    attribute :two
+    element :some
+    element :another, type: RootWithSimpleSubelement
   end
 end

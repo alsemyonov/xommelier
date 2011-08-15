@@ -5,7 +5,7 @@ module Xommelier
     class Element
       module DSL
         def element(name, options = {})
-          self.elements[name] = DEFAULT_OPTIONS.merge(options)
+          self.elements[name] = DEFAULT_ELEMENT_OPTIONS.merge(options)
           define_element_accessors(name)
         end
 
@@ -20,8 +20,19 @@ module Xommelier
         private
 
         def define_element_accessors(name)
-          define_method(name)       {         @elements[name]         }
-          define_method("#{name}=") { |value| @elements[name] = value }
+          case elements[name][:count]
+          when :one, :may
+            define_method(name)       {         @elements[name]         }
+            define_method("#{name}=") { |value| @elements[name] = value }
+          when :many
+            define_method(name)       {
+              @elements[name] ||= []
+            }
+            define_method("#{name}=") do |value|
+              @elements[name] ||= []
+              @elements[name] += Array(value)
+            end
+          end
         end
 
         def define_attribute_accessors(name)

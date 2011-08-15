@@ -1,8 +1,8 @@
-require 'time'
+require 'date'
 
-class Time
+class Date
   def self.from_xommelier(value)
-    Time.xmlschema value
+    xmlschema(value)
   end
 
   def to_xommelier
