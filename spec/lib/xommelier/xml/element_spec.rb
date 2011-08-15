@@ -28,7 +28,9 @@ describe Xommelier::Xml::Element do
     end
 
     it { should respond_to(:text) }
-    it 'defines as containing text'
+    it 'defines as containing text' do
+      NamespacedModule::RootWithText.new.should respond_to(:text)
+    end
   end
 
   describe 'instance' do
@@ -36,6 +38,14 @@ describe Xommelier::Xml::Element do
 
     it { should respond_to(:to_xml) }
     it { subject.to_xml.should == %(<?xml version="1.0"?>\n<empty-root xmlns="http://example.org/"/>\n) }
+
+    describe 'with text' do
+      subject { NamespacedModule::RootWithText.new('Text') }
+
+      it { should respond_to(:text) }
+      it { subject.text.should == 'Text' }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-text xmlns="http://example.org/">Text</root-with-text>\n) }
+    end
 
     describe 'with simple subelements' do
       subject { NamespacedModule::RootWithSimpleSubelement.new(some: 'Text') }

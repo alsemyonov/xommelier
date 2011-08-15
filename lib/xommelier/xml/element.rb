@@ -85,8 +85,12 @@ module Xommelier
           serialize_attribute(name, value, attribute_values)
         end
         builder.send(element_name, attribute_values) do |xml|
-          elements.each do |name, value|
-            serialize_element(name, value, xml)
+          if respond_to?(:text)
+            xml.text @text
+          else
+            elements.each do |name, value|
+              serialize_element(name, value, xml)
+            end
           end
         end
         builder.to_xml

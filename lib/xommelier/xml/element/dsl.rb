@@ -15,9 +15,15 @@ module Xommelier
         end
 
         def text(options = {})
+          define_text_accessors
         end
 
         private
+
+        def define_text_accessors
+          define_method(:text)  {         @text ||= ''  }
+          define_method(:text=) { |value| @text = value }
+        end
 
         def define_element_accessors(name)
           case elements[name][:count]
