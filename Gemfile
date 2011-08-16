@@ -21,3 +21,7 @@ group :development do
   gem 'ripl-rails',        require: 'ripl/rails'
   gem 'ripl-rocket',       require: 'ripl/rocket'
 end
+
+group :documentation do
+  gem 'yard'
+end
