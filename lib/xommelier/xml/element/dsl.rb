@@ -21,15 +21,15 @@ module Xommelier
         private
 
         def define_text_accessors
-          define_method(:text)  {         @text ||= ''  }
-          define_method(:text=) { |value| @text = value }
+          define_method(:text)  {         read_text         }
+          define_method(:text=) { |value| write_text(value) }
         end
 
         def define_element_accessors(name)
           case elements[name][:count]
           when :one, :may
-            define_method(name)       {         @elements[name]         }
-            define_method("#{name}=") { |value| @elements[name] = value }
+            define_method(name)       {         read_element(name)         }
+            define_method("#{name}=") { |value| write_element(name, value) }
           when :many
             define_method(name)       {
               @elements[name] ||= []
@@ -42,8 +42,8 @@ module Xommelier
         end
 
         def define_attribute_accessors(name)
-          define_method(name)       {         @attributes[name]         }
-          define_method("#{name}=") { |value| @attributes[name] = value }
+          define_method(name)       {         read_attribute(name)         }
+          define_method("#{name}=") { |value| write_attribute(name, value) }
         end
       end
     end

@@ -6,7 +6,7 @@ module Xommelier
       attribute :term
 
       may do
-        attribute :scheme, type: URI
+        attribute :scheme, type: Uri
         attribute :label
       end
     end

@@ -84,7 +84,11 @@ describe Xommelier::Xml::Element do
       end
 
       it { should respond_to(:one) }
-      it { subject.another.should == {some: 'Text'} }
+      it { should respond_to(:two) }
+      it { should respond_to(:some) }
+      it { should respond_to(:another) }
+      it { subject.another.class.should == NamespacedModule::RootWithSimpleSubelement }
+      it { subject.another.some.should == 'Text' }
       it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n) }
     end
   end

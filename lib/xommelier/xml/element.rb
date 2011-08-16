@@ -98,6 +98,50 @@ module Xommelier
 
       protected
 
+      def read_element(name)
+        @elements[name.to_sym]
+      end
+
+      def write_element(name, value)
+        type = element_options(name)[:type]
+        unless value.is_a?(type)
+          value = type.new(value)
+        end
+        @elements[name.to_sym] = value
+      end
+
+      def remove_element(name)
+        @elements.delete(name.to_sym)
+      end
+
+      def read_attribute(name)
+        @attributes[name.to_sym]
+      end
+
+      def write_attribute(name, value)
+        type = attribute_options(name)[:type]
+        unless value.is_a?(type)
+          value = type.new(value)
+        end
+        @attributes[name.to_sym] = value
+      end
+
+      def remove_attribute(name)
+        @attributes.delete(name.to_sym)
+      end
+
+      def read_text
+        @text
+      end
+
+      def write_text(text)
+        @text = text
+      end
+
+      def remove_text
+        @text = nil
+      end
+
       def element_options(name)
         self.class.elements[name]
       end
@@ -115,9 +159,6 @@ module Xommelier
       end
 
       def serialize_attribute(name, value, attributes)
-        attribute_options = self.attribute_options(name)
-        attribute_class = attribute_options[:type]
-        value = attribute_class.new(value) unless value.is_a?(attribute_class)
         attributes[name] = value.to_xommelier
       end
 
@@ -127,8 +168,6 @@ module Xommelier
           single_element = element_options.merge(count: :one)
           value.each { |item| serialize_element(name, item, xml, single_element) }
         else
-          element_class = element_options[:type]
-          value = element_class.new(value) unless value.is_a?(element_class)
           case value
           when Xommelier::Xml::Element
             value.to_xml(builder: xml, element_name: name)
