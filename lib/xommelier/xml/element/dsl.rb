@@ -20,16 +20,16 @@ module Xommelier
 
         private
 
-        def define_text_accessors
-          define_method(:text)  {         read_text         }
-          define_method(:text=) { |value| write_text(value) }
-        end
-
         def define_element_accessors(name)
           case elements[name][:count]
           when :one, :may
-            define_method(name)       {         read_element(name)         }
-            define_method("#{name}=") { |value| write_element(name, value) }
+            define_method(name) do |*args|
+              if args[0]
+                write_element(name, args[0])
+              end
+              read_element(name)
+            end
+            alias_method "#{name}=", name
           when :many
             define_method(name)       {
               @elements[name] ||= []
@@ -42,8 +42,23 @@ module Xommelier
         end
 
         def define_attribute_accessors(name)
-          define_method(name)       {         read_attribute(name)         }
-          define_method("#{name}=") { |value| write_attribute(name, value) }
+          define_method(name) do |*args|
+            if args[0]
+              write_attribute(name, args[0])
+            end
+            read_attribute(name)
+          end
+          alias_method "#{name}=", name
+        end
+
+        def define_text_accessors
+          define_method(:text) do |*args|
+            if args[0]
+              write_text(args[0])
+            end
+            read_text
+          end
+          alias_method :text=, :text
         end
       end
     end
