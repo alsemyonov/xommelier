@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
+  <title type="text">Example Feed</title>
+  <updated>2003-12-13T18:30:02Z</updated>
+  <subtitle type="html">A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless</subtitle>
+  <link rel="alternate" type="text/html" href="http://example.ru/" />
+  <link rel="self" type="application/atom+xml" href="http://example.ru/feed.atom" />
+  <rights>© Mark Pilgrim, 2003</rights>
+  <generator uri="http://example.com/" version="1.0">Example Toolkit</generator>
+  <author>
+    <name>John Doe</name>
+  </author>
+  <entry>
+    <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+    <title type="text">Atom-Powered Robots Run Amok</title>
+    <updated>2003-12-13T18:30:02Z</updated>
+    <published>2003-12-13T08:29:29-04:00</published>
+    <link rel="alternate" type="text/html" href="http://example.ru/2003/12/13/atom03"/>
+    <link rel="enclosure" type="audio/mpeg" href="http://example.org/audio/ph34r_my_podcast.mp3" length="1337"/>
+    <author>
+      <name>Mark Pilgrim</name>
+      <uri>http://example.org/</uri>
+      <email>f8dy@example.com</email>
+    </author>
+    <contributor>
+      <name>Sam Ruby</name>
+    </contributor>
+    <contributor>
+      <name>Joe Gregorio</name>
+    </contributor>
+    <summary>Some text.</summary>
+    <content type="xhtml" xml:lang="en" xml:base="http://diveintomark.org/">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+        <p><i>[Update: The Atom draft is finished.]</i></p>
+      </div>
+    </content>
+  </entry>
+</feed>
