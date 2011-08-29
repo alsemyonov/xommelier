@@ -3,7 +3,7 @@ require 'xommelier/atom'
 module Xommelier
   module Atom
     class Link < Xml::Element
-      attribute :href, type: URI
+      attribute :href, type: Uri
 
       may do
         attribute :rel#, type: Enum(:alternate, :related, :self, :enclosure, :via)

@@ -6,6 +6,8 @@ module Xommelier
   module Xml
     extend ActiveSupport::Concern
 
+    DEFAULT_NS = 'http://www.w3.org/XML/1998/namespace'
+
     included do
       instance_variable_set :@_xmlns, nil
     end

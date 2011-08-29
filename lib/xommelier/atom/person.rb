@@ -7,7 +7,7 @@ module Xommelier
 
       may do
         element :email
-        element :uri, type: URI
+        element :uri, type: Uri
       end
     end
   end

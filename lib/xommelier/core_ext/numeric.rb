@@ -1,4 +1,4 @@
-class Integer
+class Numeric
   def self.from_xommelier(value)
     return nil if value.blank?
     begin

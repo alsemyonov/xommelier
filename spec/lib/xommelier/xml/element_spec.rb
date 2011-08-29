@@ -9,28 +9,6 @@ describe Xommelier::Xml::Element do
 
     it { should respond_to(:element_name) }
     it { subject.element_name.should == 'empty-root' }
-
-    it { should respond_to(:elements) }
-    it { should respond_to(:attributes) }
-  end
-
-  describe 'DSL' do
-    subject { NamespacedModule::RootWithSimpleSubelement }
-
-    it { should respond_to(:element) }
-    it 'defines subelement' do
-      NamespacedModule::RootWithSimpleSubelement.elements.should have_key(:some)
-    end
-
-    it { should respond_to(:attribute) }
-    it 'defines attribute' do
-      NamespacedModule::RootWithAttribute.attributes.should have_key(:another)
-    end
-
-    it { should respond_to(:text) }
-    it 'defines as containing text' do
-      NamespacedModule::RootWithText.new.should respond_to(:text)
-    end
   end
 
   describe 'instance' do
@@ -57,11 +35,12 @@ describe Xommelier::Xml::Element do
 
     describe 'with many simple subelements' do
       subject do
-        NamespacedModule::RootWithManySimpleSubelements.new(foo: ['bar', 'baz'])
+        NamespacedModule::RootWithManySimpleSubelements.new(foos: ['bar', 'baz'])
       end
 
       it { should respond_to(:foo) }
-      it { subject.foo.should == ['bar', 'baz'] }
+      it { subject.foos.should == ['bar', 'baz'] }
+      it { subject.foo.should == 'bar' }
       it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
     end
 
