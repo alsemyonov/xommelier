@@ -21,7 +21,7 @@ module Xommelier
         element :author,      type: Person
         element :category,    type: Category
         element :contributor, type: Person
-        element :link
+        element :link,        type: Link
       end
     end
   end
