@@ -94,9 +94,9 @@ module Xommelier
           attributes[name] = value.to_xommelier
         end
 
-        def deserialize_element(name, element_options = nil)
-          element_options ||= self.element_options(name)
-          type = element_options[:type]
+        def deserialize_element(name, options = nil)
+          options ||= self.element_options(name)
+          type = options[:type]
           xpath = if type < Xommelier::Xml::Element
                     type.element_xpath(xml_document, name)
                   else
@@ -104,29 +104,29 @@ module Xommelier
                   end
           nodes = @_xml_node.xpath("./#{xpath}")
           if nodes.any?
-            case element_options[:count]
+            case options[:count]
             when :any, :many
-              children = nodes.map { |node| typecast_element(type, node, element_options) }
-              send element_options[:plural], children
+              children = nodes.map { |node| typecast_element(type, node, options) }
+              send options[:plural], children
             else
-              send(name, typecast_element(type, nodes[0], element_options))
+              send(name, typecast_element(type, nodes[0], options))
             end
           end
         end
 
-        def typecast_element(type, node, element_options)
+        def typecast_element(type, node, options)
           if type < Xommelier::Xml::Element
-            type.from_xommelier(xml_document, element_options.merge(node: node))
+            type.from_xommelier(xml_document, options.merge(node: node))
           else
             type.from_xommelier(node.text)
           end
         end
 
-        def serialize_element(name, value, xml, element_options = nil)
-          element_options ||= self.element_options(name)
-          case element_options[:count]
+        def serialize_element(name, value, xml, options = nil)
+          options ||= self.element_options(name)
+          case options[:count]
           when :any, :many
-            single_element = element_options.merge(count: :one)
+            single_element = options.merge(count: :one)
             value.each { |item| serialize_element(name, item, xml, single_element) }
           else
             case value
