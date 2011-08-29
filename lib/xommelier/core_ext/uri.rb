@@ -1,3 +1,4 @@
+require 'xommelier/core_ext/string'
 require 'uri'
 
 class URI::Generic
@@ -6,8 +7,12 @@ class URI::Generic
   end
 end
 
-class Uri
+class Uri < String
   def self.from_xommelier(value)
-    URI.parse(value)
+    if value.is_a?(URI::Generic)
+      value
+    else
+      URI.parse(value)
+    end
   end
 end
