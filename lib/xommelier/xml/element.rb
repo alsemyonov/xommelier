@@ -45,6 +45,28 @@ module Xommelier
           element_name(@options.delete(:element_name))
         end
       end
+
+      def inspect
+        %(#<#{self.class.name}:0x#{object_id.to_s(16)} #{inspect_contents}>)
+      end
+
+      private
+
+      def inspect_contents
+        [inspect_attributes, inspect_elements, inspect_text].compact.join(' ')
+      end
+
+      def inspect_attributes
+        "@attributes={#{@attributes.map { |name, value| "#{name}: #{value.inspect}"}.join(', ')}}" if @attributes.any?
+      end
+
+      def inspect_elements
+        "#{@elements.map { |name, value| "@#{name}=#{value.inspect}"}.join(' ')}" if @elements.any?
+      end
+
+      def inspect_text
+        text.inspect if text?
+      end
     end
   end
 end
