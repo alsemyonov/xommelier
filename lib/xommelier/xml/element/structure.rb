@@ -184,10 +184,10 @@ module Xommelier
         def write_element(name, value)
           type = element_options(name)[:type]
           unless value.is_a?(type)
-            value = if value.is_a?(Nokogiri::XML::Node) || !(type < Xommelier::Xml::Element)
-                      type.from_xommelier(value)
-                    else
+            value = if (type < Xommelier::Xml::Element) && !value.is_a?(Nokogiri::XML::Node)
                       type.new(value)
+                    else
+                      type.from_xommelier(value)
                     end
           end
           @elements[name.to_sym] = value
