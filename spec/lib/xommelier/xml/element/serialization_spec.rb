@@ -5,8 +5,8 @@ describe Xommelier::Xml::Element::Serialization do
     subject { Xommelier::Atom::Feed }
 
     it { should respond_to(:parse) }
-
   end
+
   describe 'parsing simple_feed' do
     let(:feed) { @feed = Xommelier::Atom::Feed.parse(open(File.join(SPEC_ROOT, 'spec', 'fixtures', 'simple_feed.atom'))) }
 

@@ -3,9 +3,6 @@ module NamespacedModule
 
   xmlns 'http://example.org/'
 
-  class EmptyRoot < Xommelier::Xml::Element
-  end
-
   class RootWithText < Xommelier::Xml::Element
     text
   end

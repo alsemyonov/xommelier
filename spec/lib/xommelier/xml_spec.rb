@@ -4,8 +4,8 @@ describe Xommelier::Xml do
 end
 
 describe NamespacedModule do
-  subject { NamespacedModule }
+  subject { Xommelier::Atom }
 
   it { should respond_to(:xmlns) }
-  it { subject.xmlns.to_s.should == 'http://example.org/' }
+  it { subject.xmlns.to_s.should == ATOM_XMLNS }
 end
