@@ -1,10 +1,11 @@
 require 'xommelier'
-require 'xommelier/xml/class_methods'
+require 'active_support/dependencies/autoload'
 require 'active_support/concern'
 
 module Xommelier
   module Xml
     extend ActiveSupport::Concern
+    extend ActiveSupport::Autoload
 
     DEFAULT_NS = 'http://www.w3.org/XML/1998/namespace'
 
@@ -12,7 +13,13 @@ module Xommelier
       instance_variable_set :@_xmlns, nil
     end
 
-    autoload :Namespace,  'xommelier/xml/namespace'
-    autoload :Element,    'xommelier/xml/element'
+    autoload :Element
+    autoload :Namespace
+    autoload :Node
+    autoload :Attributes
+    autoload :AttributesProxy
+    autoload :Serialization
   end
 end
+
+require 'xommelier/xml/class_methods'
