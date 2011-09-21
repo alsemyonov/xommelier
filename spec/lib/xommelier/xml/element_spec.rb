@@ -2,20 +2,20 @@ require 'spec_helper'
 
 describe Xommelier::Xml::Element do
   describe 'class' do
-    subject { NamespacedModule::EmptyRoot }
+    subject { Xommelier::Atom::Link }
 
     it { should respond_to(:xmlns) }
-    it { subject.xmlns.to_s.should == 'http://example.org/' }
+    it { subject.xmlns.to_s.should == ATOM_XMLNS }
 
     it { should respond_to(:element_name) }
-    it { subject.element_name.should == 'empty-root' }
+    it { subject.element_name.should == 'link' }
   end
 
   describe 'instance' do
-    subject { NamespacedModule::EmptyRoot.new }
+    subject { Xommelier::Atom::Link.new }
 
     it { should respond_to(:to_xml) }
-    it { subject.to_xml.should == %(<?xml version="1.0"?>\n<empty-root xmlns="http://example.org/"/>\n) }
+    it { subject.to_xml.should == %(<?xml version="1.0"?>\n<link xmlns="#{ATOM_XMLNS}"/>\n) }
 
     describe 'with text' do
       subject { NamespacedModule::RootWithText.new('Text') }
@@ -26,11 +26,11 @@ describe Xommelier::Xml::Element do
     end
 
     describe 'with simple subelements' do
-      subject { NamespacedModule::RootWithSimpleSubelement.new(some: 'Text') }
+      subject { Xommelier::Atom::Person.new(name: 'Ivan') }
 
-      it { should respond_to(:some) }
-      it { subject.some.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-simple-subelement xmlns="http://example.org/">\n  <some>Text</some>\n</root-with-simple-subelement>\n) }
+      it { should respond_to(:name) }
+      it { subject.name.should == 'Ivan' }
+      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<person xmlns="#{ATOM_XMLNS}">\n  <name>Ivan</name>\n</person>\n) }
     end
 
     describe 'with many simple subelements' do
