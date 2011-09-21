@@ -24,7 +24,7 @@ module Xommelier
 
           def xmlns_xpath(xml_document = nil)
             if xml_document
-              xml_document.namespaces.key(xmlns.uri)
+              xml_document.namespaces.key(xmlns.href)
             else
               xmlns.as
             end

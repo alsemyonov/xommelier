@@ -8,10 +8,10 @@ module Xommelier
       end
 
       # Defines namespace used in formats
-      def xmlns(uri = nil, options = {}, &block)
-        if uri
+      def xmlns(href = nil, options = {}, &block)
+        if href
           options[:module] ||= self
-          instance_variable_set :@_xmlns, Xommelier::Xml::Namespace.new(uri, options, &block)
+          instance_variable_set :@_xmlns, Xommelier::Xml::Namespace.new(href, options, &block)
         end
         instance_variable_get :@_xmlns
       end

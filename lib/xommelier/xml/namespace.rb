@@ -10,16 +10,16 @@ module Xommelier
         end
       end
 
-      attr_reader :uri, :options, :as, :elements, :attributes
-      alias to_s uri
+      attr_reader :href, :options, :prefix, :elements, :attributes
+      alias to_s href
 
-      def initialize(uri, options = {}, &block)
-        @uri        = uri
+      def initialize(href, options = {}, &block)
+        @href       = href
         @options    = {}
         @elements   = Xommelier::Collection.new(Xommelier::Xml::Element)
-        @as         = options.delete(:as)
+        @prefix     = options.delete(:prefix)
 
-        Xommelier::Xml::Namespace.registry[as] = self
+        Xommelier::Xml::Namespace.registry[prefix] = self
 
         self.options = options
         scoped(&block) if block_given?
@@ -60,7 +60,7 @@ module Xommelier
       end
 
       def inspect
-        %(xmlns:#{as}="#{uri}")
+        %(xmlns:#{prefix}="#{href}")
       end
     end
   end
