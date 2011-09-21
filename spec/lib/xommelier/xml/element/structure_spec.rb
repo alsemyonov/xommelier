@@ -23,5 +23,5 @@ describe Xommelier::Xml::Element::Structure do
   it { should respond_to(:xmlns) }
   it { NamespacedModule::RootWithText.xmlns.href.should == 'http://example.org/'}
   it { NamespacedModule::RootWithAttribute.xmlns.href.should == 'http://example.org/'}
-  it { Xommelier::Atom::Feed.xmlns.href.should == 'http://www.w3.org/2005/Atom'}
+  it { Xommelier::Atom::Feed.xmlns.href.should == ATOM_XMLNS}
 end
