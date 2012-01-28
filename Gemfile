@@ -10,6 +10,8 @@ group :development, :test do
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
+  gem 'ruby_gntp'
+  gem 'rb-fsevent'
 end
 
 group :development do
