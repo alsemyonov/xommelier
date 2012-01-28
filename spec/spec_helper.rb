@@ -1,6 +1,5 @@
 SPEC_ROOT = File.expand_path('../..', __FILE__)
-$:<< File.join(SPEC_ROOT, 'lib')
-
+require 'bundler/setup'
 require 'rspec'
 require 'xommelier'
 require 'namespaced_module'
