@@ -18,26 +18,5 @@ module Xommelier
 
     # Extensions
     autoload :Thread,    'xommelier/atom/thread'
-
-    #namespace 'http://purl.org/syndication/thread/1.0', as: :thr do
-      #element :in_reply_to, as: 'in-reply-to' do
-        #attribute :ref
-
-        #may do
-          #attribute :href, type: Uri
-          #attribute :type, type: String
-          #attribute :source
-        #end
-      #end
-
-      #ns.atom.element :entry do
-        #element :in_reply_to, ns: ns.thr
-        #element :total, type: Integer, ns: ns.thr
-      #end
-
-      #ns.atom.element :link, values: [:replies] do
-        #ns.thr.attribute :count, type: Integer
-      #end
-    #end
   end
 end
