@@ -8,6 +8,10 @@ Look into {Xommelier::Atom} module for implementation of http://www.w3.org/2005/
 
 Xommelier is work in progress.
 
+## Examples
+
+You can see example code in examples/ folder.
+
 ## Future tasks
 
 * Implementation that support more than one namespace in XML class
