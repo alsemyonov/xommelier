@@ -8,6 +8,10 @@ module Xommelier
       module Serialization
         extend ActiveSupport::Concern
 
+        SERIALIZATION_OPTIONS = {
+          encoding: 'utf-8'
+        }
+
         module ClassMethods
           def from_xml(xml, options = {})
             new.tap do |doc|
@@ -53,6 +57,7 @@ module Xommelier
         alias_method :from_xommelier, :from_xml
 
         def to_xml(options = {})
+          options = SERIALIZATION_OPTIONS.merge(options)
           element_name = options.delete(:element_name) { self.element_name }
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
