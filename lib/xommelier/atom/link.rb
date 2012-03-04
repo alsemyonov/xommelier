@@ -10,7 +10,7 @@ module Xommelier
         attribute :type
         attribute :hreflang
         attribute :title
-        attribute :length
+        attribute :length, type: Integer
       end
     end
   end

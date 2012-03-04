@@ -7,6 +7,8 @@ module Xommelier
         attribute :uri, type: Uri
         attribute :version
       end
+
+      text
     end
   end
 end
