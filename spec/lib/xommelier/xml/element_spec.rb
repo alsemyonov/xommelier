@@ -15,14 +15,14 @@ describe Xommelier::Xml::Element do
     subject { Xommelier::Atom::Link.new }
 
     it { should respond_to(:to_xml) }
-    it { subject.to_xml.should == %(<?xml version="1.0"?>\n<link xmlns="#{ATOM_XMLNS}"/>\n) }
+    it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<link xmlns="#{ATOM_XMLNS}"/>\n) }
 
     describe 'with text' do
       subject { NamespacedModule::RootWithText.new('Text') }
 
       it { should respond_to(:text) }
       it { subject.text.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-text xmlns="http://example.org/">Text</root-with-text>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-text xmlns="http://example.org/">Text</root-with-text>\n) }
     end
 
     describe 'with simple subelements' do
@@ -30,7 +30,7 @@ describe Xommelier::Xml::Element do
 
       it { should respond_to(:name) }
       it { subject.name.should == 'Ivan' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<person xmlns="#{ATOM_XMLNS}">\n  <name>Ivan</name>\n</person>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<person xmlns="#{ATOM_XMLNS}">\n  <name>Ivan</name>\n</person>\n) }
     end
 
     describe 'with many simple subelements' do
@@ -41,7 +41,7 @@ describe Xommelier::Xml::Element do
       it { should respond_to(:foo) }
       it { subject.foos.should == ['bar', 'baz'] }
       it { subject.foo.should == 'bar' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
     end
 
     describe 'with attribute' do
@@ -49,7 +49,7 @@ describe Xommelier::Xml::Element do
 
       it { should respond_to(:another) }
       it { subject.another.should == 'Difference' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n) }
     end
 
     describe 'with subelements' do
@@ -68,7 +68,7 @@ describe Xommelier::Xml::Element do
       it { should respond_to(:another) }
       it { subject.another.class.should == NamespacedModule::RootWithSimpleSubelement }
       it { subject.another.some.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n) }
+      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n) }
     end
   end
 end
