@@ -1,11 +1,11 @@
 require 'xommelier/atom'
-require 'open-uri'
+require 'active_support/core_ext'
 
 # Reading a feed
-feed = Xommelier::Atom::Feed.parse(open('http://example.com/blog.atom'))
+feed = Xommelier::Atom::Feed.parse(open('spec/fixtures/feed.atom'))
 puts feed.id, feed.title, feed.updated
 
-feed.each(:entry) do |entry|
+feed.entries do |entry|
   puts feed.id, feed.title, feed.published, feed.updated
   puts feed.content || feed.summary
 end
@@ -21,7 +21,7 @@ feed.title = 'Example.com blog'
   entry.title = "Example.com blog entry #{i}"
   entry.updated = (5 - i).days.ago
 
-  feed << entry
+  feed.entries << entry
 end
 
 puts feed.to_xml
