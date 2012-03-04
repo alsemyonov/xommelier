@@ -12,8 +12,11 @@ Xommelier is work in progress.
 
 You can see example code in examples/ folder.
 
-## Future tasks
+## TODO
 
+* Validating built XML against RelaxNG and XML Schema
 * Implementation that support more than one namespace in XML class
 * Converting XML Schema, RelaxNG, RelaxNG Compact and DTD into Xommelier Ruby DSL
 * ActiveRecord-like automatic loading of XML Schema, RelaxNG, RelaxNG Compact and DTD without needing to write it down into ruby code
+
+© Alexander Semyonov, 2011-2012. See MIT-LICENSE for details
