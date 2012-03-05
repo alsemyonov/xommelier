@@ -1,7 +1,8 @@
 # coding: utf-8
 require 'spec_helper'
 require 'active_support/core_ext/numeric/time'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
+require 'xommelier/atom/history'
 
 describe 'Atom feed' do
   describe 'parsing' do
@@ -11,13 +12,15 @@ describe 'Atom feed' do
     subject { feed }
 
     it { should be_kind_of(Xommelier::Atom::Feed) }
+    it { should respond_to(:complete?) }
+    it { should respond_to(:archive?) }
 
     its(:id)        { should == 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' }
     its(:title)     { should == 'Example Feed' }
     its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 20) }
     its(:subtitle)  { should == 'A <em>lot</em> of effort went into making this effortless' }
 
-    it { should have(2).links }
+    it { should have(3).links }
     its(:link) { should be_instance_of(Xommelier::Atom::Link) }
     it { feed.links[0].href.should == URI.parse('http://example.ru/') }
     it { feed.links[0].rel.should == 'alternate' }
@@ -25,7 +28,12 @@ describe 'Atom feed' do
     it { feed.links[1].href.should == URI.parse('http://example.ru/feed.atom') }
     it { feed.links[1].rel.should == 'self' }
     it { feed.links[1].type.should == 'application/atom+xml' }
+    its(:feed_url) { should == URI.parse('http://example.ru/feed.atom') }
+    its(:html_url) { should == URI.parse('http://example.ru/') }
+    its(:next_feed_url) { should == URI.parse('http://example.ru/feed.atom?page=2') }
 
+    its(:archive) { should be_true }
+    its(:complete) { should be_false }
     its(:rights) { should == '© Mark Pilgrim, 2003' }
     describe 'Generator' do
       subject { feed.generator }
@@ -65,6 +73,8 @@ describe 'Atom feed' do
       it { entry.links[2].type.should == 'application/atom+xml' }
       it { entry.links[2].count.should == 1 }
       it { entry.links[2].updated.should == Time.utc(2003, 12, 13, 18, 30, 20) }
+      its(:html_url) { should == URI.parse('http://example.ru/2003/12/13/atom03') }
+      its(:replies_feed_url) { should == URI.parse('http://example.ru/2003/12/13/atom03/comments.atom') }
 
       it { should have(1).authors }
 

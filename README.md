@@ -4,7 +4,7 @@
 
 Xommelier is an XML Object Mapper. You could describe some namespace (e.g. Atom) in ruby DSL and use it for parsing XML to Ruby objects or for building XML from Ruby objects.
 
-Look into {Xommelier::Atom} and {Xommelier::Atom::Thread} module for implementation of http://www.w3.org/2005/Atom namespace and Atom Threading extension
+Look into {Xommelier::Atom} and {Xommelier::Atom::Threading} module for implementation of http://www.w3.org/2005/Atom namespace and Atom Threading extension
 
 Xommelier is work in progress: [![Build Status](https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
@@ -12,7 +12,7 @@ Xommelier is work in progress: [![Build Status](https://secure.travis-ci.org/als
 
 ```ruby
 require 'xommelier/atom'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
 ```
 
 ### Reading a feed
@@ -59,7 +59,7 @@ end
     title: ('Hooray! ' * (i + 1)).strip,
     updated: (5 - i).days.ago
   ).tap do |comment|
-    comment.in_reply_to = Xommelier::Atom::Thread::InReplyTo.new(
+    comment.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(
       ref: entry.id,
       href: entry.link.href
     )

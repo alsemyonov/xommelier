@@ -1,5 +1,5 @@
 require 'xommelier/atom'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
 require 'active_support/core_ext'
 
 # Reading a feed
@@ -32,7 +32,7 @@ end
     title: ('Hooray! ' * (i + 1)).strip,
     updated: (5 - i).days.ago
   ).tap do |comment|
-    comment.in_reply_to = Xommelier::Atom::Thread::InReplyTo.new(ref: entry.id, href: entry.link.href)
+    comment.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(ref: entry.id, href: entry.link.href)
   end
 end
 
