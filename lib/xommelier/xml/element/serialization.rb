@@ -64,6 +64,7 @@ module Xommelier
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
             attribute_values = {}
+            namespaces = builder.doc.namespaces
             prefix = builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
@@ -73,6 +74,7 @@ module Xommelier
             end
             attribute_values.delete("xmlns:#{xmlns.as.to_s}")
             attribute_values.delete("xmlns:xml")
+            namespaces = attribute_values
             prefix = nil
           end
           current_xmlns = builder.doc.namespaces[prefix ? "xmlns:#{prefix}" : 'xmlns']
@@ -82,7 +84,7 @@ module Xommelier
             if (ns = attribute_options[:ns]).uri != current_xmlns
               if ns.as == :xml
                 attribute_name = "xml:#{attribute_options[:attribute_name]}"
-              elsif attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
+              elsif attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence
                 attribute_name = "#{attr_prefix}:#{attribute_options[:attribute_name]}"
               end
             end
