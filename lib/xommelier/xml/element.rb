@@ -27,6 +27,14 @@ module Xommelier
         @attributes = {}
         @text = nil
 
+        self.class.attributes.each do |name, options|
+          send("#{name}=", options[:default]) if options[:default]
+        end
+
+        self.class.elements.each do |name, options|
+          send("#{name}=", options[:default]) if options[:default]
+        end
+
         case contents
         when Hash
           contents.each do |name, value|
