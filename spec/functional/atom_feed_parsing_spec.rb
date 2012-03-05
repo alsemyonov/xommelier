@@ -1,6 +1,7 @@
 # coding: utf-8
 require 'spec_helper'
 require 'active_support/core_ext/numeric/time'
+require 'xommelier/atom/thread'
 
 describe 'Atom feed' do
   describe 'parsing' do
@@ -40,9 +41,9 @@ describe 'Atom feed' do
     its(:author) { should be_instance_of(Xommelier::Atom::Person) }
     it { feed.author.name.should == 'John Doe' }
 
-    it { feed.should have(1).entries }
+    it { feed.should have(2).entries }
     describe 'Entry' do
-      let(:entry) { feed.entry }
+      let(:entry) { feed.entries[0] }
       subject { entry }
 
       its(:id)        { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' }
@@ -79,7 +80,22 @@ describe 'Atom feed' do
         its(:type) { should == 'xhtml' }
         its(:lang) { should == 'en' }
         its(:base) { should == 'http://diveintomark.org/' }
-        its(:content) { should ~ /#{Regexp.escape('<p><i>[Update: The Atom draft is fiished.]</i></p>')}/ }
+        its(:content) { should ~ Regexp.new(Regexp.escape('<p><i>[Update: The Atom draft is fiished.]</i></p>')) }
+      end
+      describe 'Entry' do
+        let(:comment) { feed.entries[1] }
+        subject { comment }
+
+        its(:id) { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6b' }
+        its(:title) { should == 'First comment' }
+        its(:updated) { should == Time.utc(2003, 12, 13, 18, 30, 20) }
+
+        describe 'in-reply-to' do
+          subject { comment.in_reply_to }
+          its(:ref) { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' }
+          its(:href) { should == URI.parse('http://example.ru/2003/12/13/atom03#comment_1') }
+          its(:type) { should == 'text/html' }
+        end
       end
     end
   end

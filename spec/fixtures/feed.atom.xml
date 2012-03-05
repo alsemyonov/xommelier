@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
   <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
   <title type="text">Example Feed</title>
   <updated>2003-12-13T18:30:02Z</updated>
@@ -35,5 +35,12 @@
         <p><i>[Update: The Atom draft is finished.]</i></p>
       </div>
     </content>
+  </entry>
+  <entry>
+    <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6b</id>
+    <title type="text">First comment</title>
+    <updated>2003-12-13T18:30:20Z</updated>
+    <thr:in-reply-to ref="urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a" href="http://example.ru/2003/12/13/atom03#comment_1" type="text/html" />
+    <content>This is first comment.</content>
   </entry>
 </feed>

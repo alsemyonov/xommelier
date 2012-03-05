@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'xommelier/atom/thread'
 
 describe Xommelier::Xml::Element::Serialization do
   describe 'class' do
