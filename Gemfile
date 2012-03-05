@@ -4,14 +4,8 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
-  gem 'rb-inotify'
-  gem 'libnotify'
+  gem 'rake'
   gem 'rspec'
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'guard-bundler'
-  gem 'ruby_gntp'
-  gem 'rb-fsevent'
 end
 
 group :development do
@@ -22,6 +16,13 @@ group :development do
   gem 'ripl-multi_line',   require: 'ripl/multi_line'
   gem 'ripl-rails',        require: 'ripl/rails'
   gem 'ripl-rocket',       require: 'ripl/rocket'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-bundler'
+  gem 'rb-inotify'
+  gem 'libnotify'
+  gem 'ruby_gntp'
+  gem 'rb-fsevent'
 end
 
 group :documentation do
