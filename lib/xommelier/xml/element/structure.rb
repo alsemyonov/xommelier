@@ -67,6 +67,7 @@ module Xommelier
           def inherited(child)
             child.elements    = elements.dup
             child.attributes  = attributes.dup
+            include Xml::CommonAttributes
           end
 
           # Defines containing element

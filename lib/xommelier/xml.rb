@@ -14,5 +14,15 @@ module Xommelier
 
     autoload :Namespace,  'xommelier/xml/namespace'
     autoload :Element,    'xommelier/xml/element'
+
+    extend ClassMethods
+    xmlns DEFAULT_NS, as: :xml
+
+    module CommonAttributes
+      def self.included(base)
+        base.attribute :lang, ns: Xml.xmlns
+        base.attribute :base, type: Uri, ns: Xml.xmlns
+      end
+    end
   end
 end

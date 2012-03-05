@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'xommelier/atom/threading'
+require 'xommelier/atom/full'
 
 describe 'Atom feed building' do
   let(:feed) do
