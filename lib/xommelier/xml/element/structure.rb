@@ -1,6 +1,7 @@
 require 'xommelier/xml/element'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/with_options'
+require 'active_support/core_ext/object/try'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/inflections'
 
@@ -70,9 +71,14 @@ module Xommelier
 
           # Defines containing element
           # @example
-          #   element :author, class_name: 'Xommelier::Atom::Person'
+          #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
-            options[:element_name] = name
+            options[:element_name] = options.delete(:as) { name }
+            options[:ns] = if options[:type].try(:<, Xml::Element)
+                             options[:ns] = options[:type].xmlns
+                           else
+                             xmlns
+                           end
             elements[name] = DEFAULT_ELEMENT_OPTIONS.merge(options)
             define_element_accessors(name)
           end
