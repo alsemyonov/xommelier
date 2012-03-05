@@ -15,6 +15,7 @@ end
 feed = Xommelier::Atom::Feed.new
 feed.id = 'http://example.com/blog'
 feed.title = 'Example.com blog'
+feed.complete = Xommelier::Atom::History::Complete.new
 
 entry = feed.entry = Xommelier::Atom::Entry.new(
   id: 'http://example.com/blog/2012/03/05',
