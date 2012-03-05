@@ -9,9 +9,8 @@ module Xommelier
 
       class InReplyTo < Xml::Element
         element_name 'in-reply-to'
-        #method_name :in_reply_to
 
-        attribute :href
+        attribute :ref
 
         may do
           attribute :href, type: Uri
@@ -24,7 +23,7 @@ module Xommelier
     # Extends Atom elements
     class Entry
       may do
-        element :in_reply_to, ns: Thread.xmlns
+        element :in_reply_to, type: Thread::InReplyTo, as: Thread::InReplyTo.element_name
         element :total, type: Integer, ns: Thread.xmlns
       end
     end
