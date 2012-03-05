@@ -31,6 +31,7 @@ module Xommelier
     class Link
       may do
         attribute :count, type: Integer, ns: Thread.xmlns
+        attribute :updated, type: Time, ns: Thread.xmlns
       end
     end
   end

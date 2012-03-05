@@ -14,7 +14,7 @@ describe 'Atom feed' do
 
     its(:id)        { should == 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6' }
     its(:title)     { should == 'Example Feed' }
-    its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 02) }
+    its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 20) }
     its(:subtitle)  { should == 'A <em>lot</em> of effort went into making this effortless' }
 
     it { should have(2).links }
@@ -51,7 +51,7 @@ describe 'Atom feed' do
       its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 02) }
       its(:published) { should == Time.utc(2003, 12, 13, 8, 29, 29) + 4.hours }
 
-      it { should have(2).links }
+      it { should have(3).links }
       its(:link) { should be_instance_of(Xommelier::Atom::Link) }
       it { entry.links[0].href.should == URI.parse('http://example.ru/2003/12/13/atom03') }
       it { entry.links[0].rel.should == 'alternate' }
@@ -60,6 +60,11 @@ describe 'Atom feed' do
       it { entry.links[1].rel.should == 'enclosure' }
       it { entry.links[1].type.should == 'audio/mpeg' }
       it { entry.links[1].length.should == 1337 }
+      it { entry.links[2].href.should == URI.parse('http://example.ru/2003/12/13/atom03/comments.atom') }
+      it { entry.links[2].rel.should == 'replies' }
+      it { entry.links[2].type.should == 'application/atom+xml' }
+      it { entry.links[2].count.should == 1 }
+      it { entry.links[2].updated.should == Time.utc(2003, 12, 13, 18, 30, 20) }
 
       it { should have(1).authors }
 
@@ -82,7 +87,9 @@ describe 'Atom feed' do
         its(:base) { should == 'http://diveintomark.org/' }
         its(:content) { should ~ Regexp.new(Regexp.escape('<p><i>[Update: The Atom draft is fiished.]</i></p>')) }
       end
-      describe 'Entry' do
+      its(:total) { should == 1 }
+
+      describe 'Comment' do
         let(:comment) { feed.entries[1] }
         subject { comment }
 

@@ -74,11 +74,11 @@ module Xommelier
           #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
             options[:element_name] = options.delete(:as) { name }
-            options[:ns] = if options[:type].try(:<, Xml::Element)
-                             options[:ns] = options[:type].xmlns
-                           else
-                             xmlns
-                           end
+            options[:ns] ||= if options[:type].try(:<, Xml::Element)
+                               options[:ns] = options[:type].xmlns
+                             else
+                               xmlns
+                             end
             elements[name] = DEFAULT_ELEMENT_OPTIONS.merge(options)
             define_element_accessors(name)
           end
