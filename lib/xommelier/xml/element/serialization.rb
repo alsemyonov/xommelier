@@ -28,7 +28,8 @@ module Xommelier
 
           def xmlns_xpath(xml_document = nil)
             if xml_document
-              xml_document.namespaces.key(xmlns.uri)
+              prefix = xml_document.namespaces.key(xmlns.uri)
+              (prefix =~ /:/) ? prefix[6..-1] : prefix
             else
               xmlns.as
             end
@@ -102,12 +103,7 @@ module Xommelier
         def deserialize_element(name, options = nil)
           options ||= self.element_options(name)
           type = options[:type]
-          xpath = if type < Xommelier::Xml::Element
-                    type.element_xpath(xml_document, name)
-                  else
-                    element_xpath(xml_document, name)
-                  end
-          nodes = @_xml_node.xpath("./#{xpath}")
+          nodes = @_xml_node.xpath("./#{options[:ns].as}:#{options[:element_name]}", options[:ns].to_hash)
           if nodes.any?
             case options[:count]
             when :any, :many
