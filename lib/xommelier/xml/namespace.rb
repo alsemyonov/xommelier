@@ -59,6 +59,10 @@ module Xommelier
         end
       end
 
+      def to_hash
+        {as.to_s => uri.to_s}
+      end
+
       def inspect
         %(xmlns:#{as}="#{uri}")
       end
