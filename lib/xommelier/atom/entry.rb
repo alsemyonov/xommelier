@@ -3,6 +3,8 @@ require 'xommelier/atom'
 module Xommelier
   module Atom
     class Entry < Xml::Element
+      include LinksExtension
+
       root
 
       element :id, unique: true

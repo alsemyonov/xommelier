@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
 
 describe 'Atom feed building' do
   let(:feed) do
@@ -23,7 +23,7 @@ describe 'Atom feed building' do
         title: 'Comment',
         updated: Time.utc(2003, 12, 13, 18, 30, 02)
       ).tap do |entry|
-        entry.in_reply_to = Xommelier::Atom::Thread::InReplyTo.new(ref: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a')
+        entry.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(ref: 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a')
       end
     end
   end

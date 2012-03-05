@@ -1,5 +1,5 @@
 require 'xommelier/atom'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
 require 'active_support/core_ext'
 
 # Reading a feed
@@ -15,6 +15,7 @@ end
 feed = Xommelier::Atom::Feed.new
 feed.id = 'http://example.com/blog'
 feed.title = 'Example.com blog'
+feed.complete = Xommelier::Atom::History::Complete.new
 
 entry = feed.entry = Xommelier::Atom::Entry.new(
   id: 'http://example.com/blog/2012/03/05',
@@ -32,7 +33,7 @@ end
     title: ('Hooray! ' * (i + 1)).strip,
     updated: (5 - i).days.ago
   ).tap do |comment|
-    comment.in_reply_to = Xommelier::Atom::Thread::InReplyTo.new(ref: entry.id, href: entry.link.href)
+    comment.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(ref: entry.id, href: entry.link.href)
   end
 end
 
