@@ -84,7 +84,7 @@ module Xommelier
           (prefix ? builder[prefix] : builder).
             send(element_name, attribute_values) do |xml|
               elements.each do |name, value|
-                serialize_element(name, value, xml)
+                serialize_element(name, value, xml, self.class.elements[name].merge(parent_ns_prefix: prefix))
               end
               if respond_to?(:text)
                 xml.text @text
@@ -146,8 +146,12 @@ module Xommelier
           end
         end
 
-        def serialize_element(name, value, xml, options = nil)
-          options ||= self.element_options(name)
+        def serialize_element(name, value, xml, options = {})
+          prefix = if options[:ns].try(:!=, xmlns)
+                     xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
+                   else
+                     nil
+                   end
           case options[:count]
           when :any, :many
             single_element = options.merge(count: :one)
@@ -157,7 +161,7 @@ module Xommelier
             when Xommelier::Xml::Element
               value.to_xommelier(builder: xml, element_name: options[:element_name])
             else
-              xml.send(options[:element_name]) { xml.text value.to_xommelier }
+              (prefix ? xml[prefix] : xml).send(options[:element_name]) { xml.text value.to_xommelier }
             end
           end
         end
