@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:fh="http://purl.org/syndication/history/1.0">
   <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id>
   <title type="text">Example Feed</title>
   <updated>2003-12-13T18:30:20Z</updated>
   <subtitle type="html">A &lt;em&gt;lot&lt;/em&gt; of effort went into making this effortless</subtitle>
   <link rel="alternate" type="text/html" href="http://example.ru/" />
   <link rel="self" type="application/atom+xml" href="http://example.ru/feed.atom" />
+  <link rel="next" type="application/atom+xml" href="http://example.ru/feed.atom?page=2" />
+  <fh:archive />
   <rights>© Mark Pilgrim, 2003</rights>
   <generator uri="http://example.com/" version="1.0">Example Toolkit</generator>
   <author>

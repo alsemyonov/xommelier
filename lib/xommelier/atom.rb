@@ -16,7 +16,11 @@ module Xommelier
     autoload :Feed,      'xommelier/atom/feed'
     autoload :Entry,     'xommelier/atom/entry'
 
+    # Common extensions
+    autoload :LinksExtension, 'xommelier/atom/links_extension'
+
     # Extensions
-    autoload :Threading,    'xommelier/atom/threading'
+    autoload :Threading, 'xommelier/atom/threading'
+    autoload :History,   'xommelier/atom/history'
   end
 end
