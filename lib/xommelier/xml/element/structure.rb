@@ -85,6 +85,7 @@ module Xommelier
 
           # Defines containing attribute
           def attribute(name, options = {})
+            options[:ns] ||= xmlns
             attributes[name] = DEFAULT_OPTIONS.merge(options)
             define_attribute_accessors(name)
           end
@@ -146,8 +147,6 @@ module Xommelier
               end
             end
           end
-
-          protected
 
           def define_attribute_accessors(name)
             define_method(name) do |*args|
