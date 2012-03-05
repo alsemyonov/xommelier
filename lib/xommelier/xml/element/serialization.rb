@@ -1,5 +1,6 @@
 require 'xommelier/xml/element'
 require 'active_support/concern'
+require 'active_support/core_ext/object/blank'
 require 'nokogiri'
 
 module Xommelier
@@ -28,7 +29,8 @@ module Xommelier
 
           def xmlns_xpath(xml_document = nil)
             if xml_document
-              xml_document.namespaces.key(xmlns.uri)
+              prefix = xml_document.namespaces.key(xmlns.uri)
+              (prefix =~ /:/) ? prefix[6..-1] : prefix
             else
               xmlns.as
             end
@@ -62,21 +64,32 @@ module Xommelier
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
             attribute_values = {}
+            prefix = builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
-            attribute_values = {xmlns: xmlns.to_s}
+            attribute_values = children_namespaces.inject({xmlns: xmlns.uri}) do |hash, ns|
+              hash["xmlns:#{ns.as}"] = ns.uri
+              hash
+            end
+            attribute_values.delete("xmlns:#{xmlns.as.to_s}")
+            prefix = nil
           end
+          current_xmlns = builder.doc.namespaces[prefix ? "xmlns:#{prefix}" : 'xmlns']
           attributes.each do |name, value|
+            if (ns = self.class.attributes[name][:ns]).uri != current_xmlns && attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
+              name = "#{attr_prefix}:#{name}"
+            end
             serialize_attribute(name, value, attribute_values)
           end
-          builder.send(element_name, attribute_values) do |xml|
-            elements.each do |name, value|
-              serialize_element(name, value, xml)
+          (prefix ? builder[prefix] : builder).
+            send(element_name, attribute_values) do |xml|
+              elements.each do |name, value|
+                serialize_element(name, value, xml)
+              end
+              if respond_to?(:text)
+                xml.text @text
+              end
             end
-            if respond_to?(:text)
-              xml.text @text
-            end
-          end
           builder.to_xml
         end
         alias_method :to_xommelier, :to_xml
@@ -85,6 +98,17 @@ module Xommelier
 
         def element_xpath(xmldoc = self.xml_document, name = nil)
           self.class.element_xpath(xmldoc, name)
+        end
+
+        def children_namespaces(namespaces = Set[xmlns])
+          elements.inject(namespaces) do |result, (name, children)|
+            element_options = self.class.elements[name]
+            result << element_options[:ns]
+            if element_options[:type] < Xml::Element
+              Array(children).each { |child| result += child.children_namespaces }
+            end
+            result
+          end
         end
 
         def xml_document
@@ -102,12 +126,7 @@ module Xommelier
         def deserialize_element(name, options = nil)
           options ||= self.element_options(name)
           type = options[:type]
-          xpath = if type < Xommelier::Xml::Element
-                    type.element_xpath(xml_document, name)
-                  else
-                    element_xpath(xml_document, name)
-                  end
-          nodes = @_xml_node.xpath("./#{xpath}")
+          nodes = @_xml_node.xpath("./#{options[:ns].as}:#{options[:element_name]}", options[:ns].to_hash)
           if nodes.any?
             case options[:count]
             when :any, :many
@@ -136,9 +155,9 @@ module Xommelier
           else
             case value
             when Xommelier::Xml::Element
-              value.to_xommelier(builder: xml, element_name: name)
+              value.to_xommelier(builder: xml, element_name: options[:element_name])
             else
-              xml.send(name) { xml.text value.to_xommelier }
+              xml.send(options[:element_name]) { xml.text value.to_xommelier }
             end
           end
         end
