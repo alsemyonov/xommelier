@@ -67,6 +67,7 @@ module Xommelier
           def inherited(child)
             child.elements    = elements.dup
             child.attributes  = attributes.dup
+            child.send(:include, Xml::CommonAttributes)
           end
 
           # Defines containing element
@@ -85,6 +86,7 @@ module Xommelier
 
           # Defines containing attribute
           def attribute(name, options = {})
+            options[:attribute_name] = options.delete(:as) { name }
             options[:ns] ||= xmlns
             attributes[name] = DEFAULT_OPTIONS.merge(options)
             define_attribute_accessors(name)

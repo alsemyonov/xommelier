@@ -64,6 +64,7 @@ module Xommelier
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
             attribute_values = {}
+            namespaces = builder.doc.namespaces
             prefix = builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
@@ -72,19 +73,27 @@ module Xommelier
               hash
             end
             attribute_values.delete("xmlns:#{xmlns.as.to_s}")
+            attribute_values.delete("xmlns:xml")
+            namespaces = attribute_values
             prefix = nil
           end
           current_xmlns = builder.doc.namespaces[prefix ? "xmlns:#{prefix}" : 'xmlns']
           attributes.each do |name, value|
-            if (ns = self.class.attributes[name][:ns]).uri != current_xmlns && attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
-              name = "#{attr_prefix}:#{name}"
+            attribute_options = attribute_options(name)
+            attribute_name = attribute_options[:attribute_name]
+            if (ns = attribute_options[:ns]).uri != current_xmlns
+              if ns.as == :xml
+                attribute_name = "xml:#{attribute_options[:attribute_name]}"
+              elsif attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence
+                attribute_name = "#{attr_prefix}:#{attribute_options[:attribute_name]}"
+              end
             end
-            serialize_attribute(name, value, attribute_values)
+            serialize_attribute(attribute_name, value, attribute_values)
           end
           (prefix ? builder[prefix] : builder).
             send(element_name, attribute_values) do |xml|
               elements.each do |name, value|
-                serialize_element(name, value, xml)
+                serialize_element(name, value, xml, element_options(name).merge(parent_ns_prefix: prefix))
               end
               if respond_to?(:text)
                 xml.text @text
@@ -104,8 +113,11 @@ module Xommelier
           elements.inject(namespaces) do |result, (name, children)|
             element_options = self.class.elements[name]
             result << element_options[:ns]
+            result += attributes.keys.map { |name| attribute_options(name)[:ns] }
             if element_options[:type] < Xml::Element
-              Array(children).each { |child| result += child.children_namespaces }
+              Array(children).each do |child|
+                result += child.children_namespaces
+              end
             end
             result
           end
@@ -146,8 +158,12 @@ module Xommelier
           end
         end
 
-        def serialize_element(name, value, xml, options = nil)
-          options ||= self.element_options(name)
+        def serialize_element(name, value, xml, options = {})
+          prefix = if options[:ns].try(:!=, xmlns)
+                     xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
+                   else
+                     nil
+                   end
           case options[:count]
           when :any, :many
             single_element = options.merge(count: :one)
@@ -157,7 +173,7 @@ module Xommelier
             when Xommelier::Xml::Element
               value.to_xommelier(builder: xml, element_name: options[:element_name])
             else
-              xml.send(options[:element_name]) { xml.text value.to_xommelier }
+              (prefix ? xml[prefix] : xml).send(options[:element_name]) { xml.text value.to_xommelier }
             end
           end
         end
