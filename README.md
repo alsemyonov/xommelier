@@ -4,15 +4,14 @@
 
 Xommelier is an XML Object Mapper. You could describe some namespace (e.g. Atom) in ruby DSL and use it for parsing XML to Ruby objects or for building XML from Ruby objects.
 
-Look into {Xommelier::Atom} and {Xommelier::Atom::Threading} module for implementation of http://www.w3.org/2005/Atom namespace and Atom Threading extension
+Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom::History} module for implementation of http://www.w3.org/2005/Atom namespace, Atom Threading, and Feed Paging and Archiving extensions
 
 Xommelier is work in progress: [![Build Status](https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
 ## Examples with Atom
 
 ```ruby
-require 'xommelier/atom'
-require 'xommelier/atom/threading'
+require 'xommelier/atom/full'
 ```
 
 ### Reading a feed
@@ -33,6 +32,7 @@ end
 feed = Xommelier::Atom::Feed.new
 feed.id = 'http://example.com/blog'
 feed.title = 'Example.com blog'
+feed.complete = Xommelier::Atom::History::Complete.new
 
 entry = feed.entry = Xommelier::Atom::Entry.new(
   id: 'http://example.com/blog/2012/03/05',
@@ -73,9 +73,10 @@ will output:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0">
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:fh="http://purl.org/syndication/history/1.0">
   <id>http://example.com/blog</id>
   <title>Example.com blog</title>
+  <fh:complete/>
   <entry>
     <id>http://example.com/blog/2012/03/05</id>
     <title>Happy Xommelier's day!</title>
