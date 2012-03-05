@@ -6,7 +6,7 @@ Xommelier is an XML Object Mapper. You could describe some namespace (e.g. Atom)
 
 Look into {Xommelier::Atom} module for implementation of http://www.w3.org/2005/Atom namespace
 
-Xommelier is work in progress.
+Xommelier is work in progress. [![Build Status](https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
 ## Examples
 
