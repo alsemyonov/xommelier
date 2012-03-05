@@ -81,12 +81,12 @@ module Xommelier
             attribute_name = attribute_options[:attribute_name]
             if (ns = attribute_options[:ns]).uri != current_xmlns
               if ns.as == :xml
-                name = "xml:#{attribute_options[:attribute_name]}"
+                attribute_name = "xml:#{attribute_options[:attribute_name]}"
               elsif attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
-                name = "#{attr_prefix}:#{attribute_options[:attribute_name]}"
+                attribute_name = "#{attr_prefix}:#{attribute_options[:attribute_name]}"
               end
             end
-            serialize_attribute(name, value, attribute_values)
+            serialize_attribute(attribute_name, value, attribute_values)
           end
           (prefix ? builder[prefix] : builder).
             send(element_name, attribute_values) do |xml|
