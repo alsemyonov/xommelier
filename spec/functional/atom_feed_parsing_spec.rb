@@ -1,7 +1,7 @@
 # coding: utf-8
 require 'spec_helper'
 require 'active_support/core_ext/numeric/time'
-require 'xommelier/atom/thread'
+require 'xommelier/atom/threading'
 
 describe 'Atom feed' do
   describe 'parsing' do

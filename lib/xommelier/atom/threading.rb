@@ -2,7 +2,7 @@ require 'xommelier/atom'
 
 module Xommelier
   module Atom
-    module Thread
+    module Threading
       include Xommelier::Xml
 
       xmlns 'http://purl.org/syndication/thread/1.0', as: :thr
@@ -23,15 +23,15 @@ module Xommelier
     # Extends Atom elements
     class Entry
       may do
-        element :in_reply_to, type: Thread::InReplyTo, as: Thread::InReplyTo.element_name
-        element :total, type: Integer, ns: Thread.xmlns
+        element :in_reply_to, type: Threading::InReplyTo, as: Threading::InReplyTo.element_name
+        element :total, type: Integer, ns: Threading.xmlns
       end
     end
 
     class Link
       may do
-        attribute :count, type: Integer, ns: Thread.xmlns
-        attribute :updated, type: Time, ns: Thread.xmlns
+        attribute :count, type: Integer, ns: Threading.xmlns
+        attribute :updated, type: Time, ns: Threading.xmlns
       end
     end
   end

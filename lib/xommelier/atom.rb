@@ -17,6 +17,6 @@ module Xommelier
     autoload :Entry,     'xommelier/atom/entry'
 
     # Extensions
-    autoload :Thread,    'xommelier/atom/thread'
+    autoload :Threading,    'xommelier/atom/threading'
   end
 end
