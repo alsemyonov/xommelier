@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 gemspec
 
 group :development, :test do
+  gem 'rake'
   gem 'rb-inotify'
   gem 'libnotify'
   gem 'rspec'
