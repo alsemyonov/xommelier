@@ -72,19 +72,26 @@ module Xommelier
               hash
             end
             attribute_values.delete("xmlns:#{xmlns.as.to_s}")
+            attribute_values.delete("xmlns:xml")
             prefix = nil
           end
           current_xmlns = builder.doc.namespaces[prefix ? "xmlns:#{prefix}" : 'xmlns']
           attributes.each do |name, value|
-            if (ns = self.class.attributes[name][:ns]).uri != current_xmlns && attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
-              name = "#{attr_prefix}:#{name}"
+            attribute_options = attribute_options(name)
+            attribute_name = attribute_options[:attribute_name]
+            if (ns = attribute_options[:ns]).uri != current_xmlns
+              if ns.as == :xml
+                name = "xml:#{attribute_options[:attribute_name]}"
+              elsif attr_prefix = builder.doc.namespaces.key(ns.uri).try(:[], 6..-1).presence
+                name = "#{attr_prefix}:#{attribute_options[:attribute_name]}"
+              end
             end
             serialize_attribute(name, value, attribute_values)
           end
           (prefix ? builder[prefix] : builder).
             send(element_name, attribute_values) do |xml|
               elements.each do |name, value|
-                serialize_element(name, value, xml, self.class.elements[name].merge(parent_ns_prefix: prefix))
+                serialize_element(name, value, xml, element_options(name).merge(parent_ns_prefix: prefix))
               end
               if respond_to?(:text)
                 xml.text @text
@@ -104,8 +111,11 @@ module Xommelier
           elements.inject(namespaces) do |result, (name, children)|
             element_options = self.class.elements[name]
             result << element_options[:ns]
+            result += attributes.keys.map { |name| attribute_options(name)[:ns] }
             if element_options[:type] < Xml::Element
-              Array(children).each { |child| result += child.children_namespaces }
+              Array(children).each do |child|
+                result += child.children_namespaces
+              end
             end
             result
           end
