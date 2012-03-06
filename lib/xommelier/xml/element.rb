@@ -55,21 +55,29 @@ module Xommelier
       end
 
       def inspect
-        %(#<#{self.class.name}:0x#{object_id.to_s(16)} #{inspect_contents}>)
+        %(<#{inspect_element_name} ruby:object_id="0x#{object_id.to_s(16)}" #{inspect_attributes}#{inspect_contents})
       end
 
       private
 
+      def inspect_element_name
+        "#{xmlns.as}:#{element_name}"
+      end
+
       def inspect_contents
-        [inspect_attributes, inspect_elements, inspect_text].compact.join(' ')
+        [inspect_elements, inspect_text].compact.join(' ')
       end
 
       def inspect_attributes
-        "@attributes={#{@attributes.map { |name, value| "#{name}: #{value.inspect}"}.join(', ')}}" if @attributes.any?
+        @attributes.map { |name, value| %(#{name}="#{value}")}.join(' ') if @attributes.any?
       end
 
       def inspect_elements
-        "#{@elements.map { |name, value| "@#{name}=#{value.inspect}"}.join(' ')}" if @elements.any?
+        if @elements.any?
+          ">#{@elements.map { |name, value| "<#{name}>#{value}</#{name}>"}.join('')}</#{inspect_element_name}>"
+        else
+          " />"
+        end
       end
 
       def inspect_text
