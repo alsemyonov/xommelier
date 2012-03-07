@@ -73,7 +73,7 @@ module Xommelier
               hash
             end
             attribute_values.delete("xmlns:#{xmlns.as.to_s}")
-            attribute_values.delete("xmlns:xml")
+            attribute_values.delete('xmlns:xml')
             namespaces = attribute_values
             prefix = nil
           end
@@ -102,6 +102,25 @@ module Xommelier
           builder.to_xml
         end
         alias_method :to_xommelier, :to_xml
+
+        def to_hash
+          attributes.dup.tap do |hash|
+            @elements.each do |name, value|
+              options = element_options(name)
+              type = options[:type]
+              value = Array.wrap(value)
+              if type < Xml::Element
+                value = value.map(&:to_hash)
+              end
+              if value.count > 1
+                name = name.to_s.pluralize.to_sym
+              else
+                value = value.first
+              end
+              hash[name] = value
+            end
+          end
+        end
 
         protected
 
@@ -151,7 +170,7 @@ module Xommelier
         end
 
         def typecast_element(type, node, options)
-          if type < Xommelier::Xml::Element
+          if type < Xml::Element
             type.from_xommelier(xml_document, options.merge(node: node))
           else
             type.from_xommelier(node.text)

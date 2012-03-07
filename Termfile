@@ -3,23 +3,21 @@
 #setup 'bundle'
 
 def title(title)
-  run "echo -e \"\\033];#{title}\\007\""
+  run %(echo -e "\\033];#{title}\\007" && clear)
 end
 
 title 'Editor'
-run 'vim Gemfile'
+run 'vim Gemfile && clear'
 
 tab(:bash) do
   title('Shell')
 end
-#tab(:log) do
-  #title 'Logs'
-  #run 'tail -f log/development.log'
-#end
-tab :guard do
+
+tab(:guard) do
   title 'Guard'
   run 'guard'
 end
+
 tab(:console) do
   title 'Console'
   run './console'

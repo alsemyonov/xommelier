@@ -131,7 +131,9 @@ module Xommelier
 
               define_method(plural) do |*args|
                 if args.any?
-                  @elements[name] = args.flatten
+                  args.flatten.each_with_index do |object, index|
+                    write_element(name, object, index)
+                  end
                 end
                 @elements[name] ||= []
               end
@@ -184,11 +186,11 @@ module Xommelier
           self.class.elements[name.to_sym]
         end
 
-        def read_element(name)
-          @elements[name.to_sym]
+        def read_element(name, index = nil)
+          index ? @elements[name.to_sym][index] : @elements[name.to_sym]
         end
 
-        def write_element(name, value)
+        def write_element(name, value, index = nil)
           type = element_options(name)[:type]
           unless value.is_a?(type)
             value = if (type < Xommelier::Xml::Element) && !value.is_a?(Nokogiri::XML::Node)
@@ -197,7 +199,12 @@ module Xommelier
                       type.from_xommelier(value)
                     end
           end
-          @elements[name.to_sym] = value
+          if index
+            @elements[name.to_sym] ||= []
+            @elements[name.to_sym][index] = value
+          else
+            @elements[name.to_sym] = value
+          end
         end
 
         def remove_element(name)
