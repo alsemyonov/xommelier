@@ -105,6 +105,75 @@ will output:
 </feed>
 ```
 
+### Building from hash
+
+```ruby
+feed = Xommelier::Atom::Feed.new(
+  {
+    title: 'Xommelier nest elements',
+    subtitle: 'Xommelier is able to build complex objects from very nested hash',
+    author: {name: 'Alexander', email: 'al@semyonov.us'},
+    updated: Time.utc(2012, 04, 04, 04, 04),
+    contributors: [
+      {name: 'Ivan', email: 'ivan@example.com'},
+      {name: 'Pyotr', email: 'pyotr@example.com'},
+      {name: 'Sidor', email: 'sidor@example.com'},
+    ],
+    entries: [
+      {title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01)},
+      {title: 'Second article', updated: Time.utc(2012, 02, 02, 02, 02)},
+      {title: 'Third article', updated: Time.utc(2012, 03, 03, 03, 03)},
+    ]
+  }
+)
+
+feed.author # Xommelier::Atom::Person
+feed.contributors[1] # Xommelier::Atom::Person
+feed.entries[2] # Xommelier::Atom::Entry
+
+puts feed.to_xml
+```
+
+will output
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Xommelier nest elements</title>
+  <subtitle>Xommelier is able to build complex objects from very nested hash</subtitle>
+  <author>
+    <name>Alexander</name>
+    <email>al@semyonov.us</email>
+  </author>
+  <updated>2012-04-04T04:04:00Z</updated>
+  <contributor>
+    <name>Ivan</name>
+    <email>ivan@example.com</email>
+  </contributor>
+  <contributor>
+    <name>Pyotr</name>
+    <email>pyotr@example.com</email>
+  </contributor>
+  <contributor>
+    <name>Sidor</name>
+    <email>sidor@example.com</email>
+  </contributor>
+  <entry>
+    <title>First article</title>
+    <updated>2012-01-01T01:01:00Z</updated>
+  </entry>
+  <entry>
+    <title>Second article</title>
+    <updated>2012-02-02T02:02:00Z</updated>
+  </entry>
+  <entry>
+    <title>Third article</title>
+    <updated>2012-03-03T03:03:00Z</updated>
+  </entry>
+</feed>
+```
+
+
 ## TODO
 
 * Validating built XML against RelaxNG and XML Schema
