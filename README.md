@@ -180,4 +180,8 @@ will output
 * Converting XML Schema, RelaxNG, RelaxNG Compact and DTD into Xommelier Ruby DSL
 * ActiveRecord-like automatic loading of XML Schema, RelaxNG, RelaxNG Compact and DTD without needing to write it down into ruby code
 
+## Contributors
+
+* Artyom Semyonov
+
 © Alexander Semyonov, 2011-2012. See MIT-LICENSE for details
