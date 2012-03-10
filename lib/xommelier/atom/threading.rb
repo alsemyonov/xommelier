@@ -2,6 +2,8 @@ require 'xommelier/atom'
 
 module Xommelier
   module Atom
+    # Implments Atom Threading Extensions
+    # See RFC 4685 {http://tools.ietf.org/html/rfc4685.html}
     module Threading
       include Xommelier::Xml
 
