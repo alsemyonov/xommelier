@@ -1,4 +1,5 @@
 require 'xommelier/xml/element'
+require 'active_support/concern'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/with_options'
 require 'active_support/core_ext/object/try'

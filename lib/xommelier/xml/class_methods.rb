@@ -1,4 +1,5 @@
 require 'xommelier/xml'
+require 'xommelier/xml/namespace'
 
 module Xommelier
   module Xml

@@ -1,4 +1,6 @@
 require 'xommelier/xml'
+require 'xommelier/collection'
+require 'xommelier/xml/element'
 require 'active_support/core_ext/array/extract_options'
 
 module Xommelier
