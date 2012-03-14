@@ -2,6 +2,8 @@ require 'xommelier/atom'
 
 module Xommelier
   module Atom
+    # Implements Feed Paging and Archiving
+    # See RFC 5005 {http://tools.ietf.org/html/rfc5005.html}
     module History
       include Xommelier::Xml
 

@@ -12,9 +12,6 @@ module Xommelier
       instance_variable_set :@_xmlns, nil
     end
 
-    autoload :Namespace,  'xommelier/xml/namespace'
-    autoload :Element,    'xommelier/xml/element'
-
     extend ClassMethods
     xmlns DEFAULT_NS, as: :xml
 

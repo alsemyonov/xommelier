@@ -1,6 +1,8 @@
 require 'xommelier/xml'
 
 module Xommelier
+  # Implements The Atom Syndication Format
+  # See RFC 4287 {http://tools.ietf.org/html/rfc4287.html}
   module Atom
     include Xommelier::Xml
 
