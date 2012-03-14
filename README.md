@@ -173,6 +173,12 @@ will output
 </feed>
 ```
 
+## Built in XML namespaces:
+
+1. {Xommelier::Atom} - http://www.w3.org/2005/Atom
+2. {Xommelier::Atom::Threading} - http://purl.org/syndication/thread/1.0
+3. {Xommelier::Atom::History} - http://purl.org/syndication/history/1.0
+4. {Xommelier::OpenSearch} - http://a9.com/-/spec/opensearch/1.1/
 
 ## TODO
 
