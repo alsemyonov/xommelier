@@ -15,8 +15,7 @@ module Xommelier
 
         module ClassMethods
           def from_xml(xml, options = {})
-            new.tap do |doc|
-              doc.options = options
+            new({}, options).tap do |doc|
               doc.from_xml(xml, options)
             end
           end
@@ -43,6 +42,7 @@ module Xommelier
             xml = Nokogiri::XML(xml)
           end
           @_xml_node = options.delete(:node) { xml.at_xpath(element_xpath(xml.document, element_name)) }
+          validate if options[:validate]
 
           if text? && @_xml_node.text?
             self.text = @_xml_node.text
@@ -72,7 +72,7 @@ module Xommelier
               hash["xmlns:#{ns.as}"] = ns.uri
               hash
             end
-            attribute_values.delete("xmlns:#{xmlns.as.to_s}")
+            attribute_values.delete("xmlns:#{xmlns.as}")
             attribute_values.delete('xmlns:xml')
             namespaces = attribute_values
             prefix = nil
@@ -90,15 +90,18 @@ module Xommelier
             end
             serialize_attribute(attribute_name, value, attribute_values)
           end
-          (prefix ? builder[prefix] : builder).
-            send(element_name, attribute_values) do |xml|
-              elements.each do |name, value|
-                serialize_element(name, value, xml, element_options(name).merge(parent_ns_prefix: prefix))
-              end
-              if respond_to?(:text)
-                xml.text @text
-              end
+          @_xml_node = (prefix ? builder[prefix] : builder).
+              send(element_name, attribute_values) do |xml|
+            elements.each do |name, value|
+              serialize_element(
+                name,
+                value,
+                xml,
+                element_options(name).merge(parent_ns_prefix: prefix)
+              )
             end
+            xml.text(@text) if respond_to?(:text)
+          end.instance_variable_get(:@node)
           builder.to_xml
         end
         alias_method :to_xommelier, :to_xml
@@ -143,7 +146,7 @@ module Xommelier
         end
 
         def xml_document
-          @_xml_node.document
+          @_xml_node.try(:document)
         end
 
         def xmlns_xpath(xml_document = self.xml_document)
