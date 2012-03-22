@@ -4,7 +4,7 @@ require 'nokogiri'
 
 module Xommelier
   module Xml
-    class Element
+    class Element < Node
       module Serialization
         extend ActiveSupport::Concern
 

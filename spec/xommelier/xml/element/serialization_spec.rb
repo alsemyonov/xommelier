@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Xommelier::Xml::Element::Serialization do
+describe Xommelier::Xml::Serialization do
   describe 'class' do
     subject { Xommelier::Atom::Feed }
 

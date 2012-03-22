@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Xommelier::Xml do
 end
 
-describe NamespacedModule do
+describe Xommelier::Atom do
   subject { Xommelier::Atom }
 
   it { should respond_to(:xmlns) }

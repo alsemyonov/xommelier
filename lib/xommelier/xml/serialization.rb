@@ -1,5 +1,6 @@
 require 'xommelier/xml'
 require 'nokogiri'
+require 'active_support/core_ext/object/try'
 
 module Xommelier
   module Xml
@@ -33,7 +34,7 @@ module Xommelier
       end
 
       def xml_document
-        @xml_document
+        @xml_document ||= Nokogiri::XML::Document.new
       end
 
       def xml_document=(document)

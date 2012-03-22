@@ -7,7 +7,7 @@ require 'active_support/inflections'
 
 module Xommelier
   module Xml
-    class Element
+    class Element < Node
       module Structure
         extend ActiveSupport::Concern
 

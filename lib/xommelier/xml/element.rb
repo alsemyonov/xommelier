@@ -1,6 +1,4 @@
 require 'xommelier/xml'
-require 'xommelier/xml/element/structure'
-require 'xommelier/xml/element/serialization'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/extract_options'
 require 'active_support/core_ext/class/attribute'
@@ -14,40 +12,24 @@ module Xommelier
       count: :one
     )
 
-    class Element
-      include Xommelier::Xml::Element::Structure
-      include Xommelier::Xml::Element::Serialization
-
-      attr_reader :options
-
-      def initialize(contents = {}, options = {})
-        self.options = options
-
-        @elements = {}
-        @attributes = {}
-        @text = nil
-
-        case contents
-        when Hash
-          contents.each do |name, value|
-            send("#{name}=", value)
-          end
-        else
-          send(:text=, contents)
-        end
+    class Element < Node
+      def contents=(contents)
+        self.xml_node = Nokogiri::XML::Element.new(element_name, xml_document)
+        xml_document.add_child(xml_node) unless xml_document.root.present?
+        super(contents)
       end
 
       def options=(options = {})
-        @options = options
-        @options.delete(:type)
+        # options.delete(:type)
 
-        if @options.key?(:element_name)
-          element_name(@options.delete(:element_name))
+        if options.key?(:element_name)
+          element_name(options.delete(:element_name))
         end
+        super(options)
       end
 
       def inspect
-        %(#<#{self.class.name}:0x#{object_id.to_s(16)} #{inspect_contents}>)
+        %(#<#{self.class.name}:0x#{object_id.to_s(16)} #{to_xml}>)
       end
 
       private
