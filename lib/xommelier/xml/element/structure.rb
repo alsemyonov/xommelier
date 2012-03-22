@@ -176,6 +176,13 @@ module Xommelier
 
         protected
 
+        def options=(options = {})
+          if @options.key?(:element_name)
+            element_name(@options.delete(:element_name))
+          end
+          super(options)
+        end
+
         def element_name(value = nil)
           if value
             @element_name = value

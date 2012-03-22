@@ -48,10 +48,6 @@ module Xommelier
       def options=(options = {})
         @options = options
         @options.delete(:type)
-
-        if @options.key?(:element_name)
-          element_name(@options.delete(:element_name))
-        end
       end
 
       def inspect
