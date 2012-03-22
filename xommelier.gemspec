@@ -19,10 +19,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency 'nokogiri', '~> 1.5.0'
-  s.add_dependency 'activesupport', '~> 3.1.0'
-  s.add_dependency 'activemodel', '~> 3.1.0'
+  s.add_dependency 'activesupport', '~> 3.1'
+  s.add_dependency 'activemodel', '~> 3.1'
 
-  s.add_development_dependency 'rspec', '~> 2.7.0'
+  s.add_development_dependency 'rspec', '~> 2.9.0'
   s.add_development_dependency 'rake', '~> 0.9.2'
   s.add_development_dependency 'yard', '~> 0.7.3'
 end
