@@ -12,16 +12,17 @@ module Xommelier
         end
       end
 
-      attr_reader :uri, :options, :as, :elements, :attributes
+      attr_reader :uri, :options, :prefix, :elements, :attributes
       alias to_s uri
+      alias as prefix
 
       def initialize(uri, options = {}, &block)
         @uri        = uri
         @options    = {}
         @elements   = Xommelier::Collection.new(Xommelier::Xml::Element)
-        @as         = options.delete(:as)
+        @prefix     = options.delete(:prefix) { options.delete(:as) }
 
-        Xommelier::Xml::Namespace.registry[as] = self
+        Xommelier::Xml::Namespace.registry[prefix] = self
 
         self.options = options
         scoped(&block) if block_given?
@@ -70,11 +71,17 @@ module Xommelier
       end
 
       def to_hash
-        {as.to_s => uri.to_s}
+        {prefix.to_s => uri.to_s}
       end
 
       def inspect
-        %(xmlns:#{as}="#{uri}")
+        %(xmlns:#{prefix}="#{uri}")
+      end
+
+      protected
+
+      def define_module!
+        options[:module]
       end
     end
   end
