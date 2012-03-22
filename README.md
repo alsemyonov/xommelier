@@ -182,7 +182,7 @@ will output
 
 ## TODO
 
-* Validating built XML against RelaxNG and XML Schema
+* Validating built XML against RelaxNG
 * Converting XML Schema, RelaxNG, RelaxNG Compact and DTD into Xommelier Ruby DSL
 * ActiveRecord-like automatic loading of XML Schema, RelaxNG, RelaxNG Compact and DTD without needing to write it down into ruby code
 
