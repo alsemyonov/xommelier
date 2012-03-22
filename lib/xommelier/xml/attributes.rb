@@ -1,5 +1,6 @@
 require 'xommelier/xml'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/object/with_options'
 require 'active_support/core_ext/module/delegation'
 require 'active_model/attribute_methods'
 require 'active_model/dirty'
@@ -57,6 +58,24 @@ module Xommelier
         def text(name = :text, options = {})
           options[:type] ||= String
           field(name, options.merge(node_type: :text))
+        end
+
+        def any(&block)
+          with_options(count: :any) do |any|
+            any.instance_eval(&block)
+          end
+        end
+
+        def many(&block)
+          with_options(count: :many) do |many|
+            many.instance_eval(&block)
+          end
+        end
+
+        def may(&block)
+          with_options(count: :may) do |may|
+            may.instance_eval(&block)
+          end
         end
 
         protected

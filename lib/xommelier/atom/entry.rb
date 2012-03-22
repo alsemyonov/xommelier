@@ -3,7 +3,7 @@ require 'xommelier/atom'
 module Xommelier
   module Atom
     class Entry < Xml::Element
-      root
+      #root
 
       element :id, unique: true
       element :title

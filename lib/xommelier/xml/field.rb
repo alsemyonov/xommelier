@@ -45,7 +45,7 @@ module Xommelier
         @method_name = options.delete(:method_name) { name }
         @node_type   = options.delete(:node_type)
         @default     = options.delete(:default)
-        self.type        = options.delete(:type)
+        self.type    = options.delete(:type)
         @options     = options
       end
 
