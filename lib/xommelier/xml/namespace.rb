@@ -41,6 +41,14 @@ module Xommelier
         @options.merge!(options)
       end
 
+      def module
+        options[:module]
+      end
+
+      def schema
+        self.module.schema
+      end
+
       def scoped(&block)
         instance_exec(&block)
       end

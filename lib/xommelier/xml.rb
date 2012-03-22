@@ -25,12 +25,15 @@ module Xommelier
 
       def schema(schema = nil)
         if schema
+          # If schema or schema path provided, set schema
           schema = Nokogiri::XML::Schema(open(schema).read) unless schema.is_a?(Nokogiri::XML::Node)
           instance_variable_set(:@_schema, schema)
-        end
-        unless instance_variable_get(:@_schema)
+        elsif !instance_variable_defined?(:@_schema)
+          # Unless schema exists, try to autoload schema
           available_schema = available_schemas.find { |path| path =~ /#{xmlns.as}\.xsd/ }
-          self.schema(available_schema)
+          self.schema(available_schema) if available_schema
+        else
+          instance_variable_set(:@schema, nil)
         end
         instance_variable_get(:@_schema)
       end
