@@ -26,6 +26,7 @@ module Xommelier
         @elements = {}
         @attributes = {}
         @text = nil
+        @errors = []
 
         self.class.attributes.each do |name, options|
           send("#{name}=", options[:default]) if options[:default]
@@ -47,11 +48,15 @@ module Xommelier
 
       def options=(options = {})
         @options = options
-        @options.delete(:type)
-
-        if @options.key?(:element_name)
-          element_name(@options.delete(:element_name))
+        unless @options[:validate]
+          @options[:validate] = !!xmlns.schema
         end
+        @options.delete(:type)
+      end
+
+      def valid?
+        validate
+        @errors.empty? || @errors
       end
 
       def inspect
@@ -59,6 +64,16 @@ module Xommelier
       end
 
       private
+
+      def validate
+        @errors = []
+        to_xml unless xml_document
+        if xmlns.schema
+          xmlns.schema.validate(xml_document).each do |error|
+            @errors << error
+          end
+        end
+      end
 
       def inspect_contents
         [inspect_attributes, inspect_elements, inspect_text].compact.join(' ')
