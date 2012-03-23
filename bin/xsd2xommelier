@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'erubis'
 require 'xommelier/builder'
 
 schema_path = ARGV[0]
@@ -9,12 +8,9 @@ schema_file = open(schema_path, 'r')
 
 @schema = Xommelier::Builder.new(schema_file)
 File.open(ruby_path, 'w') do |f|
-  ruby_code = Erubis::Eruby.new(DATA.read).result(binding)
+  ruby_code = @schema.to_ruby
   f.puts(ruby_code)
 end
 $stderr.puts @schema.errors.to_a
 
 __END__
-module Xommelier
-<%= @schema.parse_node(@schema.root) %>
-end
