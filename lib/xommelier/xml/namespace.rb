@@ -43,7 +43,15 @@ module Xommelier
       end
 
       def module
-        options[:module]
+        options[:module] ||= begin
+                               module_name = prefix.to_s.camelcase
+                               if ::Xommelier.const_defined?(module_name)
+                                 raise "Module Xommelier::#{module_name} already defined"
+                               end
+                               Module.new { extend Xommelier::DSL::Namespace }.tap do |mod|
+                                 ::Xommelier.const_set(module_name, mod)
+                               end
+                             end
       end
 
       def schema
@@ -51,7 +59,7 @@ module Xommelier
       end
 
       def scoped(&block)
-        instance_exec(&block)
+        self.module.module_eval(&block)
       end
 
       def attribute(*names, &block)

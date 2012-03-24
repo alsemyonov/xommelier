@@ -10,6 +10,10 @@ module Xommelier
       key?(name) || super(name)
     end
 
+    def key(value)
+      super(value) || find { |key, item| item.to_s == value }.try(:[], 1)
+    end
+
     def find_and_append(name, options = {}, &block)
       item = self[name]
       item.options = options
