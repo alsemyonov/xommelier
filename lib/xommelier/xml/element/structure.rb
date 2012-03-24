@@ -2,6 +2,7 @@ require 'xommelier/xml/element'
 require 'active_support/concern'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/with_options'
+require 'active_support/core_ext/object/try'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/inflections'
 
@@ -67,14 +68,20 @@ module Xommelier
           def inherited(child)
             child.elements    = elements.dup
             child.attributes  = attributes.dup
+            child.send(:include, Xml::CommonAttributes)
           end
 
-          def root
-            #xmlns.roots << self
-          end
+          def root; end
         end
 
         protected
+
+        def options=(options = {})
+          if @options.key?(:element_name)
+            element_name(@options.delete(:element_name))
+          end
+          super(options)
+        end
 
         def element_name(value = nil)
           if value

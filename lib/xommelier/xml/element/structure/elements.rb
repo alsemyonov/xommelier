@@ -5,29 +5,28 @@ module Xommelier
         module ClassMethods
           # Defines containing element
           # @example
-          #   element :author, class_name: 'Xommelier::Atom::Person'
+          #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
-            options[:element_name] = name
+            options[:element_name] = options.delete(:as) { name }
+            options[:ns] ||= if options[:type].try(:<, Xml::Element)
+                               options[:ns] = options[:type].xmlns
+                             else
+                               xmlns
+                             end
             elements[name] = DEFAULT_ELEMENT_OPTIONS.merge(options)
             define_element_accessors(name)
           end
 
           def any(&block)
-            with_options(count: :any) do |any|
-              any.instance_eval(&block)
-            end
+            with_options(count: :any)  { |any|  any.instance_eval(&block)   }
           end
 
           def many(&block)
-            with_options(count: :many) do |many|
-              many.instance_eval(&block)
-            end
+            with_options(count: :many) { |many| many.instance_eval(&block)  }
           end
 
           def may(&block)
-            with_options(count: :may) do |may|
-              may.instance_eval(&block)
-            end
+            with_options(count: :may)  { |may|  may.instance_eval(&block)   }
           end
 
           protected
@@ -50,7 +49,9 @@ module Xommelier
 
               define_method(plural) do |*args|
                 if args.any?
-                  @elements[name] = args.flatten
+                  args.flatten.each_with_index do |object, index|
+                    write_element(name, object, index)
+                  end
                 end
                 @elements[name] ||= []
               end
@@ -76,11 +77,11 @@ module Xommelier
           self.class.elements[name.to_sym]
         end
 
-        def read_element(name)
-          @elements[name.to_sym]
+        def read_element(name, index = nil)
+          index ? @elements[name.to_sym][index] : @elements[name.to_sym]
         end
 
-        def write_element(name, value)
+        def write_element(name, value, index = nil)
           type = element_options(name)[:type]
           unless value.is_a?(type)
             value = if (type < Xommelier::Xml::Element) && !value.is_a?(Nokogiri::XML::Node)
@@ -89,7 +90,12 @@ module Xommelier
                       type.from_xommelier(value)
                     end
           end
-          @elements[name.to_sym] = value
+          if index
+            @elements[name.to_sym] ||= []
+            @elements[name.to_sym][index] = value
+          else
+            @elements[name.to_sym] = value
+          end
         end
 
         def remove_element(name)

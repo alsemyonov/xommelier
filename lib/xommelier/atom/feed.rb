@@ -3,7 +3,9 @@ require 'xommelier/atom'
 module Xommelier
   module Atom
     class Feed < Xml::Element
-      #root
+      include LinksExtension
+
+      root
 
       element :id, unique: true
       element :title

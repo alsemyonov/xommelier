@@ -14,6 +14,48 @@ module Xommelier
         end
         alias from_xml parse
         alias from_xommelier parse
+
+        def xmlns(value = nil)
+          if value
+            @xmlns = case value
+                     when Module
+                       value.xmlns
+                     else
+                       value
+                     end
+          end
+          @xmlns ||= find_namespace
+        end
+        alias_method :xmlns=, :xmlns
+
+        def element_name(element_name = nil)
+          @element_name = element_name if element_name
+          @element_name ||= find_element_name
+        end
+
+        def root; end
+
+        protected
+
+        def containing_module
+          @containing_module ||= ("::#{name.gsub(/::[^:]+$/, '')}").constantize
+        end
+
+        def find_element_name
+          name.demodulize.underscore.dasherize
+        end
+
+        def find_namespace
+          if self == containing_module
+            Xommelier::Xml::DEFAULT_NS
+          else
+            containing_module.xmlns
+          end
+        end
+      end
+
+      def xmlns(*args)
+        self.class.xmlns(*args)
       end
 
       attr_accessor :text
@@ -43,7 +85,7 @@ module Xommelier
       end
 
       def xml_node
-        @xml_node
+        @xml_node || xml_document && @xml_node
       end
 
       def xml_node=(xml_node)

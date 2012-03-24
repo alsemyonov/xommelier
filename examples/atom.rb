@@ -1,11 +1,12 @@
 require 'xommelier/atom'
-require 'open-uri'
+require 'xommelier/atom/threading'
+require 'active_support/core_ext'
 
 # Reading a feed
-feed = Xommelier::Atom::Feed.parse(open('http://example.com/blog.atom'))
+feed = Xommelier::Atom::Feed.parse(open('spec/fixtures/feed.atom.xml'))
 puts feed.id, feed.title, feed.updated
 
-feed.each(:entry) do |entry|
+feed.entries do |entry|
   puts feed.id, feed.title, feed.published, feed.updated
   puts feed.content || feed.summary
 end
@@ -14,14 +15,26 @@ end
 feed = Xommelier::Atom::Feed.new
 feed.id = 'http://example.com/blog'
 feed.title = 'Example.com blog'
+feed.complete = Xommelier::Atom::History::Complete.new
 
+entry = feed.entry = Xommelier::Atom::Entry.new(
+  id: 'http://example.com/blog/2012/03/05',
+  title: "Happy Xommelier's day!",
+  updated: 5.days.ago
+).tap do |entry|
+  entry.link = Xommelier::Atom::Link.new(href: entry.id, rel: 'alternate', type: 'text/html')
+  entry.links << Xommelier::Atom::Link.new(href: "#{entry.id}/comments.atom", rel: 'replies', type: 'application/atom+xml', count: 5)
+end
+
+# Add Comments
 5.times do |i|
-  entry = Xommelier::Atom::Entry.new
-  entry.id = "http://example.com/blog/#{i}"
-  entry.title = "Example.com blog entry #{i}"
-  entry.updated = (5 - i).days.ago
-
-  feed << entry
+  feed.entries << Xommelier::Atom::Entry.new(
+    id: "http://example.com/blog/2012/03/05#comment_#{i}",
+    title: ('Hooray! ' * (i + 1)).strip,
+    updated: (5 - i).days.ago
+  ).tap do |comment|
+    comment.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(ref: entry.id, href: entry.link.href)
+  end
 end
 
 puts feed.to_xml

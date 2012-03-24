@@ -12,7 +12,7 @@ describe Xommelier::Atom::Entry do
     end
     %w(author category contributor link).each do |any_field|
       it { should respond_to(any_field) }
-      it { should respond_to(any_field.pluralize) }
+      it('have plural methods for embedded collections') { should respond_to(any_field.pluralize) }
     end
   end
 end

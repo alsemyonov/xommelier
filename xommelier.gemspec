@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Alexander Semyonov"]
   s.email       = ["al@semyonov.us"]
   s.homepage    = "http://github.com/alsemyonov/xommelier"
-  s.summary     = %q{XML-Object Mapper}
+  s.summary     = %q{Xommelier is an XML Sommelier}
   s.description = %q{XML-Object Mapper with many built-in XML formats supported}
 
   s.rubyforge_project = "xommelier"

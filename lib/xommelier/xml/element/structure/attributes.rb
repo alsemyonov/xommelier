@@ -5,6 +5,8 @@ module Xommelier
         module ClassMethods
           # Defines containing attribute
           def attribute(name, options = {})
+            options[:attribute_name] = options.delete(:as) { name }
+            options[:ns] ||= xmlns
             attributes[name] = DEFAULT_OPTIONS.merge(options)
             define_attribute_accessors(name)
           end

@@ -1,0 +1,36 @@
+# IDE for rails application development
+
+#setup 'bundle'
+
+def title(title)
+  run %(echo -e "\\033];#{title}\\007" && clear)
+end
+
+title 'Editor'
+run 'vim Gemfile && clear'
+
+tab(:bash) do
+  title('Shell')
+end
+
+tab(:guard) do
+  title 'Guard'
+  run 'guard'
+end
+
+tab(:console) do
+  title 'Console'
+  run './console'
+end
+
+#window do
+  #tab "echo 'first tab'", "echo 'of window'"
+  #tab "named tab", :settings => "Ocean" do
+    #run "echo 'named tab'"
+    #run "ls"
+  #end
+#end
+
+#window "autotest" do
+  #tab "echo 'window and tab without options'"
+#end

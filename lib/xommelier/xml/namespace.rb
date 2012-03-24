@@ -1,4 +1,6 @@
 require 'xommelier/xml'
+require 'xommelier/collection'
+require 'xommelier/xml/element'
 require 'active_support/core_ext/array/extract_options'
 
 module Xommelier
@@ -39,6 +41,14 @@ module Xommelier
         @options.merge!(options)
       end
 
+      def module
+        options[:module]
+      end
+
+      def schema
+        self.module.schema
+      end
+
       def scoped(&block)
         instance_exec(&block)
       end
@@ -57,6 +67,10 @@ module Xommelier
           options[:ns] ||= self
           elements.find_or_create(name, options, &block)
         end
+      end
+
+      def to_hash
+        {as.to_s => uri.to_s}
       end
 
       def inspect

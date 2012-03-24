@@ -1,4 +1,6 @@
 require 'xommelier/xml'
+require 'xommelier/xml/serialization'
+require 'xommelier/xml/attributes'
 
 module Xommelier
   module Xml

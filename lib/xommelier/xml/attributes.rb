@@ -38,6 +38,10 @@ module Xommelier
           child.lookup_undefined_fields = lookup_undefined_fields
         end
 
+        def field_names
+          fields.keys
+        end
+
         def field(name, options = {})
           Field.new(name, options).tap do |field|
             fields[name] = field
@@ -81,21 +85,6 @@ module Xommelier
         protected
 
         def field_accessor(field)
-          $stderr.puts <<-STR, __FILE__, __LINE__
-            def #{field.getter}                                           # def name
-              #{field.type}.deserialize(read_attribute('#{field.name}'))  #   String.deserialize(read_attribute('name'))
-            end                                                           # end
-
-            def #{field.setter}(value)                # def name=(value)
-              #{field.name}_will_change!              #   name_will_change!
-              write_attribute('#{field.name}', value) #   write_attribute('name', value)
-            end                                       # end
-
-            def #{field.presence}                     # def name?
-              #{field.getter}.present?                #   name.present?
-            end                                       # end
-          STR
-          $stderr.puts field.inspect
           class_eval <<-STR, __FILE__, __LINE__
             def #{field.getter}                                           # def name
               #{field.type}.deserialize(read_attribute('#{field.name}'))  #   String.deserialize(read_attribute('name'))
