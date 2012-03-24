@@ -14,6 +14,10 @@ module Xommelier
       def namespace
         element['namespace'].to_s
       end
+
+      def method_options
+        super.except('namespace')
+      end
     end
   end
 end

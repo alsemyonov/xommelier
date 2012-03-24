@@ -25,7 +25,7 @@ module Xommelier
     end
 
     def to_ruby
-      %(module Xommelier\n#{parse_node(@xml.root)}end)
+      %(require 'xommelier/dsl'\n\nmodule Xommelier\n#{parse_node(@xml.root)}end)
     end
 
     protected

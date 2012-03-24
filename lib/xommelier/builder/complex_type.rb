@@ -16,7 +16,9 @@ module Xommelier
       end
 
       def method_options
-        super.except('name')
+        {}.tap do |opts|
+          #opts.merge!(options_from('complexContent'))
+        end.merge(super.except('name'))
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'xommelier/dsl'
+
 module Xommelier
   # Part 1 version: Id: structures.xsd,v 1.2 2004/01/15 11:34:25 ht Exp
   # Part 2 version: Id: datatypes.xsd,v 1.3 2004/01/23 18:11:13 ht Exp
@@ -11,23 +13,23 @@ module Xommelier
     # towards the end of this schema document
     # Get access to the xml: attribute groups for xml:lang
     # as declared on 'schema' and 'documentation' below
-    import "http://www.w3.org/XML/1998/namespace", namespace: "http://www.w3.org/XML/1998/namespace", schemaLocation: "http://www.w3.org/2001/xml.xsd"
+    import "http://www.w3.org/XML/1998/namespace", schemaLocation: "http://www.w3.org/2001/xml.xsd"
     # This type is extended by almost all schema types
     # to allow attributes from other namespaces to be
     # added to user schemas.
     complex_type :openAttrs do
-      complex_content base: ref('xs:anyType') do
+      complex_content base: ns.xs.anyType do
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # This type is extended by all types which allow annotation
     # other than <schema> itself
     complex_type :annotated do
-      complex_content base: ref('xs:openAttrs') do
+      complex_content base: ns.xs.openAttrs do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
         end
-        attribute :id, type: ref('xs:ID')
+        attribute :id, type: ns.xs.ID
       end
     end
     # This group is for the
@@ -35,70 +37,70 @@ module Xommelier
     # All of their types are based on the "annotated" type by extension.
     group :schemaTop do
       choice do
-        group ref: ref('xs:redefinable')
-        element ref: ref('xs:element')
-        element ref: ref('xs:attribute')
-        element ref: ref('xs:notation')
+        group ref: ns.xs.redefinable
+        element ref: ns.xs.element
+        element ref: ns.xs.attribute
+        element ref: ns.xs.notation
       end
     end
     # This group is for the
     # elements which can self-redefine (see <redefine> below).
     group :redefinable do
       choice do
-        element ref: ref('xs:simpleType')
-        element ref: ref('xs:complexType')
-        element ref: ref('xs:group')
-        element ref: ref('xs:attributeGroup')
+        element ref: ns.xs.simpleType
+        element ref: ns.xs.complexType
+        element ref: ns.xs.group
+        element ref: ns.xs.attributeGroup
       end
     end
     # A utility type, not for public use
-    simple_type :formChoice, base: ref('xs:NMTOKEN'), enumeration: ["qualified", "unqualified"]
+    simple_type :formChoice, base: ns.xs.NMTOKEN, enumeration: ["qualified", "unqualified"]
     # A utility type, not for public use
-    simple_type :reducedDerivationControl, base: ref('xs:derivationControl'), enumeration: ["extension", "restriction"]
+    simple_type :reducedDerivationControl, base: ns.xs.derivationControl, enumeration: ["extension", "restriction"]
     # A utility type, not for public use
     simple_type :derivationSet do
       union do
-        simple_type base: ref('xs:token'), enumeration: ["#all"]
+        simple_type base: ns.xs.token, enumeration: ["#all"]
         simple_type do
-          list item_type: ref('xs:reducedDerivationControl')
+          list item_type: ns.xs.reducedDerivationControl
         end
       end
     end
     # A utility type, not for public use
-    simple_type :typeDerivationControl, base: ref('xs:derivationControl'), enumeration: ["extension", "restriction", "list", "union"]
+    simple_type :typeDerivationControl, base: ns.xs.derivationControl, enumeration: ["extension", "restriction", "list", "union"]
     # A utility type, not for public use
     simple_type :fullDerivationSet do
       union do
-        simple_type base: ref('xs:token'), enumeration: ["#all"]
+        simple_type base: ns.xs.token, enumeration: ["#all"]
         simple_type do
-          list item_type: ref('xs:typeDerivationControl')
+          list item_type: ns.xs.typeDerivationControl
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-schema}
     element :schema, id: "schema" do
       complex_type do
-        complex_content base: ref('xs:openAttrs') do
+        complex_content base: ns.xs.openAttrs do
           sequence do
             choice min: 0, max: :unbounded do
-              element ref: ref('xs:include')
-              element ref: ref('xs:import')
-              element ref: ref('xs:redefine')
-              element ref: ref('xs:annotation')
+              element ref: ns.xs.include
+              element ref: ns.xs.import
+              element ref: ns.xs.redefine
+              element ref: ns.xs.annotation
             end
             sequence min: 0, max: :unbounded do
-              group ref: ref('xs:schemaTop')
-              element ref: ref('xs:annotation'), min: 0, max: :unbounded
+              group ref: ns.xs.schemaTop
+              element ref: ns.xs.annotation, min: 0, max: :unbounded
             end
           end
-          attribute :targetNamespace, type: ref('xs:anyURI')
-          attribute :version, type: ref('xs:token')
-          attribute :finalDefault, type: ref('xs:fullDerivationSet'), use: "optional", default: ""
-          attribute :blockDefault, type: ref('xs:blockSet'), use: "optional", default: ""
-          attribute :attributeFormDefault, type: ref('xs:formChoice'), use: "optional", default: "unqualified"
-          attribute :elementFormDefault, type: ref('xs:formChoice'), use: "optional", default: "unqualified"
-          attribute :id, type: ref('xs:ID')
-          attribute ref: ref('xml:lang')
+          attribute :targetNamespace, type: ns.xs.anyURI
+          attribute :version, type: ns.xs.token
+          attribute :finalDefault, type: ns.xs.fullDerivationSet, use: "optional", default: ""
+          attribute :blockDefault, type: ns.xs.blockSet, use: "optional", default: ""
+          attribute :attributeFormDefault, type: ns.xs.formChoice, use: "optional", default: "unqualified"
+          attribute :elementFormDefault, type: ns.xs.formChoice, use: "optional", default: "unqualified"
+          attribute :id, type: ns.xs.ID
+          attribute ref: ns.xml.lang
         end
       end
       key "element", name: "element" do
@@ -133,89 +135,89 @@ module Xommelier
     # for maxOccurs
     simple_type :allNNI do
       union memberTypes: "xs:nonNegativeInteger" do
-        simple_type base: ref('xs:NMTOKEN'), enumeration: ["unbounded"]
+        simple_type base: ns.xs.NMTOKEN, enumeration: ["unbounded"]
       end
     end
     # for all particles
     attributes :occurs, name: "occurs" do
-      attribute :minOccurs, type: ref('xs:nonNegativeInteger'), use: "optional", default: "1"
-      attribute :maxOccurs, type: ref('xs:allNNI'), use: "optional", default: "1"
+      attribute :minOccurs, type: ns.xs.nonNegativeInteger, use: "optional", default: "1"
+      attribute :maxOccurs, type: ns.xs.allNNI, use: "optional", default: "1"
     end
     # for element, group and attributeGroup,
     # which both define and reference
     attributes :defRef, name: "defRef" do
-      attribute :name, type: ref('xs:NCName')
-      attribute :ref, type: ref('xs:QName')
+      attribute :name, type: ns.xs.NCName
+      attribute :ref, type: ns.xs.QName
     end
     # 'complexType' uses this
     group :typeDefParticle do
       choice do
-        element :group, type: ref('xs:groupRef')
-        element ref: ref('xs:all')
-        element ref: ref('xs:choice')
-        element ref: ref('xs:sequence')
+        element :group, type: ns.xs.groupRef
+        element ref: ns.xs.all
+        element ref: ns.xs.choice
+        element ref: ns.xs.sequence
       end
     end
     group :nestedParticle do
       choice do
-        element :element, type: ref('xs:localElement')
-        element :group, type: ref('xs:groupRef')
-        element ref: ref('xs:choice')
-        element ref: ref('xs:sequence')
-        element ref: ref('xs:any')
+        element :element, type: ns.xs.localElement
+        element :group, type: ns.xs.groupRef
+        element ref: ns.xs.choice
+        element ref: ns.xs.sequence
+        element ref: ns.xs.any
       end
     end
     group :particle do
       choice do
-        element :element, type: ref('xs:localElement')
-        element :group, type: ref('xs:groupRef')
-        element ref: ref('xs:all')
-        element ref: ref('xs:choice')
-        element ref: ref('xs:sequence')
-        element ref: ref('xs:any')
+        element :element, type: ns.xs.localElement
+        element :group, type: ns.xs.groupRef
+        element ref: ns.xs.all
+        element ref: ns.xs.choice
+        element ref: ns.xs.sequence
+        element ref: ns.xs.any
       end
     end
     complex_type :attribute do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         sequence do
-          element :simpleType, type: ref('xs:localSimpleType'), min: 0
+          element :simpleType, type: ns.xs.localSimpleType, min: 0
         end
-        attributes ref: ref('xs:defRef')
-        attribute :type, type: ref('xs:QName')
-        attribute :use, base: ref('xs:NMTOKEN'), enumeration: ["prohibited", "optional", "required"], use: "optional", default: "optional"
-        attribute :default, type: ref('xs:string')
-        attribute :fixed, type: ref('xs:string')
-        attribute :form, type: ref('xs:formChoice')
+        attributes ref: ns.xs.defRef
+        attribute :type, type: ns.xs.QName
+        attribute :use, base: ns.xs.NMTOKEN, enumeration: ["prohibited", "optional", "required"], use: "optional", default: "optional"
+        attribute :default, type: ns.xs.string
+        attribute :fixed, type: ns.xs.string
+        attribute :form, type: ns.xs.formChoice
       end
     end
     complex_type :topLevelAttribute do
-      complex_content base: ref('xs:attribute') do
+      complex_content base: ns.xs.attribute do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          element :simpleType, type: ref('xs:localSimpleType'), min: 0
+          element ref: ns.xs.annotation, min: 0
+          element :simpleType, type: ns.xs.localSimpleType, min: 0
         end
         attribute :ref, use: "prohibited"
         attribute :form, use: "prohibited"
         attribute :use, use: "prohibited"
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     group :attrDecls do
       sequence do
         choice min: 0, max: :unbounded do
-          element :attribute, type: ref('xs:attribute')
-          element :attributeGroup, type: ref('xs:attributeGroupRef')
+          element :attribute, type: ns.xs.attribute
+          element :attributeGroup, type: ns.xs.attributeGroupRef
         end
-        element ref: ref('xs:anyAttribute'), min: 0
+        element ref: ns.xs.anyAttribute, min: 0
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-anyAttribute}
-    element :anyAttribute, type: ref('xs:wildcard'), id: "anyAttribute"
+    element :anyAttribute, type: ns.xs.wildcard, id: "anyAttribute"
     group :complexTypeModel do
       choice do
-        element ref: ref('xs:simpleContent')
-        element ref: ref('xs:complexContent')
+        element ref: ns.xs.simpleContent
+        element ref: ns.xs.complexContent
         # This branch is short for
         # <complexContent>
         # <restriction base="xs:anyType">
@@ -223,39 +225,39 @@ module Xommelier
         # </restriction>
         # </complexContent>
         sequence do
-          group ref: ref('xs:typeDefParticle'), min: 0
-          group ref: ref('xs:attrDecls')
+          group ref: ns.xs.typeDefParticle, min: 0
+          group ref: ns.xs.attrDecls
         end
       end
     end
     complex_type :complexType, abstract: "true" do
-      complex_content base: ref('xs:annotated') do
-        group ref: ref('xs:complexTypeModel')
+      complex_content base: ns.xs.annotated do
+        group ref: ns.xs.complexTypeModel
         # Will be restricted to required or forbidden
-        attribute :name, type: ref('xs:NCName')
+        attribute :name, type: ns.xs.NCName
         # Not allowed if simpleContent child is chosen.
         # May be overriden by setting on complexContent child.
-        attribute :mixed, type: ref('xs:boolean'), use: "optional", default: "false"
-        attribute :abstract, type: ref('xs:boolean'), use: "optional", default: "false"
-        attribute :final, type: ref('xs:derivationSet')
-        attribute :block, type: ref('xs:derivationSet')
+        attribute :mixed, type: ns.xs.boolean, use: "optional", default: "false"
+        attribute :abstract, type: ns.xs.boolean, use: "optional", default: "false"
+        attribute :final, type: ns.xs.derivationSet
+        attribute :block, type: ns.xs.derivationSet
       end
     end
     complex_type :topLevelComplexType do
-      complex_content base: ref('xs:complexType') do
+      complex_content base: ns.xs.complexType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:complexTypeModel')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.complexTypeModel
         end
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :localComplexType do
-      complex_content base: ref('xs:complexType') do
+      complex_content base: ns.xs.complexType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:complexTypeModel')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.complexTypeModel
         end
         attribute :name, use: "prohibited"
         attribute :abstract, use: "prohibited"
@@ -265,73 +267,73 @@ module Xommelier
       end
     end
     complex_type :restrictionType do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         sequence do
           choice min: 0 do
-            group ref: ref('xs:typeDefParticle')
-            group ref: ref('xs:simpleRestrictionModel')
+            group ref: ns.xs.typeDefParticle
+            group ref: ns.xs.simpleRestrictionModel
           end
-          group ref: ref('xs:attrDecls')
+          group ref: ns.xs.attrDecls
         end
-        attribute :base, type: ref('xs:QName'), use: "required"
+        attribute :base, type: ns.xs.QName, use: "required"
       end
     end
     complex_type :complexRestrictionType do
-      complex_content base: ref('xs:restrictionType') do
+      complex_content base: ns.xs.restrictionType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           # This choice is added simply to
           # make this a valid restriction per the REC
           choice min: 0 do
-            group ref: ref('xs:typeDefParticle')
+            group ref: ns.xs.typeDefParticle
           end
-          group ref: ref('xs:attrDecls')
+          group ref: ns.xs.attrDecls
         end
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :extensionType do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         sequence do
-          group ref: ref('xs:typeDefParticle'), min: 0
-          group ref: ref('xs:attrDecls')
+          group ref: ns.xs.typeDefParticle, min: 0
+          group ref: ns.xs.attrDecls
         end
-        attribute :base, type: ref('xs:QName'), use: "required"
+        attribute :base, type: ns.xs.QName, use: "required"
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-complexContent}
     element :complexContent, id: "complexContent" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
+        complex_content base: ns.xs.annotated do
           choice do
-            element :restriction, type: ref('xs:complexRestrictionType')
-            element :extension, type: ref('xs:extensionType')
+            element :restriction, type: ns.xs.complexRestrictionType
+            element :extension, type: ns.xs.extensionType
           end
           # Overrides any setting on complexType parent.
-          attribute :mixed, type: ref('xs:boolean')
+          attribute :mixed, type: ns.xs.boolean
         end
       end
     end
     complex_type :simpleRestrictionType do
-      complex_content base: ref('xs:restrictionType') do
+      complex_content base: ns.xs.restrictionType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           # This choice is added simply to
           # make this a valid restriction per the REC
           choice min: 0 do
-            group ref: ref('xs:simpleRestrictionModel')
+            group ref: ns.xs.simpleRestrictionModel
           end
-          group ref: ref('xs:attrDecls')
+          group ref: ns.xs.attrDecls
         end
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :simpleExtensionType do
-      complex_content base: ref('xs:extensionType') do
+      complex_content base: ns.xs.extensionType do
         # No typeDefParticle group reference
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:attrDecls')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.attrDecls
         end
         any_attribute ns: "##other", processContents: "lax"
       end
@@ -339,23 +341,23 @@ module Xommelier
     # {http://www.w3.org/TR/xmlschema-1/#element-simpleContent}
     element :simpleContent, id: "simpleContent" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
+        complex_content base: ns.xs.annotated do
           choice do
-            element :restriction, type: ref('xs:simpleRestrictionType')
-            element :extension, type: ref('xs:simpleExtensionType')
+            element :restriction, type: ns.xs.simpleRestrictionType
+            element :extension, type: ns.xs.simpleExtensionType
           end
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-complexType}
-    element :complexType, type: ref('xs:topLevelComplexType'), id: "complexType"
+    element :complexType, type: ns.xs.topLevelComplexType, id: "complexType"
     # A utility type, not for public use
     simple_type :blockSet do
       union do
-        simple_type base: ref('xs:token'), enumeration: ["#all"]
+        simple_type base: ns.xs.token, enumeration: ["#all"]
         simple_type do
           list do
-            simple_type base: ref('xs:derivationControl'), enumeration: ["extension", "restriction", "substitution"]
+            simple_type base: ns.xs.derivationControl, enumeration: ["extension", "restriction", "substitution"]
           end
         end
       end
@@ -366,54 +368,54 @@ module Xommelier
     # element or type or declare an element-type binding locally.
     # The ref form is not allowed at the top level.
     complex_type :element, abstract: "true" do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         sequence do
           choice min: 0 do
-            element :simpleType, type: ref('xs:localSimpleType')
-            element :complexType, type: ref('xs:localComplexType')
+            element :simpleType, type: ns.xs.localSimpleType
+            element :complexType, type: ns.xs.localComplexType
           end
-          group ref: ref('xs:identityConstraint'), min: 0, max: :unbounded
+          group ref: ns.xs.identityConstraint, min: 0, max: :unbounded
         end
-        attributes ref: ref('xs:defRef')
-        attribute :type, type: ref('xs:QName')
-        attribute :substitutionGroup, type: ref('xs:QName')
-        attributes ref: ref('xs:occurs')
-        attribute :default, type: ref('xs:string')
-        attribute :fixed, type: ref('xs:string')
-        attribute :nillable, type: ref('xs:boolean'), use: "optional", default: "false"
-        attribute :abstract, type: ref('xs:boolean'), use: "optional", default: "false"
-        attribute :final, type: ref('xs:derivationSet')
-        attribute :block, type: ref('xs:blockSet')
-        attribute :form, type: ref('xs:formChoice')
+        attributes ref: ns.xs.defRef
+        attribute :type, type: ns.xs.QName
+        attribute :substitutionGroup, type: ns.xs.QName
+        attributes ref: ns.xs.occurs
+        attribute :default, type: ns.xs.string
+        attribute :fixed, type: ns.xs.string
+        attribute :nillable, type: ns.xs.boolean, use: "optional", default: "false"
+        attribute :abstract, type: ns.xs.boolean, use: "optional", default: "false"
+        attribute :final, type: ns.xs.derivationSet
+        attribute :block, type: ns.xs.blockSet
+        attribute :form, type: ns.xs.formChoice
       end
     end
     complex_type :topLevelElement do
-      complex_content base: ref('xs:element') do
+      complex_content base: ns.xs.element do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           choice min: 0 do
-            element :simpleType, type: ref('xs:localSimpleType')
-            element :complexType, type: ref('xs:localComplexType')
+            element :simpleType, type: ns.xs.localSimpleType
+            element :complexType, type: ns.xs.localComplexType
           end
-          group ref: ref('xs:identityConstraint'), min: 0, max: :unbounded
+          group ref: ns.xs.identityConstraint, min: 0, max: :unbounded
         end
         attribute :ref, use: "prohibited"
         attribute :form, use: "prohibited"
         attribute :minOccurs, use: "prohibited"
         attribute :maxOccurs, use: "prohibited"
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :localElement do
-      complex_content base: ref('xs:element') do
+      complex_content base: ns.xs.element do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           choice min: 0 do
-            element :simpleType, type: ref('xs:localSimpleType')
-            element :complexType, type: ref('xs:localComplexType')
+            element :simpleType, type: ns.xs.localSimpleType
+            element :complexType, type: ns.xs.localComplexType
           end
-          group ref: ref('xs:identityConstraint'), min: 0, max: :unbounded
+          group ref: ns.xs.identityConstraint, min: 0, max: :unbounded
         end
         attribute :substitutionGroup, use: "prohibited"
         attribute :final, use: "prohibited"
@@ -422,49 +424,49 @@ module Xommelier
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-element}
-    element :element, type: ref('xs:topLevelElement'), id: "element"
+    element :element, type: ns.xs.topLevelElement, id: "element"
     # group type for explicit groups, named top-level groups and
     # group references
     complex_type :group, abstract: "true" do
-      complex_content base: ref('xs:annotated') do
-        group ref: ref('xs:particle'), min: 0, max: :unbounded
-        attributes ref: ref('xs:defRef')
-        attributes ref: ref('xs:occurs')
+      complex_content base: ns.xs.annotated do
+        group ref: ns.xs.particle, min: 0, max: :unbounded
+        attributes ref: ns.xs.defRef
+        attributes ref: ns.xs.occurs
       end
     end
     complex_type :realGroup do
-      complex_content base: ref('xs:group') do
+      complex_content base: ns.xs.group do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           choice min: 0, max: 1 do
-            element ref: ref('xs:all')
-            element ref: ref('xs:choice')
-            element ref: ref('xs:sequence')
+            element ref: ns.xs.all
+            element ref: ns.xs.choice
+            element ref: ns.xs.sequence
           end
         end
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :namedGroup do
-      complex_content base: ref('xs:realGroup') do
+      complex_content base: ns.xs.realGroup do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           choice min: 1, max: 1 do
             element :all do
               complex_type do
-                complex_content base: ref('xs:all') do
-                  group ref: ref('xs:allModel')
+                complex_content base: ns.xs.all do
+                  group ref: ns.xs.allModel
                   attribute :minOccurs, use: "prohibited"
                   attribute :maxOccurs, use: "prohibited"
                   any_attribute ns: "##other", processContents: "lax"
                 end
               end
             end
-            element :choice, type: ref('xs:simpleExplicitGroup')
-            element :sequence, type: ref('xs:simpleExplicitGroup')
+            element :choice, type: ns.xs.simpleExplicitGroup
+            element :sequence, type: ns.xs.simpleExplicitGroup
           end
         end
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         attribute :ref, use: "prohibited"
         attribute :minOccurs, use: "prohibited"
         attribute :maxOccurs, use: "prohibited"
@@ -472,32 +474,32 @@ module Xommelier
       end
     end
     complex_type :groupRef do
-      complex_content base: ref('xs:realGroup') do
+      complex_content base: ns.xs.realGroup do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
         end
-        attribute :ref, type: ref('xs:QName'), use: "required"
+        attribute :ref, type: ns.xs.QName, use: "required"
         attribute :name, use: "prohibited"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # group type for the three kinds of group
     complex_type :explicitGroup do
-      complex_content base: ref('xs:group') do
+      complex_content base: ns.xs.group do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:nestedParticle'), min: 0, max: :unbounded
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.nestedParticle, min: 0, max: :unbounded
         end
-        attribute :name, type: ref('xs:NCName'), use: "prohibited"
-        attribute :ref, type: ref('xs:QName'), use: "prohibited"
+        attribute :name, type: ns.xs.NCName, use: "prohibited"
+        attribute :ref, type: ns.xs.QName, use: "prohibited"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :simpleExplicitGroup do
-      complex_content base: ref('xs:explicitGroup') do
+      complex_content base: ns.xs.explicitGroup do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:nestedParticle'), min: 0, max: :unbounded
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.nestedParticle, min: 0, max: :unbounded
         end
         attribute :minOccurs, use: "prohibited"
         attribute :maxOccurs, use: "prohibited"
@@ -506,59 +508,59 @@ module Xommelier
     end
     group :allModel do
       sequence do
-        element ref: ref('xs:annotation'), min: 0
+        element ref: ns.xs.annotation, min: 0
         # This choice with min/max is here to
         # avoid a pblm with the Elt:All/Choice/Seq
         # Particle derivation constraint
         choice min: 0, max: :unbounded do
-          element :element, type: ref('xs:narrowMaxMin')
+          element :element, type: ns.xs.narrowMaxMin
         end
       end
     end
     # restricted max/min
     complex_type :narrowMaxMin do
-      complex_content base: ref('xs:localElement') do
+      complex_content base: ns.xs.localElement do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
           choice min: 0 do
-            element :simpleType, type: ref('xs:localSimpleType')
-            element :complexType, type: ref('xs:localComplexType')
+            element :simpleType, type: ns.xs.localSimpleType
+            element :complexType, type: ns.xs.localComplexType
           end
-          group ref: ref('xs:identityConstraint'), min: 0, max: :unbounded
+          group ref: ns.xs.identityConstraint, min: 0, max: :unbounded
         end
-        attribute :minOccurs, base: ref('xs:nonNegativeInteger'), enumeration: ["0", "1"], use: "optional", default: "1"
-        attribute :maxOccurs, base: ref('xs:allNNI'), enumeration: ["0", "1"], use: "optional", default: "1"
+        attribute :minOccurs, base: ns.xs.nonNegativeInteger, enumeration: ["0", "1"], use: "optional", default: "1"
+        attribute :maxOccurs, base: ns.xs.allNNI, enumeration: ["0", "1"], use: "optional", default: "1"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # Only elements allowed inside
     complex_type :all do
-      complex_content base: ref('xs:explicitGroup') do
-        group ref: ref('xs:allModel')
-        attribute :minOccurs, base: ref('xs:nonNegativeInteger'), enumeration: ["0", "1"], use: "optional", default: "1"
-        attribute :maxOccurs, base: ref('xs:allNNI'), enumeration: ["1"], use: "optional", default: "1"
+      complex_content base: ns.xs.explicitGroup do
+        group ref: ns.xs.allModel
+        attribute :minOccurs, base: ns.xs.nonNegativeInteger, enumeration: ["0", "1"], use: "optional", default: "1"
+        attribute :maxOccurs, base: ns.xs.allNNI, enumeration: ["1"], use: "optional", default: "1"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-all}
-    element :all, type: ref('xs:all'), id: "all"
+    element :all, type: ns.xs.all, id: "all"
     # {http://www.w3.org/TR/xmlschema-1/#element-choice}
-    element :choice, type: ref('xs:explicitGroup'), id: "choice"
+    element :choice, type: ns.xs.explicitGroup, id: "choice"
     # {http://www.w3.org/TR/xmlschema-1/#element-sequence}
-    element :sequence, type: ref('xs:explicitGroup'), id: "sequence"
+    element :sequence, type: ns.xs.explicitGroup, id: "sequence"
     # {http://www.w3.org/TR/xmlschema-1/#element-group}
-    element :group, type: ref('xs:namedGroup'), id: "group"
+    element :group, type: ns.xs.namedGroup, id: "group"
     complex_type :wildcard do
-      complex_content base: ref('xs:annotated') do
-        attribute :namespace, type: ref('xs:namespaceList'), use: "optional", default: "##any"
-        attribute :processContents, base: ref('xs:NMTOKEN'), enumeration: ["skip", "lax", "strict"], use: "optional", default: "strict"
+      complex_content base: ns.xs.annotated do
+        attribute :namespace, type: ns.xs.namespaceList, use: "optional", default: "##any"
+        attribute :processContents, base: ns.xs.NMTOKEN, enumeration: ["skip", "lax", "strict"], use: "optional", default: "strict"
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-any}
     element :any, id: "any" do
       complex_type do
-        complex_content base: ref('xs:wildcard') do
-          attributes ref: ref('xs:occurs')
+        complex_content base: ns.xs.wildcard do
+          attributes ref: ns.xs.occurs
         end
       end
     end
@@ -579,12 +581,12 @@ module Xommelier
     # A utility type, not for public use
     simple_type :namespaceList do
       union do
-        simple_type base: ref('xs:token'), enumeration: ["##any", "##other"]
+        simple_type base: ns.xs.token, enumeration: ["##any", "##other"]
         simple_type do
           list do
             simple_type do
               union memberTypes: "xs:anyURI" do
-                simple_type base: ref('xs:token'), enumeration: ["##targetNamespace", "##local"]
+                simple_type base: ns.xs.token, enumeration: ["##targetNamespace", "##local"]
               end
             end
           end
@@ -592,131 +594,131 @@ module Xommelier
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-attribute}
-    element :attribute, type: ref('xs:topLevelAttribute'), id: "attribute"
+    element :attribute, type: ns.xs.topLevelAttribute, id: "attribute"
     complex_type :attributeGroup, abstract: "true" do
-      complex_content base: ref('xs:annotated') do
-        group ref: ref('xs:attrDecls')
-        attributes ref: ref('xs:defRef')
+      complex_content base: ns.xs.annotated do
+        group ref: ns.xs.attrDecls
+        attributes ref: ns.xs.defRef
       end
     end
     complex_type :namedAttributeGroup do
-      complex_content base: ref('xs:attributeGroup') do
+      complex_content base: ns.xs.attributeGroup do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:attrDecls')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.attrDecls
         end
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         attribute :ref, use: "prohibited"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :attributeGroupRef do
-      complex_content base: ref('xs:attributeGroup') do
+      complex_content base: ns.xs.attributeGroup do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
         end
-        attribute :ref, type: ref('xs:QName'), use: "required"
+        attribute :ref, type: ns.xs.QName, use: "required"
         attribute :name, use: "prohibited"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-attributeGroup}
-    element :attributeGroup, type: ref('xs:namedAttributeGroup'), id: "attributeGroup"
+    element :attributeGroup, type: ns.xs.namedAttributeGroup, id: "attributeGroup"
     # {http://www.w3.org/TR/xmlschema-1/#element-include}
     element :include, id: "include" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          attribute :schemaLocation, type: ref('xs:anyURI'), use: "required"
+        complex_content base: ns.xs.annotated do
+          attribute :schemaLocation, type: ns.xs.anyURI, use: "required"
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-redefine}
     element :redefine, id: "redefine" do
       complex_type do
-        complex_content base: ref('xs:openAttrs') do
+        complex_content base: ns.xs.openAttrs do
           choice min: 0, max: :unbounded do
-            element ref: ref('xs:annotation')
-            group ref: ref('xs:redefinable')
+            element ref: ns.xs.annotation
+            group ref: ns.xs.redefinable
           end
-          attribute :schemaLocation, type: ref('xs:anyURI'), use: "required"
-          attribute :id, type: ref('xs:ID')
+          attribute :schemaLocation, type: ns.xs.anyURI, use: "required"
+          attribute :id, type: ns.xs.ID
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-import}
     element :import, id: "import" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          attribute :namespace, type: ref('xs:anyURI')
-          attribute :schemaLocation, type: ref('xs:anyURI')
+        complex_content base: ns.xs.annotated do
+          attribute :namespace, type: ns.xs.anyURI
+          attribute :schemaLocation, type: ns.xs.anyURI
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-selector}
     element :selector, id: "selector" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          attribute :xpath, base: ref('xs:token'), pattern: /(\.\/\/)?(((child::)?((\i\c*:)?(\i\c*|\*)))|\.)(\/(((child::)?((\i\c*:)?(\i\c*|\*)))|\.))*(\|(\.\/\/)?(((child::)?((\i\c*:)?(\i\c*|\*)))|\.)(\/(((child::)?((\i\c*:)?(\i\c*|\*)))|\.))*)*/, use: "required"
+        complex_content base: ns.xs.annotated do
+          attribute :xpath, base: ns.xs.token, pattern: /(\.\/\/)?(((child::)?((\i\c*:)?(\i\c*|\*)))|\.)(\/(((child::)?((\i\c*:)?(\i\c*|\*)))|\.))*(\|(\.\/\/)?(((child::)?((\i\c*:)?(\i\c*|\*)))|\.)(\/(((child::)?((\i\c*:)?(\i\c*|\*)))|\.))*)*/, use: "required"
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-field}
     element :field, id: "field" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          attribute :xpath, base: ref('xs:token'), pattern: /(\.\/\/)?((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)\/)*((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)|((attribute::|@)((\i\c*:)?(\i\c*|\*))))(\|(\.\/\/)?((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)\/)*((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)|((attribute::|@)((\i\c*:)?(\i\c*|\*)))))*/, use: "required"
+        complex_content base: ns.xs.annotated do
+          attribute :xpath, base: ns.xs.token, pattern: /(\.\/\/)?((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)\/)*((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)|((attribute::|@)((\i\c*:)?(\i\c*|\*))))(\|(\.\/\/)?((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)\/)*((((child::)?((\i\c*:)?(\i\c*|\*)))|\.)|((attribute::|@)((\i\c*:)?(\i\c*|\*)))))*/, use: "required"
         end
       end
     end
     complex_type :keybase do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         sequence do
-          element ref: ref('xs:selector')
-          element ref: ref('xs:field'), min: 1, max: :unbounded
+          element ref: ns.xs.selector
+          element ref: ns.xs.field, min: 1, max: :unbounded
         end
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
       end
     end
     # The three kinds of identity constraints, all with
     # type of or derived from 'keybase'.
     group :identityConstraint do
       choice do
-        element ref: ref('xs:unique')
-        element ref: ref('xs:key')
-        element ref: ref('xs:keyref')
+        element ref: ns.xs.unique
+        element ref: ns.xs.key
+        element ref: ns.xs.keyref
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-unique}
-    element :unique, type: ref('xs:keybase'), id: "unique"
+    element :unique, type: ns.xs.keybase, id: "unique"
     # {http://www.w3.org/TR/xmlschema-1/#element-key}
-    element :key, type: ref('xs:keybase'), id: "key"
+    element :key, type: ns.xs.keybase, id: "key"
     # {http://www.w3.org/TR/xmlschema-1/#element-keyref}
     element :keyref, id: "keyref" do
       complex_type do
-        complex_content base: ref('xs:keybase') do
-          attribute :refer, type: ref('xs:QName'), use: "required"
+        complex_content base: ns.xs.keybase do
+          attribute :refer, type: ns.xs.QName, use: "required"
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-notation}
     element :notation, id: "notation" do
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          attribute :name, type: ref('xs:NCName'), use: "required"
-          attribute :public, type: ref('xs:public')
-          attribute :system, type: ref('xs:anyURI')
+        complex_content base: ns.xs.annotated do
+          attribute :name, type: ns.xs.NCName, use: "required"
+          attribute :public, type: ns.xs.public
+          attribute :system, type: ns.xs.anyURI
         end
       end
     end
     # A utility type, not for public use
-    simple_type :public, base: ref('xs:token')
+    simple_type :public, base: ns.xs.token
     # {http://www.w3.org/TR/xmlschema-1/#element-appinfo}
     element :appinfo, id: "appinfo" do
       complex_type mixed: "true" do
         sequence min: 0, max: :unbounded do
           any processContents: "lax"
         end
-        attribute :source, type: ref('xs:anyURI')
+        attribute :source, type: ns.xs.anyURI
         any_attribute ns: "##other", processContents: "lax"
       end
     end
@@ -726,20 +728,20 @@ module Xommelier
         sequence min: 0, max: :unbounded do
           any processContents: "lax"
         end
-        attribute :source, type: ref('xs:anyURI')
-        attribute ref: ref('xml:lang')
+        attribute :source, type: ns.xs.anyURI
+        attribute ref: ns.xml.lang
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # {http://www.w3.org/TR/xmlschema-1/#element-annotation}
     element :annotation, id: "annotation" do
       complex_type do
-        complex_content base: ref('xs:openAttrs') do
+        complex_content base: ns.xs.openAttrs do
           choice min: 0, max: :unbounded do
-            element ref: ref('xs:appinfo')
-            element ref: ref('xs:documentation')
+            element ref: ns.xs.appinfo
+            element ref: ns.xs.documentation
           end
-          attribute :id, type: ref('xs:ID')
+          attribute :id, type: ns.xs.ID
         end
       end
     end
@@ -757,156 +759,156 @@ module Xommelier
     # First the built-in primitive datatypes.  These definitions are for
     # information only, the real built-in definitions are magic.
     # {http://www.w3.org/TR/xmlschema-2/#string}
-    simple_type :string, base: ref('xs:anySimpleType'), white_space: {:value=>"preserve"}
+    simple_type :string, base: ns.xs.anySimpleType, white_space: {:value=>"preserve"}
     # {http://www.w3.org/TR/xmlschema-2/#boolean}
-    simple_type :boolean, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :boolean, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#float}
-    simple_type :float, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :float, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#double}
-    simple_type :double, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :double, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#decimal}
-    simple_type :decimal, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :decimal, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#duration}
-    simple_type :duration, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :duration, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#dateTime}
-    simple_type :dateTime, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :dateTime, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#time}
-    simple_type :time, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :time, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#date}
-    simple_type :date, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :date, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#gYearMonth}
-    simple_type :gYearMonth, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :gYearMonth, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#gYear}
-    simple_type :gYear, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :gYear, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#gMonthDay}
-    simple_type :gMonthDay, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :gMonthDay, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#gDay}
-    simple_type :gDay, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :gDay, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#gMonth}
-    simple_type :gMonth, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :gMonth, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#binary}
-    simple_type :hexBinary, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :hexBinary, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#base64Binary}
-    simple_type :base64Binary, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :base64Binary, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#anyURI}
-    simple_type :anyURI, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :anyURI, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#QName}
-    simple_type :QName, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :QName, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # {http://www.w3.org/TR/xmlschema-2/#NOTATION}
-    simple_type :NOTATION, base: ref('xs:anySimpleType'), white_space: {:value=>"collapse", :fixed=>true}
+    simple_type :NOTATION, base: ns.xs.anySimpleType, white_space: {:value=>"collapse", :fixed=>true}
     # Now the derived primitive types
     # {http://www.w3.org/TR/xmlschema-2/#normalizedString}
-    simple_type :normalizedString, base: ref('xs:string'), white_space: {:value=>"replace"}
+    simple_type :normalizedString, base: ns.xs.string, white_space: {:value=>"replace"}
     # {http://www.w3.org/TR/xmlschema-2/#token}
-    simple_type :token, base: ref('xs:normalizedString'), white_space: {:value=>"collapse"}
+    simple_type :token, base: ns.xs.normalizedString, white_space: {:value=>"collapse"}
     # {http://www.w3.org/TR/xmlschema-2/#language}
-    simple_type :language, base: ref('xs:token'), pattern: /[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*/
+    simple_type :language, base: ns.xs.token, pattern: /[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*/
     # {http://www.w3.org/TR/xmlschema-2/#IDREFS}
     simple_type :IDREFS do
       simple_type do
-        list item_type: ref('xs:IDREF')
+        list item_type: ns.xs.IDREF
       end
       minimum value: "1", id: "IDREFS.minLength"
     end
     # {http://www.w3.org/TR/xmlschema-2/#ENTITIES}
     simple_type :ENTITIES do
       simple_type do
-        list item_type: ref('xs:ENTITY')
+        list item_type: ns.xs.ENTITY
       end
       minimum value: "1", id: "ENTITIES.minLength"
     end
     # {http://www.w3.org/TR/xmlschema-2/#NMTOKEN}
-    simple_type :NMTOKEN, base: ref('xs:token'), pattern: /\c+/
+    simple_type :NMTOKEN, base: ns.xs.token, pattern: /\c+/
     # {http://www.w3.org/TR/xmlschema-2/#NMTOKENS}
     simple_type :NMTOKENS do
       simple_type do
-        list item_type: ref('xs:NMTOKEN')
+        list item_type: ns.xs.NMTOKEN
       end
       minimum value: "1", id: "NMTOKENS.minLength"
     end
     # {http://www.w3.org/TR/xmlschema-2/#Name}
-    simple_type :Name, base: ref('xs:token'), pattern: /\i\c*/
+    simple_type :Name, base: ns.xs.token, pattern: /\i\c*/
     # {http://www.w3.org/TR/xmlschema-2/#NCName}
-    simple_type :NCName, base: ref('xs:Name'), pattern: /[\i-[:]][\c-[:]]*/
+    simple_type :NCName, base: ns.xs.Name, pattern: /[\i-[:]][\c-[:]]*/
     # {http://www.w3.org/TR/xmlschema-2/#ID}
-    simple_type :ID, base: ref('xs:NCName')
+    simple_type :ID, base: ns.xs.NCName
     # {http://www.w3.org/TR/xmlschema-2/#IDREF}
-    simple_type :IDREF, base: ref('xs:NCName')
+    simple_type :IDREF, base: ns.xs.NCName
     # {http://www.w3.org/TR/xmlschema-2/#ENTITY}
-    simple_type :ENTITY, base: ref('xs:NCName')
+    simple_type :ENTITY, base: ns.xs.NCName
     # {http://www.w3.org/TR/xmlschema-2/#integer}
-    simple_type :integer, base: ref('xs:decimal') do
+    simple_type :integer, base: ns.xs.decimal do
     # <xs:fractionDigits value="0" fixed="true" id="integer.fractionDigits"/>
       pattern value: "[\\-+]?[0-9]+"
     end
     # {http://www.w3.org/TR/xmlschema-2/#nonPositiveInteger}
-    simple_type :nonPositiveInteger, base: ref('xs:integer'), gte: 0
+    simple_type :nonPositiveInteger, base: ns.xs.integer, gte: 0
     # {http://www.w3.org/TR/xmlschema-2/#negativeInteger}
-    simple_type :negativeInteger, base: ref('xs:nonPositiveInteger'), gte: -1
+    simple_type :negativeInteger, base: ns.xs.nonPositiveInteger, gte: -1
     # {http://www.w3.org/TR/xmlschema-2/#long}
-    simple_type :long, base: ref('xs:integer'), lte: -9223372036854775808, gte: 9223372036854775807
+    simple_type :long, base: ns.xs.integer, lte: -9223372036854775808, gte: 9223372036854775807
     # {http://www.w3.org/TR/xmlschema-2/#int}
-    simple_type :int, base: ref('xs:long'), lte: -2147483648, gte: 2147483647
+    simple_type :int, base: ns.xs.long, lte: -2147483648, gte: 2147483647
     # {http://www.w3.org/TR/xmlschema-2/#short}
-    simple_type :short, base: ref('xs:int'), lte: -32768, gte: 32767
+    simple_type :short, base: ns.xs.int, lte: -32768, gte: 32767
     # {http://www.w3.org/TR/xmlschema-2/#byte}
-    simple_type :byte, base: ref('xs:short'), lte: -128, gte: 127
+    simple_type :byte, base: ns.xs.short, lte: -128, gte: 127
     # {http://www.w3.org/TR/xmlschema-2/#nonNegativeInteger}
-    simple_type :nonNegativeInteger, base: ref('xs:integer'), lte: 0
+    simple_type :nonNegativeInteger, base: ns.xs.integer, lte: 0
     # {http://www.w3.org/TR/xmlschema-2/#unsignedLong}
-    simple_type :unsignedLong, base: ref('xs:nonNegativeInteger'), gte: 18446744073709551615
+    simple_type :unsignedLong, base: ns.xs.nonNegativeInteger, gte: 18446744073709551615
     # {http://www.w3.org/TR/xmlschema-2/#unsignedInt}
-    simple_type :unsignedInt, base: ref('xs:unsignedLong'), gte: 4294967295
+    simple_type :unsignedInt, base: ns.xs.unsignedLong, gte: 4294967295
     # {http://www.w3.org/TR/xmlschema-2/#unsignedShort}
-    simple_type :unsignedShort, base: ref('xs:unsignedInt'), gte: 65535
+    simple_type :unsignedShort, base: ns.xs.unsignedInt, gte: 65535
     # {http://www.w3.org/TR/xmlschema-2/#unsignedByte}
-    simple_type :unsignedByte, base: ref('xs:unsignedShort'), gte: 255
+    simple_type :unsignedByte, base: ns.xs.unsignedShort, gte: 255
     # {http://www.w3.org/TR/xmlschema-2/#positiveInteger}
-    simple_type :positiveInteger, base: ref('xs:nonNegativeInteger'), lte: 1
+    simple_type :positiveInteger, base: ns.xs.nonNegativeInteger, lte: 1
     # A utility type, not for public use
-    simple_type :derivationControl, base: ref('xs:NMTOKEN'), enumeration: ["substitution", "extension", "restriction", "list", "union"]
+    simple_type :derivationControl, base: ns.xs.NMTOKEN, enumeration: ["substitution", "extension", "restriction", "list", "union"]
     group :simpleDerivation do
       choice do
-        element ref: ref('xs:restriction')
-        element ref: ref('xs:list')
-        element ref: ref('xs:union')
+        element ref: ns.xs.restriction
+        element ref: ns.xs.list
+        element ref: ns.xs.union
       end
     end
     # #all or (possibly empty) subset of {restriction, union, list}
     simple_type :simpleDerivationSet do
       union do
-        simple_type base: ref('xs:token'), enumeration: ["#all"]
+        simple_type base: ns.xs.token, enumeration: ["#all"]
         simple_type do
           list do
-            simple_type base: ref('xs:derivationControl'), enumeration: ["list", "union", "restriction"]
+            simple_type base: ns.xs.derivationControl, enumeration: ["list", "union", "restriction"]
           end
         end
       end
     end
     complex_type :simpleType, abstract: "true" do
-      complex_content base: ref('xs:annotated') do
-        group ref: ref('xs:simpleDerivation')
-        attribute :final, type: ref('xs:simpleDerivationSet')
+      complex_content base: ns.xs.annotated do
+        group ref: ns.xs.simpleDerivation
+        attribute :final, type: ns.xs.simpleDerivationSet
         # Can be restricted to required or forbidden
-        attribute :name, type: ref('xs:NCName')
+        attribute :name, type: ns.xs.NCName
       end
     end
     complex_type :topLevelSimpleType do
-      complex_content base: ref('xs:simpleType') do
+      complex_content base: ns.xs.simpleType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:simpleDerivation')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.simpleDerivation
         end
         # Required at the top level
-        attribute :name, type: ref('xs:NCName'), use: "required"
+        attribute :name, type: ns.xs.NCName, use: "required"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     complex_type :localSimpleType do
-      complex_content base: ref('xs:simpleType') do
+      complex_content base: ns.xs.simpleType do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
-          group ref: ref('xs:simpleDerivation')
+          element ref: ns.xs.annotation, min: 0
+          group ref: ns.xs.simpleDerivation
         end
         # Forbidden when nested
         attribute :name, use: "prohibited"
@@ -915,39 +917,39 @@ module Xommelier
       end
     end
     # {http://www.w3.org/TR/xmlschema-2/#element-simpleType}
-    element :simpleType, type: ref('xs:topLevelSimpleType'), id: "simpleType"
+    element :simpleType, type: ns.xs.topLevelSimpleType, id: "simpleType"
     # We should use a substitution group for facets, but
     # that's ruled out because it would allow users to
     # add their own, which we're not ready for yet.
     group :facets do
       choice do
-        element ref: ref('xs:minExclusive')
-        element ref: ref('xs:minInclusive')
-        element ref: ref('xs:maxExclusive')
-        element ref: ref('xs:maxInclusive')
-        element ref: ref('xs:totalDigits')
-        element ref: ref('xs:fractionDigits')
-        element ref: ref('xs:length')
-        element ref: ref('xs:minLength')
-        element ref: ref('xs:maxLength')
-        element ref: ref('xs:enumeration')
-        element ref: ref('xs:whiteSpace')
-        element ref: ref('xs:pattern')
+        element ref: ns.xs.minExclusive
+        element ref: ns.xs.minInclusive
+        element ref: ns.xs.maxExclusive
+        element ref: ns.xs.maxInclusive
+        element ref: ns.xs.totalDigits
+        element ref: ns.xs.fractionDigits
+        element ref: ns.xs.length
+        element ref: ns.xs.minLength
+        element ref: ns.xs.maxLength
+        element ref: ns.xs.enumeration
+        element ref: ns.xs.whiteSpace
+        element ref: ns.xs.pattern
       end
     end
     group :simpleRestrictionModel do
       sequence do
-        element :simpleType, type: ref('xs:localSimpleType'), min: 0
-        group ref: ref('xs:facets'), min: 0, max: :unbounded
+        element :simpleType, type: ns.xs.localSimpleType, min: 0
+        group ref: ns.xs.facets, min: 0, max: :unbounded
       end
     end
     element :restriction, id: "restriction" do
       # base attribute and simpleType child are mutually
       # exclusive, but one or other is required
       complex_type do
-        complex_content base: ref('xs:annotated') do
-          group ref: ref('xs:simpleRestrictionModel')
-          attribute :base, type: ref('xs:QName'), use: "optional"
+        complex_content base: ns.xs.annotated do
+          group ref: ns.xs.simpleRestrictionModel
+          attribute :base, type: ns.xs.QName, use: "optional"
         end
       end
     end
@@ -955,11 +957,11 @@ module Xommelier
       # itemType attribute and simpleType child are mutually
       # exclusive, but one or other is required
       complex_type do
-        complex_content base: ref('xs:annotated') do
+        complex_content base: ns.xs.annotated do
           sequence do
-            element :simpleType, type: ref('xs:localSimpleType'), min: 0
+            element :simpleType, type: ns.xs.localSimpleType, min: 0
           end
-          attribute :itemType, type: ref('xs:QName'), use: "optional"
+          attribute :itemType, type: ns.xs.QName, use: "optional"
         end
       end
     end
@@ -967,78 +969,78 @@ module Xommelier
       # memberTypes attribute must be non-empty or there must be
       # at least one simpleType child
       complex_type do
-        complex_content base: ref('xs:annotated') do
+        complex_content base: ns.xs.annotated do
           sequence do
-            element :simpleType, type: ref('xs:localSimpleType'), min: 0, max: :unbounded
+            element :simpleType, type: ns.xs.localSimpleType, min: 0, max: :unbounded
           end
           attribute :memberTypes, use: "optional" do
-            list item_type: ref('xs:QName')
+            list item_type: ns.xs.QName
           end
         end
       end
     end
     complex_type :facet do
-      complex_content base: ref('xs:annotated') do
+      complex_content base: ns.xs.annotated do
         attribute :value, use: "required"
-        attribute :fixed, type: ref('xs:boolean'), use: "optional", default: "false"
+        attribute :fixed, type: ns.xs.boolean, use: "optional", default: "false"
       end
     end
     complex_type :noFixedFacet do
-      complex_content base: ref('xs:facet') do
+      complex_content base: ns.xs.facet do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
         end
         attribute :fixed, use: "prohibited"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # {http://www.w3.org/TR/xmlschema-2/#element-minExclusive}
-    element :minExclusive, type: ref('xs:facet'), id: "minExclusive"
+    element :minExclusive, type: ns.xs.facet, id: "minExclusive"
     # {http://www.w3.org/TR/xmlschema-2/#element-minInclusive}
-    element :minInclusive, type: ref('xs:facet'), id: "minInclusive"
+    element :minInclusive, type: ns.xs.facet, id: "minInclusive"
     # {http://www.w3.org/TR/xmlschema-2/#element-maxExclusive}
-    element :maxExclusive, type: ref('xs:facet'), id: "maxExclusive"
+    element :maxExclusive, type: ns.xs.facet, id: "maxExclusive"
     # {http://www.w3.org/TR/xmlschema-2/#element-maxInclusive}
-    element :maxInclusive, type: ref('xs:facet'), id: "maxInclusive"
+    element :maxInclusive, type: ns.xs.facet, id: "maxInclusive"
     complex_type :numFacet do
-      complex_content base: ref('xs:facet') do
+      complex_content base: ns.xs.facet do
         sequence do
-          element ref: ref('xs:annotation'), min: 0
+          element ref: ns.xs.annotation, min: 0
         end
-        attribute :value, type: ref('xs:nonNegativeInteger'), use: "required"
+        attribute :value, type: ns.xs.nonNegativeInteger, use: "required"
         any_attribute ns: "##other", processContents: "lax"
       end
     end
     # {http://www.w3.org/TR/xmlschema-2/#element-totalDigits}
     element :totalDigits, id: "totalDigits" do
       complex_type do
-        complex_content base: ref('xs:numFacet') do
+        complex_content base: ns.xs.numFacet do
           sequence do
-            element ref: ref('xs:annotation'), min: 0
+            element ref: ns.xs.annotation, min: 0
           end
-          attribute :value, type: ref('xs:positiveInteger'), use: "required"
+          attribute :value, type: ns.xs.positiveInteger, use: "required"
           any_attribute ns: "##other", processContents: "lax"
         end
       end
     end
     # {http://www.w3.org/TR/xmlschema-2/#element-fractionDigits}
-    element :fractionDigits, type: ref('xs:numFacet'), id: "fractionDigits"
+    element :fractionDigits, type: ns.xs.numFacet, id: "fractionDigits"
     # {http://www.w3.org/TR/xmlschema-2/#element-length}
-    element :length, type: ref('xs:numFacet'), id: "length"
+    element :length, type: ns.xs.numFacet, id: "length"
     # {http://www.w3.org/TR/xmlschema-2/#element-minLength}
-    element :minLength, type: ref('xs:numFacet'), id: "minLength"
+    element :minLength, type: ns.xs.numFacet, id: "minLength"
     # {http://www.w3.org/TR/xmlschema-2/#element-maxLength}
-    element :maxLength, type: ref('xs:numFacet'), id: "maxLength"
+    element :maxLength, type: ns.xs.numFacet, id: "maxLength"
     # {http://www.w3.org/TR/xmlschema-2/#element-enumeration}
-    element :enumeration, type: ref('xs:noFixedFacet'), id: "enumeration"
+    element :enumeration, type: ns.xs.noFixedFacet, id: "enumeration"
     # {http://www.w3.org/TR/xmlschema-2/#element-whiteSpace}
     element :whiteSpace, id: "whiteSpace" do
       complex_type do
-        complex_content base: ref('xs:facet') do
+        complex_content base: ns.xs.facet do
           sequence do
-            element ref: ref('xs:annotation'), min: 0
+            element ref: ns.xs.annotation, min: 0
           end
-          attribute :value, base: ref('xs:NMTOKEN'), enumeration: ["preserve", "replace", "collapse"], use: "required"
+          attribute :value, base: ns.xs.NMTOKEN, enumeration: ["preserve", "replace", "collapse"], use: "required"
           any_attribute ns: "##other", processContents: "lax"
         end
       end
@@ -1046,11 +1048,11 @@ module Xommelier
     # {http://www.w3.org/TR/xmlschema-2/#element-pattern}
     element :pattern, id: "pattern" do
       complex_type do
-        complex_content base: ref('xs:noFixedFacet') do
+        complex_content base: ns.xs.noFixedFacet do
           sequence do
-            element ref: ref('xs:annotation'), min: 0
+            element ref: ns.xs.annotation, min: 0
           end
-          attribute :value, type: ref('xs:string'), use: "required"
+          attribute :value, type: ns.xs.string, use: "required"
           any_attribute ns: "##other", processContents: "lax"
         end
       end
