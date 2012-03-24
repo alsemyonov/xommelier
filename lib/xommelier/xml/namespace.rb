@@ -14,12 +14,13 @@ module Xommelier
 
       attr_reader :href, :options, :prefix, :elements, :attributes
       alias to_s href
+      alias as prefix
 
       def initialize(href, options = {}, &block)
         @href       = href
         @options    = {}
         @elements   = Xommelier::Collection.new(Xommelier::Xml::Element)
-        @prefix     = options.delete(:prefix)
+        @prefix     = options.delete(:prefix) { options.delete(:as) }
 
         Xommelier::Xml::Namespace.registry[prefix] = self
 
@@ -70,11 +71,17 @@ module Xommelier
       end
 
       def to_hash
-        {as.to_s => uri.to_s}
+        {prefix.to_s => href.to_s}
       end
 
       def inspect
         %(xmlns:#{prefix}="#{href}")
+      end
+
+      protected
+
+      def define_module!
+        options[:module]
       end
     end
   end
