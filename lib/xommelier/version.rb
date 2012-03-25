@@ -1,3 +1,3 @@
 module Xommelier
-  VERSION = '0.1.9'
+  VERSION = '0.2.wip.0'
 end
