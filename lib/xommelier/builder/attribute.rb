@@ -21,10 +21,6 @@ module Xommelier
           opts.merge!(options_from('simpleType'))
         end.merge(super.except('type', 'name'))
       end
-
-      def prefix
-        @prefix ||= element.namespaces.key(namespace).gsub(/^xmlns:/, '').to_sym
-      end
     end
   end
 end

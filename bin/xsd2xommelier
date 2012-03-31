@@ -12,5 +12,3 @@ File.open(ruby_path, 'w') do |f|
   f.puts(ruby_code)
 end
 $stderr.puts @schema.errors.to_a
-
-__END__

@@ -9,6 +9,10 @@ module Xommelier
         method(name) { pass }
       end
 
+      def to_options
+        {simple_type: method_options}
+      end
+
       protected
 
       def name

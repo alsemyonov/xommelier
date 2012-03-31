@@ -3,7 +3,7 @@ require 'xommelier/builder/base'
 module Xommelier
   class Builder
     class AttributeGroup < Base
-      self.method_name = :attributes
+      self.method_name = :attribute_group
 
       def to_ruby
         method(name) { pass }

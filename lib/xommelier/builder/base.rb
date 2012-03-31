@@ -20,13 +20,16 @@ module Xommelier
         def wrapper(element, options)
           class_name = element.name.classify
           "Xommelier::Builder::#{class_name}".constantize.new(element, options)
+        rescue NameError => e
+          $stderr.puts e.message
+          nil
         end
       end
 
       attr_reader :element, :options, :prefix
       def initialize(element, options = {})
         @element = element
-        @prefix = options.delete(:prefix).to_sym if options.key?(:prefix)
+        @prefix = options.delete(:prefix).try(:to_sym) if options.key?(:prefix)
         @options = {indent: 1}.merge(options)
         extract_annotation!
       end
@@ -104,7 +107,7 @@ module Xommelier
         end
       end
 
-      COMMON_ATTRIBUTES = %w(minOccurs maxOccurs type ref)
+      COMMON_ATTRIBUTES = %w(minOccurs maxOccurs type ref use)
       def method_options
         {}.tap do |opts|
           opts[:type] = deprefix(element['type']) if element['type']
@@ -121,6 +124,16 @@ module Xommelier
             result[key] = attr.value
             result
           end
+          if element['use']
+            opts[:required] = case element['use']
+                              when 'required'
+                                true
+                              when 'optional'
+                                false
+                              else
+                                element['use']
+                              end
+          end
           opts.merge!(uncommon_opts)
         end
       end
@@ -131,13 +144,21 @@ module Xommelier
 
       def format_options(options)
         string = options.map do |key, value|
-          "#{key}: #{value.inspect}" if value
+          "#{key}: #{value.is_a?(Hash) ? "{#{format_options(value)}}" : value.inspect}"
         end.compact.join(', ').presence
       end
 
       def deprefix(value)
         if value.is_a?(String) || value.is_a?(Symbol)
-          Code.new("ns.#{value.to_s.gsub(':', '.')}")
+          if value.to_s =~ /^(.+):(.+)$/
+            if $1.to_sym == prefix
+                           $2.to_sym
+                         else
+                           Code.new("ns.#{value.to_s.gsub(':', '.')}")
+                         end
+          else
+            value.to_sym
+          end
           #Code.new("ref('#{value}')")
         else
           value
@@ -155,7 +176,8 @@ module Xommelier
         if child.try(:name) == element_name
           child = self.class.wrapper(child, options)
           yield(child).tap do
-            @removed_children = child.element.element_children
+            @removed_children ||= []
+            @removed_children += child.element.element_children
             child.element.remove
           end
         end

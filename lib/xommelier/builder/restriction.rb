@@ -3,26 +3,28 @@ require 'xommelier/builder/base'
 module Xommelier
   class Builder
     class Restriction < Base
-      self.method_name = :restriction
+      self.method_name = :restrict
 
       protected
 
       def method_options
         {base: deprefix(element['base'])}.tap do |opts|
-          child = first_element_child
-          if child.try(:name) == 'enumeration'
-            opts[:enumeration] = element.xpath('./xs:enumeration').inject([]) do |result, child|
+          enumerations = element.xpath('./xs:enumeration')
+          if enumerations.any?
+            opts[:enumeration] = enumerations.inject([]) do |result, child|
               result << child['value']
               child.remove
               result
             end
           end
-          opts.merge!(options_from('pattern'))
-          opts.merge!(options_from('whiteSpace'))
-          opts.merge!(options_from('minInclusive'))
-          opts.merge!(options_from('maxInclusive'))
-          opts.merge!(options_from('minLength'))
-          opts.merge!(options_from('maxLength'))
+          element.xpath('./*').each do |child|
+            if wrapped_child = self.class.wrapper(child, options)
+              opts.merge!(wrapped_child.to_options)
+              @removed_children ||= []
+              @removed_children += child.element_children
+              child.remove
+            end
+          end
         end
       end
 
