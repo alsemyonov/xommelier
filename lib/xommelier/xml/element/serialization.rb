@@ -60,7 +60,8 @@ module Xommelier
 
         def to_xml(options = {})
           options = SERIALIZATION_OPTIONS.merge(options)
-          element_name = options.delete(:element_name) { self.element_name }.to_s
+          element_name = options.delete(:element_name) { self.element_name }
+          element_name = element_name.to_s
           element_name << '_' if %w(text class id).include?(element_name)
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
@@ -196,7 +197,9 @@ module Xommelier
             when Xommelier::Xml::Element
               value.to_xommelier(builder: xml, element_name: options[:element_name])
             else
-              (prefix ? xml[prefix] : xml).send(options[:element_name]) { xml.text value.to_xommelier }
+              element_name = options[:element_name].to_s
+              element_name << '_' if %w(text class id).include?(element_name)
+              (prefix ? xml[prefix] : xml).send(element_name) { xml.text(value.to_xommelier) }
             end
           end
         end
