@@ -60,7 +60,8 @@ module Xommelier
 
         def to_xml(options = {})
           options = SERIALIZATION_OPTIONS.merge(options)
-          element_name = options.delete(:element_name) { self.element_name }
+          element_name = options.delete(:element_name) { self.element_name }.to_s
+          element_name << '_' if %w(text class id).include?(element_name)
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
             attribute_values = {}
