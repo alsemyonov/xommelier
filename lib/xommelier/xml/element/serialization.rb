@@ -63,11 +63,12 @@ module Xommelier
           element_name = options.delete(:element_name) { self.element_name }
           element_name = element_name.to_s
           element_name << '_' if %w(text class id).include?(element_name)
+          xmlns = options[:ns] || self.xmlns
           if options[:builder] # Non-root element
             builder = options.delete(:builder)
             attribute_values = {}
             namespaces = builder.doc.namespaces
-            prefix = builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
+            prefix = options[:prefix] || builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
             attribute_values = children_namespaces.inject({xmlns: xmlns.uri}) do |hash, ns|
@@ -83,7 +84,8 @@ module Xommelier
           attributes.each do |name, value|
             attribute_options = attribute_options(name)
             attribute_name = attribute_options[:attribute_name]
-            if (ns = attribute_options[:ns]).uri != current_xmlns
+            ns = attribute_options[:ns]
+            if ns.uri != current_xmlns
               if ns.as == :xml
                 attribute_name = "xml:#{attribute_options[:attribute_name]}"
               elsif attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence
@@ -186,19 +188,19 @@ module Xommelier
         end
 
         def serialize_element(name, value, xml, options = {})
-          prefix = if options[:ns].try(:!=, xmlns)
-                     xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
-                   else
-                     nil
-                   end
           case options[:count]
           when :any, :many
             single_element = options.merge(count: :one)
             value.each { |item| serialize_element(name, item, xml, single_element) }
           else
+            prefix = if options[:ns].try(:!=, xmlns)
+                       xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
+                     else
+                       nil
+                     end
             case value
             when Xommelier::Xml::Element
-              value.to_xommelier(builder: xml, element_name: options[:element_name])
+              value.to_xommelier(builder: xml, element_name: options[:element_name], prefix: prefix, ns: options[:ns])
             else
               element_name = options[:element_name].to_s
               element_name << '_' if %w(text class id).include?(element_name)
