@@ -23,8 +23,8 @@ module Xommelier
         element :author,      type: Person
         element :category,    type: Category
         element :contributor, type: Person
-        element :entry,       type: Entry
         element :link,        type: Link
+        element :entry,       type: Entry
       end
     end
   end

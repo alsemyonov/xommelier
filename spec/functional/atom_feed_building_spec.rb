@@ -29,6 +29,11 @@ describe 'Atom feed building' do
   it { feed.should be_valid }
 
   it { should == load_xml_file('simple_feed.atom').read }
+  it do
+    rng.validate(parsed_xml).each do |error|
+      pp error
+    end
+  end
   it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
   it('should conform to XML Schema') { xsd.valid?(parsed_xml).should == true }
 end

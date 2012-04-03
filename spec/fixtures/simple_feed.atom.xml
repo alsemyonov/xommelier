@@ -6,6 +6,7 @@
   <author>
     <name>John Doe</name>
   </author>
+  <link href="http://example.org/"/>
   <entry>
     <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
     <title>Atom-Powered Robots Run Amok</title>
@@ -13,5 +14,4 @@
     <summary>Some text.</summary>
     <link href="http://example.org/2003/12/13/atom03"/>
   </entry>
-  <link href="http://example.org/"/>
 </feed>
