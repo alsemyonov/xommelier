@@ -99,12 +99,8 @@ module Xommelier
             self.class.elements.each do |name, element_options|
               value = elements.fetch(name, options[:default])
               if value
-                serialize_element(
-                  name,
-                  value,
-                  xml,
-                  element_options.merge(parent_ns_prefix: prefix)
-                )
+                serialize_element(name, value, xml,
+                                  element_options.merge(overriden_xmlns: xmlns))
               end
             end
             xml.text(@text) if respond_to?(:text)
@@ -193,7 +189,10 @@ module Xommelier
             single_element = options.merge(count: :one)
             value.each { |item| serialize_element(name, item, xml, single_element) }
           else
-            prefix = if options[:ns].try(:!=, xmlns)
+            xmlns = options[:overriden_xmlns] || self.xmlns
+            prefix = if options[:prefix]
+                       options[:prefix]
+                     elsif options[:ns].try(:!=, xmlns)
                        xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
                      else
                        nil

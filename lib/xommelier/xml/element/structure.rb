@@ -77,7 +77,7 @@ module Xommelier
           def element(name, options = {})
             options[:element_name] = options.delete(:as) { name }
             options[:ns] ||= if options[:type].try(:<, Xml::Element)
-                               options[:ns] = options[:type].xmlns
+                               options[:type].xmlns
                              else
                                xmlns
                              end
