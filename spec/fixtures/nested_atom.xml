@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Xommelier nest elements</title>
+  <updated>2012-04-04T04:04:00Z</updated>
   <subtitle>Xommelier is able to build complex objects from very nested hash</subtitle>
   <author>
     <name>Alexander</name>
     <email>al@semyonov.us</email>
   </author>
-  <updated>2012-04-04T04:04:00Z</updated>
   <contributor>
     <name>Artyom</name>
     <email>sevenov@gmail.com</email>
