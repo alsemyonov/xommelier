@@ -94,13 +94,16 @@ module Xommelier
           end
           @_xml_node = (prefix ? builder[prefix] : builder).
               send(element_name, attribute_values) do |xml|
-            elements.each do |name, value|
-              serialize_element(
-                name,
-                value,
-                xml,
-                element_options(name).merge(parent_ns_prefix: prefix)
-              )
+            self.class.elements.each do |name, element_options|
+              value = elements.fetch(name, options[:default])
+              if value
+                serialize_element(
+                  name,
+                  value,
+                  xml,
+                  element_options.merge(parent_ns_prefix: prefix)
+                )
+              end
             end
             xml.text(@text) if respond_to?(:text)
           end.instance_variable_get(:@node)
