@@ -11,8 +11,13 @@ module Xommelier
         end
 
         def new(href, options={})
-          if key = registry.key(href)
-            registry[key]
+          if href.is_a?(Namespace)
+            href.options = options
+            href
+          elsif key = registry.key(href)
+            ns = registry[key]
+            ns.options = options
+            ns
           else
             super(href, options)
           end

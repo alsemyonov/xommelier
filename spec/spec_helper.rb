@@ -6,6 +6,7 @@ SimpleCov.start do
   add_filter '/spec/'
   add_filter 'lib/rspec/xommelier'
   add_filter 'lib/yard/xommelier'
+  add_filter 'lib/xommelier/deprecated'
 
   add_group 'Xml::Schema', 'lib/xommelier/xml/schema'
   add_group 'XML Schema Datatypes', 'lib/xommelier/schemas/xml_schema'

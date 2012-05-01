@@ -19,4 +19,8 @@ describe Xommelier::Schemas do
       expect { Xommelier::Schemas::Atom }.to raise_error(NameError, 'uninitialized constant Xommelier::Schemas::Atom')
     end
   end
+
+  context '.register' do
+    it { described_class.should respond_to(:register) }
+  end
 end

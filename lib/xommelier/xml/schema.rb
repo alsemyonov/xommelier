@@ -27,7 +27,7 @@ module Xommelier
         extend_module!
 
         @namespaces = Utils::Collection.new(Xml::Namespace)
-        uses options.delete(:xmlns) { {} }
+        uses(options[:xmlns] || {})
         mod.module_eval(&block) if block_given?
       end
 
@@ -42,7 +42,7 @@ module Xommelier
           if prefix == name
             namespace(href, as: prefix)
           else
-            @namespaces[prefix.to_sym] = Namespace.new(href, as: prefix)
+            @namespaces[prefix.to_sym] = import(href, as: prefix)
           end
         end if namespaces_map
       end
@@ -54,7 +54,6 @@ module Xommelier
 
       def namespace(href = nil, options = {})
         if href
-          namespaces
           options[:as] ||= name
           options[:module] = self.module
           @namespace = Namespace.new(href, options)
@@ -65,7 +64,7 @@ module Xommelier
       alias xmlns namespace
 
       def import(href, options={})
-        #$stderr.puts "#{self.class.name}(#{name})#import(#{href.inspect}, #{options.inspect})"
+        namespace = Schemas.import(href, options)
       end
 
       def complex_type(name, options={}, &block)

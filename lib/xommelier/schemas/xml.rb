@@ -9,8 +9,11 @@ module Xommelier
     module Xml
       extend Xommelier::Xml::Schema::DSL
 
-      namespace "http://www.w3.org/XML/1998/namespace", as: :xml
-      uses xs: "http://www.w3.org/2001/XMLSchema"
+      schema :xml,
+        xmlns: {
+          xml: "http://www.w3.org/XML/1998/namespace",
+          xs: "http://www.w3.org/2001/XMLSchema"
+        }
 
       # lang (as an attribute name): denotes an attribute whose value
       #  is a language code for the natural language of the content of

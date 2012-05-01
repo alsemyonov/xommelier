@@ -18,6 +18,7 @@ module Xommelier
 
         def schema(name=nil, options={}, &block)
           @schema ||= begin
+                        name ||= self.name.underscore
                         Schema.new(name, options.merge(module: self), &block)
                       end
         end
