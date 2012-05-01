@@ -4,11 +4,11 @@ require 'xommelier/schemas/xml_schema'
 module Xommelier
   module Schemas
     module XmlSchema
-      # {Boolean} has the ·value space· required to support the mathematical concept of binary-valued logic: `true`, `false`
+      # {Boolean} has the ·value space· required to support the mathematical concept of binary-valued logic: +true+, +false+
       #
-      # An instance of a datatype that is defined as ·boolean· can have the following legal literals: true, false, 1, 0.
+      # An instance of a datatype that is defined as ·boolean· can have the following legal literals: +true+, +false+, +1+, +0+.
       #
-      # The canonical representation for boolean is the set of literals `true`, `false`.
+      # The canonical representation for boolean is the set of literals +true+, +false+.
       #
       # @see http://www.w3.org/TR/xmlschema-2/#boolean xs:boolean
       class Boolean < AnySimpleType

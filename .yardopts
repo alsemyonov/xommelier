@@ -1,5 +1,7 @@
 -e yard/xommelier.rb
 --exclude \.(un~|swp)$
 --exclude lib/yard.*
+--exclude lib/rspec.*
+--exclude lib/xommelier/deprecated.*
 --plugin delegate
 lib/**/*.rb - README.md

@@ -11,7 +11,7 @@ module Xommelier
 
       schema :xs,
         xmlns: {
-          xs: "http://www.w3.org/2001/XMLSchema"
+          xs: 'http://www.w3.org/2001/XMLSchema'
         }
 
       # @abstract Abstract type, ancestors of all types

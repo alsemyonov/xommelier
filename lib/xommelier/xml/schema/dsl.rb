@@ -5,6 +5,7 @@ module Xommelier
   module Xml
     class Schema
       module DSL
+        # @visibility private
         def self.extended(mod)
           mod.singleton_class.module_eval do
             delegate :namespace, :xmlns, :ns, :uses, :import,

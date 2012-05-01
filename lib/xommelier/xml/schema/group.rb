@@ -4,7 +4,7 @@ require 'active_support/core_ext/module/delegation'
 module Xommelier
   module Xml
     class Schema
-      # OPTIMIZE use ruby {Module} to provide group functionality
+      # OPTIMIZE use ruby +Module+ to provide group functionality
       class Group
         attr_accessor :schema
         delegate :ns, :namespace, to: :schema

@@ -3,14 +3,15 @@ require 'xommelier/xml/schema/simple_type'
 
 shared_examples_for 'Simple Type' do |options|
   options ||= {}
-  let(:instance) { described_class.new(value) }
+  let(:type) { described_class }
+  let(:instance) { type.new(value) }
   let(:value) { nil }
 
-  subject { described_class }
+  subject { type }
 
-  it { should < Xommelier::Xml::Schema::Type }
-  it { should respond_to(:deserialize) }
+  it_behaves_like 'XML Schema Type'
 
+  it { should be_simple }
   deserializes = options.fetch(:deserializes, {})
   raises = options.fetch(:raises, [])
   not_raises = options.fetch(:not_raises, [])
