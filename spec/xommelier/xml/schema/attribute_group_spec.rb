@@ -15,10 +15,10 @@ describe Xommelier::Xml::Schema::AttributeGroup do
   end
 
   context 'Simple Atom' do
-    subject { ATOM.namespace.commonAttributes }
+    subject { Atom.namespace.commonAttributes }
 
     it { should be_instance_of(Xommelier::Xml::Schema::AttributeGroup) }
     it { should respond_to(:fields) }
-    it { should have(1).fields }
+    it { should have(0).fields }
   end
 end

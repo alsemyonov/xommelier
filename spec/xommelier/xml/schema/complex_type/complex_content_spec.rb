@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Xommelier::Xml::Schema::ComplexType::ComplexContent do
-  let(:type) { ATOM::Person }
+  let(:type) { Atom::Person }
   let(:instance) { type.new }
   subject { type }
 
   it { subject.options[:_content].should == :complex }
-  it { expect { ATOM::Person.simple_content }.to raise_error Xommelier::ComplexContentTypeError }
+  it { expect { Atom::Person.simple_content }.to raise_error Xommelier::ComplexContentTypeError }
   its(:included_modules) { should include(Xommelier::Xml::Schema::ComplexType, described_class)  }
 
   context 'instance' do

@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'support/simple_atom'
-
 describe Xommelier::Xml::Schema::Field do
   subject { field }
 
@@ -30,11 +28,11 @@ describe Xommelier::Xml::Schema::Field do
     its(:xpath)               { should == ['entry'] }
 
     context 'with namespace' do
-      let(:field_options) { {node_type: :element, type: ATOM::Entry} }
+      let(:field_options) { {node_type: :element, type: Atom::Entry} }
 
-      its(:xmlns) { should == ATOM.xmlns }
+      its(:xmlns) { should == Atom.xmlns }
       its('xmlns.prefix') { should == :atom }
-      its(:xpath) { should == ['atom:entry', ATOM.xmlns.to_hash] }
+      its(:xpath) { should == ['atom:entry', Atom.xmlns.to_hash] }
     end
   end
 
@@ -45,7 +43,7 @@ describe Xommelier::Xml::Schema::Field do
     its(:xpath) { should == ['@href'] }
 
     context 'with namespace' do
-      let(:field_options) { {node_type: :attribute, type: XmlSchema::AnyURI, xmlns: ATOM.xmlns} }
+      let(:field_options) { {node_type: :attribute, type: XmlSchema::AnyURI, xmlns: Atom.xmlns} }
 
       its(:xpath) { should == ['@href'] }
     end
@@ -57,7 +55,7 @@ describe Xommelier::Xml::Schema::Field do
     its(:xpath) { should == ['text()'] }
 
     context 'with namespace' do
-      let(:field_options) { {node_type: :content, type: XmlSchema::AnyURI, xmlns: ATOM.xmlns} }
+      let(:field_options) { {node_type: :content, type: XmlSchema::AnyURI, xmlns: Atom.xmlns} }
 
       its(:xpath) { should == ['text()'] }
     end

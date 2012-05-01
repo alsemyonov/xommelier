@@ -1,15 +1,10 @@
 require 'spec_helper'
 
-#require 'xommelier/schemas/xsd'
-#require 'xommelier/schemas/xml'
-require 'support/simple_atom'
-
 describe Xommelier::Xml::Schema do
-  let(:schema) { ATOM_SCHEMA }
+  let(:schema) { Atom.schema }
   subject { schema }
 
   its(:name) { should == :atom }
-  its(:options) { should be_blank }
 
   ##
   # Module for containing types
@@ -63,11 +58,11 @@ describe Xommelier::Xml::Schema do
 
     it { should respond_to(:atom) }
 
-    it { ATOM.should == Xommelier::Schemas::Atom }
-    it { ATOM.should be_instance_of(Module) }
+    it { Atom.should == Xommelier::Schemas::Atom }
+    it { Atom.should be_instance_of(Module) }
 
-    its('atom.feedType') { should == ATOM::Feed }
-    its('atom.emailType') { should == ATOM::Email }
-    its('atom.someNewType') { should == ATOM::SomeNew }
+    its('atom.feedType') { should == Atom::Feed }
+    its('atom.emailType') { should == Atom::Email }
+    its('atom.someNewType') { should == Atom::SomeNew }
   end
 end

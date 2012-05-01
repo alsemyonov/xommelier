@@ -1,8 +1,7 @@
 require 'spec_helper'
-require 'support/simple_atom'
 
 describe Xommelier::Xml::Schema::ComplexType do
-  let(:type) { ATOM::Person }
+  let(:type) { Atom::Person }
   let(:instance) { type.new }
 
   subject { type }
@@ -12,7 +11,7 @@ describe Xommelier::Xml::Schema::ComplexType do
   it { expect { subject.simple_type }.to raise_error Xommelier::ContentTypeError }
 
   context '.fields' do
-    let(:generated_attribute_methods) { ATOM::Person.send(:generated_attribute_methods) }
+    let(:generated_attribute_methods) { Atom::Person.send(:generated_attribute_methods) }
     it { generated_attribute_methods.should be_kind_of(Module) }
     its(:included_modules) { should include(generated_attribute_methods)  }
 

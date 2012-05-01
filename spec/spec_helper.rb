@@ -32,3 +32,14 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.treat_symbols_as_metadata_keys_with_true_values = true
 end
+
+require 'xommelier/schemas/atom'
+
+# Define some constants to speed up specs writing
+XmlSchema = Xommelier::Schemas::XmlSchema
+Atom = Xommelier::Schemas::Atom
+Xml = Xommelier::Schemas::Xml
+
+ATOM_XMLNS = Atom.namespace
+XSD_XMLNS = XmlSchema.namespace
+XML_XMLNS = Xml.namespace

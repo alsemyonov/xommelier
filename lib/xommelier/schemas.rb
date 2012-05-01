@@ -6,7 +6,7 @@ module Xommelier
     class << self
       def cleanup!
         constants.each do |constant|
-          remove_const(constant)
+          remove_const(constant) unless constant.to_sym == :XmlSchema
         end
       end
 

@@ -1,29 +1,28 @@
 require 'spec_helper'
-require 'support/simple_atom'
 
 describe Xommelier::Xml::Schema::Type do
-  it { ATOM::Person.should_not == ATOM::Email }
-  it { ATOM::Person.xmlns.should == ATOM.xmlns }
+  it { Atom::Person.should_not == Atom::Email }
+  it { Atom::Person.xmlns.should == Atom.xmlns }
 
-  context ATOM::Email do
-    subject { ATOM::Email }
+  context Atom::Email do
+    subject { Atom::Email }
 
     it { should < Xommelier::Xml::Schema::Type }
     it { should_not respond_to(:element) }
     it { should_not respond_to(:sequence) }
-    its(:base) { should == XmlSchema::String }
+    its(:base) { should == XmlSchema::NormalizedString }
   end
 
-  context ATOM::Uri do
-    subject { ATOM::Uri }
+  context Atom::Uri do
+    subject { Atom::Uri }
 
     it { should < Xommelier::Xml::Schema::Type }
     it { should_not respond_to(:element) }
     its(:base) { should == XmlSchema::AnyURI }
   end
 
-  context ATOM::Generator do
-    subject { ATOM::Generator }
+  context Atom::Generator do
+    subject { Atom::Generator }
 
     it { should < Xommelier::Xml::Schema::Type }
     it { should_not respond_to(:element) }

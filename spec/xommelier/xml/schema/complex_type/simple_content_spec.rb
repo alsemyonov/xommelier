@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Xommelier::Xml::Schema::ComplexType::SimpleContent do
-  let(:type) { ATOM::Generator  }
+  let(:type) { Atom::Generator  }
   let(:instance) { type.new }
   subject { type }
 
@@ -26,7 +26,7 @@ describe Xommelier::Xml::Schema::ComplexType::SimpleContent do
 
     it { content.name.should == 'content' }
     it { content.node_type.should == :content }
-    it { content.type.should == ATOM::Generator }
+    it { content.type.should == Atom::Generator }
   end
 
   context 'instance' do
@@ -43,7 +43,7 @@ describe Xommelier::Xml::Schema::ComplexType::SimpleContent do
     its(:content) { should == nil }
     its(:uri) { should == nil }
     its(:version) { should == nil }
-    its(:to_hash) { should == {'content'=>nil, 'uri'=>nil, 'version'=>nil,'lang'=>nil} }
+    its(:to_hash) { should == {'content'=>nil, 'uri'=>nil, 'version'=>nil} }
 
     its(:to_s) { should == '' }
   end
