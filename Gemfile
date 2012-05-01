@@ -14,6 +14,11 @@ group :development, :test do
   gem 'guard-bundler'
 end
 
+group :test do
+  gem 'rspec'
+  gem 'simplecov'
+end
+
 group :development do
   gem 'ripl'
   gem 'ripl-auto_indent',  require: 'ripl/auto_indent'
