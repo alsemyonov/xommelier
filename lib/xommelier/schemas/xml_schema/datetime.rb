@@ -28,7 +28,7 @@ module Xommelier
               nil
             end
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
 
@@ -61,7 +61,7 @@ module Xommelier
               nil
             end
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
 
@@ -96,7 +96,7 @@ module Xommelier
               nil
             end
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
 
@@ -118,8 +118,13 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        def self.deserialize(string)
-          string.to_i
+        def self.deserialize(value)
+          case value
+          when /^\d+$/
+            string.to_i
+          else
+            super
+          end
         end
       end
 
@@ -136,8 +141,13 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        def self.deserialize(string)
-          string.split('-').map(&:to_i)
+        def self.deserialize(value)
+          case value
+          when /^\d+-\d+$/
+            value.split('-').map(&:to_i)
+          else
+            super
+          end
         end
 
         def serialize
@@ -158,8 +168,13 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        def self.deserialize(string)
-          string[2..-1].to_i
+        def self.deserialize(value)
+          case value
+          when /^--\d+$/
+            value[2..-1].to_i
+          else
+            super
+          end
         end
 
         def serialize
@@ -180,8 +195,13 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        def self.deserialize(string)
-          string[2..-1].split('-').map(&:to_i)
+        def self.deserialize(value)
+          case value
+          when /^--\d+-\d+$/
+            value[2..-1].split('-').map(&:to_i)
+          else
+            super
+          end
         end
 
         def serialize
@@ -202,8 +222,13 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        def self.deserialize(string)
-          string[3..-1].to_i
+        def self.deserialize(value)
+          case value
+          when /^---\d+$/
+            value[3..-1].to_i
+          else
+            super
+          end
         end
 
         def serialize

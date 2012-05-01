@@ -16,7 +16,7 @@ module Xommelier
 
         BOOLEAN_MAP = {
           true => true, 'true' => true, '1' => true, 1 => true,
-          false => false, 'false' => false, '0' => false, 0 => false,
+          false => false, 'false' => false, '0' => false, 0 => false, nil => false
         }
 
         facets :pattern, :white_space

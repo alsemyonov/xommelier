@@ -14,7 +14,14 @@ module Xommelier
           # @param [String] value from XML
           # @return Ruby native type
           def deserialize(value)
-            value
+            case value
+            when nil
+              nil
+            when String
+              value
+            else
+              raise DeserializationError.new(self, value)
+            end
           end
 
           # Define facets used in this simple type

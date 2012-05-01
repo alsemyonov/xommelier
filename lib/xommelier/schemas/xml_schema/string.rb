@@ -70,7 +70,7 @@ module Xommelier
           when ::String, ::Symbol
             value.to_s.split(/-/)
           else
-            raise DeserializationError.new(self, value)
+            super
           end
         end
 
@@ -122,7 +122,7 @@ module Xommelier
           when ::String
             namespace_name, local_part = value.split(/:/, 2)
           else
-            raise DeserializationError.new(self, value)
+            super
           end
           namespace_name = NCName.new(namespace_name)
           local_part = NCName.new(local_part)
@@ -183,7 +183,7 @@ module Xommelier
           when ::String
             URI.parse(value)
           else
-            raise DeserializationError.new(self, value)
+            super
           end
         end
 

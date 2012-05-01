@@ -36,7 +36,7 @@ module Xommelier
           when Numeric
             value
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
       end
@@ -63,7 +63,7 @@ module Xommelier
           when Numeric
             value.to_i
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
       end
@@ -217,7 +217,7 @@ module Xommelier
               value
             end
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
 
@@ -256,7 +256,7 @@ module Xommelier
               value
             end
           else
-            raise "Class #{value.class} cannot be deserialized to #{name}"
+            super
           end
         end
 
