@@ -1,0 +1,5 @@
+-e yard/xommelier.rb
+--exclude \.(un~|swp)$
+--exclude lib/yard.*
+--plugin delegate
+lib/**/*.rb - README.md

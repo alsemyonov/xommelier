@@ -5,16 +5,17 @@ require 'xommelier/core_ext/hash'
 describe Xommelier::HashWithReferences do
   let(:person) do
     {
-      name: :name,
-      email: :email
+      name: :name
     }
   end
+
   let(:web_person) do
     {}.with_references!.tap do |hash|
       hash << person
       hash[:uri] = :uri
     end
   end
+
   let(:emailed_person) do
     {}.with_references!.tap do |hash|
       hash << web_person
@@ -25,19 +26,23 @@ describe Xommelier::HashWithReferences do
   describe 'instance' do
     subject { web_person }
 
-    its(:count) { should == 3 }
-    its(:keys) { should == [:name, :email, :uri] }
-    its(:values) { should == [:name, :email, :uri] }
-
-    its(:inspect) { should == "{*{:name=>:name, :email=>:email}, :uri=>:uri}" }
+    it_behaves_like 'Hash with references', [:name, :uri] do
+      its(:inspect) { should == "{*{:name=>:name}, :uri=>:uri}" }
+    end
 
     describe 'with nested references' do
       subject { emailed_person }
 
-      its(:count) { should == 4 }
-      its(:keys) { should == [:name, :email, :uri, :email] }
-      its(:values) { should == [:name, :email, :uri, :email] }
-      its(:inspect) { should == "{*{*{:name=>:name, :email=>:email}, :uri=>:uri}, :email=>:email}" }
+      it_behaves_like 'Hash with references', [:name, :uri, :email] do
+
+        its(:inspect) { should == "{*{*{:name=>:name}, :uri=>:uri}, :email=>:email}" }
+      end
     end
+  end
+
+  context 'auto injecting' do
+    subject { {} }
+    before { subject.add_reference(:web_person) }
+    its('singleton_class.included_modules') { should include(Xommelier::WithReferences) }
   end
 end

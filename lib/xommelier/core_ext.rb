@@ -1,10 +1,3 @@
 require 'xommelier'
 
-require 'xommelier/core_ext/boolean'
-require 'xommelier/core_ext/date'
-require 'xommelier/core_ext/float'
-require 'xommelier/core_ext/numeric'
-require 'xommelier/core_ext/string'
-require 'xommelier/core_ext/symbol'
-require 'xommelier/core_ext/time'
-require 'xommelier/core_ext/uri'
+require 'xommelier/core_ext/hash'

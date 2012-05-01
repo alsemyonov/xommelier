@@ -3,9 +3,15 @@ guard 'bundler' do
   watch(/^.+\.gemspec/)
 end
 
-guard 'rspec', :version => 2 do
+guard 'rspec', all_on_start: false, all_after_pass: false do
+  watch('spec/spec_helper.rb')
   watch(%r{^spec/fixtures/.+$})
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/#{m[1]}_spec.rb" }
-  watch('spec/spec_helper.rb')  { 'spec' }
+end
+
+guard 'yard' do
+  watch(%r{app/.+\.rb$})
+  watch(%r{lib/xommelier.*\.rb$})
+  watch(%r{ext/.+\.c$})
 end

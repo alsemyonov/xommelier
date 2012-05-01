@@ -56,10 +56,23 @@ module Xommelier
       super(object) || references.any? { |ref| ref.include?(object) }
     end
 
+    def [](key)
+      #if $raise
+        #puts caller
+        #raise
+      #end
+      super(key) || references.find { |ref| ref[key] }.try(:[], key)
+    end
+
     def add_reference(object)
-      Reference.new(object).tap do |ref|
-        self[ref.reference_name] = ref
-        self.references << ref
+      raise "Object #{self} couldn't reference itself" if object == self
+      if references.include?(object)
+        object
+      else
+        Reference.new(object).tap do |ref|
+          self[ref.reference_name] = ref
+          self.references << ref
+        end
       end
     end
     alias << add_reference

@@ -6,6 +6,8 @@ gemspec
 group :development, :test do
   gem 'rb-inotify'
   gem 'libnotify'
+  gem 'rb-fsevent'
+  gem 'ruby_gntp'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
@@ -19,11 +21,11 @@ group :development do
   gem 'ripl-multi_line',   require: 'ripl/multi_line'
   gem 'ripl-rails',        require: 'ripl/rails'
   gem 'ripl-rocket',       require: 'ripl/rocket'
-  gem 'guard'
-  gem 'guard-rspec'
-  gem 'guard-bundler'
-  gem 'rb-inotify'
-  gem 'libnotify'
-  gem 'ruby_gntp'
-  gem 'rb-fsevent'
+end
+
+group :doc do
+  gem 'yard'
+  gem 'yard-delegate'
+  gem 'redcarpet'
+  gem 'guard-yard'
 end
