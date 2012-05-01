@@ -9,18 +9,18 @@ module Xommelier
     # Represents XML Schema
     class Schema < Delegator
       attr_reader :name
-      attr_reader :module_name, :module, :options
+      attr_reader :module, :options
 
       # @param name [Symbol] Schema name
       # @param options [Hash] (see #options=)
       def initialize(name, options = {}, &block)
         @name = name
         if options[:module]
-          self.module_name = options[:module].name
           mod = options.delete(:module)
         else
-          self.module_name = options.delete(:module_name) { name.to_s.camelize }
-          mod = generate_module
+          module_name = options.delete(:module_name) { name.to_s.camelize }
+          mod = Module.new
+          Schemas.const_set(module_name, mod)
         end
         @options = options
         super(mod)
@@ -136,17 +136,6 @@ module Xommelier
         @module = obj
       end
       alias module= __setobj__
-
-      def module_name=(module_name)
-        @module_name = module_name
-      end
-
-      def generate_module
-        Module.new.tap do |mod|
-          Schemas.const_set(module_name, mod)
-          __setobj__(mod)
-        end
-      end
 
       def extend_module!
         @module.instance_variable_set(:@schema, self)

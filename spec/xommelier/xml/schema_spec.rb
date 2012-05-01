@@ -9,7 +9,6 @@ describe Xommelier::Xml::Schema do
   ##
   # Module for containing types
   ##
-  its(:module_name) { should == 'Atom' }
   context '#module' do
     subject { schema.module }
 
