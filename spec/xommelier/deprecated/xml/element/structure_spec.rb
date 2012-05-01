@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+__END__
+
 describe Xommelier::Xml::Element do
   #subject { Xommelier::Atom::Feed }
 

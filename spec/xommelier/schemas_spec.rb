@@ -9,7 +9,7 @@ describe Xommelier::Schemas do
     expect { Xommelier::Schemas::Atom }.not_to raise_error(NameError)
   end
 
-  context '.cleanup!', unless: false do
+  context '.cleanup!', :unless do
     before do
       subject.cleanup!
     end

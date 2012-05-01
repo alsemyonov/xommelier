@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Build document from nested hash' do
+describe 'Build document from nested hash', :unless do
   let(:hash) do
     {
       title: 'Xommelier nest elements',

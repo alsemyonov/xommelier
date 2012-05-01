@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+__END__
+
 describe Xommelier::Xml::Node do
   describe 'class' do
     subject { Xommelier::Xml::Node }

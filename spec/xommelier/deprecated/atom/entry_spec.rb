@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Xommelier::Atom::Entry do
+describe Xommelier::Schemas::Atom::Entry, :unless do
   describe 'instance' do
-    subject { Xommelier::Atom::Entry.new }
+    subject { described_class.new }
 
     [:id, :title, :updated].each do |must_field|
       it { should respond_to(must_field) }

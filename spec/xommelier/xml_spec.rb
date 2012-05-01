@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Xommelier::Xml do
 end
 
+__END__
+
 describe Xommelier::Atom do
   subject { Xommelier::Atom }
 

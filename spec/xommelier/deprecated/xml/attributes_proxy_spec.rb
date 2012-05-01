@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+__END__
+
 describe Xommelier::Xml::AttributesProxy do
   subject { proxy }
 
