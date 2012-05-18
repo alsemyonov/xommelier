@@ -20,7 +20,6 @@ module Xommelier
 
         attr_reader :name, :type, :default, :xmlns, :node_type, :method_name, :plural_method_name
         attr_accessor :schema
-        alias getter method_name
         alias plural_getter plural_method_name
 
         def initialize(name, options = {})
@@ -76,8 +75,6 @@ module Xommelier
           @type = type
         end
 
-        def setter;           :"#{method_name}=";         end
-        def presence;         :"#{method_name}?";         end
         def plural_setter;    :"#{plural_method_name}=";  end
         def plural_presence;  :"#{plural_method_name}?";  end
 
@@ -93,35 +90,14 @@ module Xommelier
           case node_type
           when :element
             if xmlns.try(:prefix)
-              ["#{xmlns.prefix}:#{name}", xmlns.to_hash]
+              "#{xmlns.prefix}:#{name}"
             else
-              ["#{name}"]
+              "#{name}"
             end
           when :attribute
-            ["@#{name}"]
+            "@#{name}"
           when :content
-            ["text()"]
-          end
-        end
-
-        def get(xml_node)
-          node = xml_node.at_xpath(*xpath, xmlns.to_hash)
-          #puts xml_node.to_xml, inspect, xpath, node
-          node = node.content if node.is_a?(Nokogiri::XML::Node)
-          type.deserialize(node)
-        end
-
-        def set(xml_node, value)
-          #puts self.inspect, xml_node, value
-          value = type.new(value) unless value.is_a?(type)
-          case node_type
-          when :attribute
-            xml_node[name] = value.to_xml
-          when :element
-            child = xml_node.document.create_element(name, value.to_xml)
-            xml_node.add_child(child)
-          when :content
-            xml_node.content = value.to_xml
+            "text()"
           end
         end
 

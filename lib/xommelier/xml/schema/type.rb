@@ -1,11 +1,15 @@
 require 'xommelier/xml/schema'
+require 'xommelier/xml/schema/fields'
 require 'active_support/core_ext/module/delegation'
+require 'active_model/naming'
 
 module Xommelier
   module Xml
     class Schema
       # @abstract Subclass should use method {Type.simple_type} or {Type.complex_type} to implement real class
-      class Type
+      class Type < Delegator
+        extend ActiveModel::Naming
+
         class_attribute :node_type, :options
 
         class << self

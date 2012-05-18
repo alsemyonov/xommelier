@@ -15,9 +15,6 @@ describe Xommelier::Xml::Schema::Field do
     its(:type)                { should == XmlSchema::String }
     its(:node_type)           { should == :element }
     its(:method_name)         { should == :entry }
-    its(:getter)              { should == :entry }
-    its(:setter)              { should == :entry= }
-    its(:presence)            { should == :entry? }
     its(:plural_method_name)  { should == :entries }
     its(:plural_getter)       { should == :entries }
     its(:plural_setter)       { should == :entries= }
@@ -25,14 +22,14 @@ describe Xommelier::Xml::Schema::Field do
     its(:default)             { should be_nil }
     its(:plural?)             { should be_false }
     its(:finder_method)       { should == :at_xpath }
-    its(:xpath)               { should == ['entry'] }
+    its(:xpath)               { should == 'entry' }
 
     context 'with namespace' do
       let(:field_options) { {node_type: :element, type: Atom::Entry} }
 
       its(:xmlns) { should == Atom.xmlns }
       its('xmlns.prefix') { should == :atom }
-      its(:xpath) { should == ['atom:entry', Atom.xmlns.to_hash] }
+      its(:xpath) { should == 'atom:entry' }
     end
   end
 
@@ -40,24 +37,24 @@ describe Xommelier::Xml::Schema::Field do
     let(:field_name) { :href }
     let(:field_options) { {node_type: :attribute, type: XmlSchema::AnyURI} }
 
-    its(:xpath) { should == ['@href'] }
+    its(:xpath) { should == '@href' }
 
     context 'with namespace' do
       let(:field_options) { {node_type: :attribute, type: XmlSchema::AnyURI, xmlns: Atom.xmlns} }
 
-      its(:xpath) { should == ['@href'] }
+      its(:xpath) { should == '@href' }
     end
   end
   context '(node_type: :content)' do
     let(:field_name) { :href }
     let(:field_options) { {node_type: :content, type: XmlSchema::AnyURI} }
 
-    its(:xpath) { should == ['text()'] }
+    its(:xpath) { should == 'text()' }
 
     context 'with namespace' do
       let(:field_options) { {node_type: :content, type: XmlSchema::AnyURI, xmlns: Atom.xmlns} }
 
-      its(:xpath) { should == ['text()'] }
+      its(:xpath) { should == 'text()' }
     end
   end
 end

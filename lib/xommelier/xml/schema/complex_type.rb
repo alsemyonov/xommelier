@@ -18,6 +18,7 @@ module Xommelier
         extend ActiveSupport::Concern
 
         included do
+          extend Fields
           extend Attributes
           include generated_attribute_methods
           include Serialization

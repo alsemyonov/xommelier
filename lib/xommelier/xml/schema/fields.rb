@@ -1,4 +1,5 @@
 require 'xommelier/xml/schema/field'
+require 'xommelier/xml/proxy'
 require 'active_support/core_ext/hash/indifferent_access'
 require 'active_support/core_ext/module/delegation'
 require 'active_model/attribute_methods'
@@ -25,7 +26,6 @@ module Xommelier
               end
               options[:xmlns] = namespace
               fields[name] = field = Field.new(name, options)
-              field_accessor(field)
               define_attribute_method(field.name) if is_a?(Class)
             else
               field = fields[name]
@@ -42,66 +42,64 @@ module Xommelier
               self::FieldAccessors
             else
               generated_attribute_methods = Module.new
+
               def generated_attribute_methods.included(base)
                 base.module_eval do
                   include Fields
                   include ActiveModel::AttributeMethods
-                  #include ActiveModel::Dirty
+                  include ActiveModel::Dirty
 
                   delegate :fields, :field, to: 'self.class'
+                  attribute_method_prefix 'reset_'
+                  attribute_method_suffix '=', '?'
                   define_attribute_methods(fields.keys)
                 end
                 super
               end
+
               if is_a?(Module)
                 const_set(:FieldAccessors, generated_attribute_methods)
                 include self::FieldAccessors
-                #include const_get(:FieldAccessors)
               end
+
               generated_attribute_methods
             end
         end
 
-        def field_accessor(field)
-          generated_attribute_methods.module_eval <<-END, __FILE__, __LINE__
-            def #{field.getter}                       # def name
-              read_attribute(#{field.getter.inspect})       #   read_field(:name)
-            end                                       # end
-
-            def #{field.setter}(value)                # def name=(value)
-              ##{field.name}_will_change!              #   name_will_change!
-              write_attributes(#{field.getter.inspect} => value)     #   write_field('name', value)
-            end                                       # end
-
-            def #{field.presence}                     # def name?
-              #{field.getter}.present?                #   name.present?
-            end                                       # end
-          END
-        end
-
         module Attributes
-          def attributes
-            fields.inject({}.with_indifferent_access) do |result, (name, field)|
-              #result[name.to_s] = read_field(field)
-              result[name.to_s] = field.get(xml_node)
-              result
-            end
-          end
+          attr_reader :attributes
 
-          def write_attributes(attributes)
-            attributes.each do |name, value|
-              field(name).set(xml_node, value)
-            end
+          def initialize(*args)
+            super(*args)
+            @attributes = Xml::Proxy.new(xml_node, self.class)
           end
 
           protected
 
-          def read_attribute(name)
-            field(name).get(xml_node)
+          def attributes=(attrs)
+            @attributes.replace(attrs)
           end
 
+          def write_attributes(attributes)
+            @attributes.merge!(attributes)
+          end
+
+          def read_attribute(name)
+            @attributes[name]
+          end
+          alias attribute read_attribute
+
           def write_attribute(name, value)
-            field(name).set(xml_node, value)
+            @attributes[name] = value
+          end
+          alias attribute= write_attribute
+
+          def attribute?(name)
+            @attributes[name].present?
+          end
+
+          def reset_attribute(name)
+            @attributes.reset(name)
           end
         end
       end

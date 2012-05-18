@@ -32,6 +32,8 @@ end
 group :doc do
   gem 'yard'
   gem 'yard-delegate'
-  gem 'redcarpet'
   gem 'guard-yard'
+  gem 'redcarpet', platforms: :ruby
+  gem 'kramdown', platforms: :jruby
 end
+
