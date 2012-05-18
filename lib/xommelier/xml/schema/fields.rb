@@ -8,7 +8,7 @@ require 'active_model/dirty'
 module Xommelier
   module Xml
     class Schema
-      # Provides accessors for elements, attributes and content (see {.field_accessors})
+      # Provides accessors for elements, attributes and content (see {generated_attribute_methods})
       module Fields
         def fields
           @fields ||= {}.with_references
