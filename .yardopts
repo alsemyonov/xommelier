@@ -4,4 +4,5 @@
 --exclude lib/rspec.*
 --exclude lib/xommelier/deprecated.*
 --plugin delegate
+--protected
 lib/**/*.rb - README.md

@@ -16,7 +16,7 @@ end
 
 def yard_server
   kill_yard_if_needed
-  $yard_server = spawn('yard server', out: 'log/yard.log', err: 'log/yard.log')
+  $yard_server = spawn('yard server --reload', out: 'log/yard.log', err: 'log/yard.log')
   Process.detach($yard_server)
 end
 
