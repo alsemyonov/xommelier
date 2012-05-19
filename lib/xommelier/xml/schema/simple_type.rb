@@ -7,8 +7,6 @@ module Xommelier
       module SimpleType
         extend ActiveSupport::Concern
 
-        protected
-
         module ClassMethods
           # Deserializes value from string
           # @param [String] value from XML

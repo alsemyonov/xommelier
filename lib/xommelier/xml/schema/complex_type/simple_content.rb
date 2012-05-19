@@ -1,5 +1,6 @@
 require 'active_support/concern'
 require 'xommelier/xml/schema/complex_type'
+require 'xommelier/xml/schema/complex_type/structure'
 
 module Xommelier
   module Xml
@@ -9,17 +10,22 @@ module Xommelier
           extend ActiveSupport::Concern
 
           included do
-            extend Fields
+            extend Structure
 
             field(:content, type: base, node_type: :content)
           end
 
-          def value
+          def __getobj__
             content
           end
 
           def value=(value)
-            self.content = value
+            case value
+            when Hash
+              self.attributes = value
+            else
+              self.content = value
+            end
           end
         end
       end

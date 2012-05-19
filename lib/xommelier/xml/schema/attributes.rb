@@ -1,18 +1,19 @@
 require 'xommelier/core_ext/hash'
 require 'xommelier/xml/schema'
-require 'xommelier/xml/schema/fields'
+require 'xommelier/xml/schema/complex_type'
+require 'xommelier/xml/schema/complex_type/structure'
 
 module Xommelier
   module Xml
     class Schema
       module Attributes
         def self.included(mod)
-          mod.send(:include, Fields)
+          mod.send(:include, ComplexType::Structure)
           super
         end
 
         def self.extend_object(obj)
-          obj.extend(Fields)
+          obj.extend(ComplexType::Structure)
           super
         end
 

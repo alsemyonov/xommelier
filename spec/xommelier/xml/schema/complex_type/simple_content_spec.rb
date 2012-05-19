@@ -43,8 +43,29 @@ describe Xommelier::Xml::Schema::ComplexType::SimpleContent do
     its(:content) { should == nil }
     its(:uri) { should == nil }
     its(:version) { should == nil }
-    its(:to_hash) { should == {'content'=>nil, 'uri'=>nil, 'version'=>nil} }
+    its(:to_hash) { should == {} }
 
     its(:to_s) { should == '' }
+
+    context 'serialization' do
+      before do
+        subject.content = 'Xommelier'
+        subject.uri = 'http://github.com/alsemyonov/xommelier'
+        subject.version = Xommelier::VERSION
+      end
+
+      #it { puts subject.xml_node }
+      its(:content)  { should == 'Xommelier' }
+      its(:uri) { should == URI.parse('http://github.com/alsemyonov/xommelier') }
+      its(:version) { should == Xommelier::VERSION }
+      its(:attributes) do
+        should == {
+          'content' => 'Xommelier',
+          'uri'     => URI.parse('http://github.com/alsemyonov/xommelier'),
+          'version' => Xommelier::VERSION
+        }
+      end
+      it { should == 'Xommelier' }
+    end
   end
 end

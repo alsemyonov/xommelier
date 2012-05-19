@@ -7,7 +7,7 @@ require 'active_model/dirty'
 
 module Xommelier
   module Xml
-    require 'xommelier/xml/schema/fields'
+    require 'xommelier/xml/schema/field'
     # @deprecated
     Field = Schema::Field
 

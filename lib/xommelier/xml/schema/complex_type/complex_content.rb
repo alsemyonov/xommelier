@@ -19,6 +19,10 @@ module Xommelier
             end
           end
 
+          def __getobj__
+            attributes
+          end
+
           module ClassMethods
             def sequence(options = {}, &block)
               Sequence.new(options.merge(schema: schema), &block).tap do |sequence|

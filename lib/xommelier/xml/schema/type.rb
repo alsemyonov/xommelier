@@ -1,5 +1,5 @@
 require 'xommelier/xml/schema'
-require 'xommelier/xml/schema/fields'
+require 'active_support/core_ext/class/attribute'
 require 'active_support/core_ext/module/delegation'
 require 'active_model/naming'
 
@@ -107,9 +107,20 @@ module Xommelier
           self.value = value if value.present? || value == false
         end
 
+        def __getobj__
+          @value
+        end
+
+        def __setobj__(value)
+          self.value = value
+        end
+
+        #def __setobj__(obj)
+          #self.xml_node = obj
+        #end
+
         attr_reader :value
 
-        delegate :==, :eql?, :<=>, :to_s, :inspect, to: :value
         delegate :namespace, to: 'self.class'
 
         def value=(string)

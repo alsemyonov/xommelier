@@ -36,7 +36,7 @@ module Xommelier
       # @overload namespaces(namespaces_map)
       #   Set namespaces map used in this schema
       #   @param namespaces_map [Hash] hash of namespaces with +prefix+es as keys and +href+s as values
-      # @return [Xommelier::Collection<Xml::Namespace>] Defined namespaces map
+      # @return [Xommelier::Utils::Collection<Xml::Namespace>] Defined namespaces map
       def namespaces(namespaces_map = nil)
         namespaces_map.each do |prefix, href|
           if prefix == name

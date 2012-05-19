@@ -16,7 +16,7 @@ describe Xommelier::Xml::Schema::ComplexType do
     its(:included_modules) { should include(generated_attribute_methods)  }
 
     its(:fields) { should have(3).keys }
-    it { subject.fields[:name].should be_kind_of Xommelier::Xml::Schema::Field }
+    it { subject.fields[:name].should be_kind_of Xommelier::Xml::Schema::ComplexType::Field }
   end
 
   context '.choice' do

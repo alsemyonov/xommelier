@@ -28,7 +28,7 @@ module Xommelier
         )
         restriction { white_space :collapse, fixed: true }
 
-        # @param [String, Numeric, true, false]
+        # @param value [String, Numeric, true, false]
         # @return [true, false]
         def self.deserialize(value)
           BOOLEAN_MAP.fetch(value) {

@@ -25,7 +25,7 @@ describe Xommelier::Xml::Schema do
   describe '#elements' do
     subject { schema.elements }
 
-    it { subject[:feed].should be_instance_of(Xommelier::Xml::Schema::Field) }
+    it { subject[:feed].should be_instance_of(Xommelier::Xml::Schema::ComplexType::Field) }
     it { subject[:feed].type.should == Xommelier::Schemas::Atom::Feed }
     its(:count) { should == 2 }
   end

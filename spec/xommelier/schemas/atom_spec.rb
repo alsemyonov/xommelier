@@ -22,6 +22,19 @@ describe Xommelier::Schemas::Atom do
       its(:type) { should == namespace.entryType }
     end
 
+    context 'personType' do
+      let(:type) { namespace.personType }
+
+      it_behaves_like 'Complex Type' do
+        context '.elements' do
+          subject { elements }
+
+          it { should include(:name) }
+          it { should include(:uri, :email) }
+        end
+      end
+    end
+
     context 'feedType' do
       let(:type) { namespace.feedType }
 
@@ -30,7 +43,34 @@ describe Xommelier::Schemas::Atom do
           subject { elements }
 
           it { should include(:title, :id, :updated) }
-          it { should include(:author, :category, :contributor, :generator, :icon, :id, :link, :logo, :rights, :subtitle) }
+          it { should include(:author, :category, :contributor, :generator, :icon, :link, :logo, :rights, :subtitle) }
+        end
+      end
+    end
+
+    context 'entryType' do
+      let(:type) { namespace.entryType }
+
+      it_behaves_like 'Complex Type' do
+        context '.elements' do
+          subject { elements }
+
+          it { should include(:title, :id, :updated) }
+          it { should include(:author, :category, :contributor, :link, :rights, :source) }
+        end
+      end
+    end
+
+    context 'sourceType' do
+      let(:type) { namespace.sourceType }
+
+      it_behaves_like 'Complex Type' do
+        context '.elements' do
+          subject { elements }
+
+          it { should include(:title, :id, :updated) }
+          it { should include(:author, :category, :contributor, :link, :rights) }
+          it { should_not include(:source) }
         end
       end
     end

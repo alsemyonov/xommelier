@@ -13,7 +13,7 @@ module Xommelier
                 raise DefRefError.new(options) if name
                 ref = options.delete(:ref)
                 case ref
-                when Field
+                when ComplexType::Field
                   parent = ref
                   name = parent.name.to_sym
                 when Symbol, String

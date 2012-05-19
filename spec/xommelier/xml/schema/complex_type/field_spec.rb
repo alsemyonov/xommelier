@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Xommelier::Xml::Schema::Field do
+describe Xommelier::Xml::Schema::ComplexType::Field do
   subject { field }
 
   let(:field) { described_class.new(field_name, field_options) }

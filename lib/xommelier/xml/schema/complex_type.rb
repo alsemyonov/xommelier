@@ -1,4 +1,5 @@
 require 'xommelier/xml/schema'
+require 'xommelier/xml/schema/type'
 require 'xommelier/xml/schema/elements'
 require 'xommelier/xml/schema/attributes'
 require 'xommelier/xml/schema/sequence'
@@ -7,7 +8,6 @@ require 'xommelier/xml/schema/referenced'
 require 'active_support/concern'
 require 'active_support/core_ext/object/with_options'
 require 'active_support/core_ext/module/delegation'
-require 'active_model/attribute_methods'
 require 'xommelier/xml/schema/complex_type/serialization'
 
 module Xommelier
@@ -18,10 +18,11 @@ module Xommelier
         extend ActiveSupport::Concern
 
         included do
-          extend Fields
-          extend Attributes
+          extend Structure
           include generated_attribute_methods
           include Serialization
+
+          extend Attributes
 
           singleton_class.class_eval do
             extend Referenced

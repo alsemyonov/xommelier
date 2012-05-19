@@ -17,7 +17,7 @@ describe Xommelier::Xml::Schema::ComplexType::ComplexContent do
 
     #it_behaves_like 'ActiveModel'
 
-    its(:attributes) { should == {'name'=>nil,'email'=>nil,'uri'=>nil} }
+    its(:attributes) { should == {} }
     its(:name) { should == nil }
     its(:email) { should == nil }
     its(:uri) { should == nil }
@@ -26,15 +26,24 @@ describe Xommelier::Xml::Schema::ComplexType::ComplexContent do
       before do
         subject.name = 'Example Name'
         subject.email = 'name@example.com'
-        #instance.uri = 'http://ya.ru/'
-        #puts subject.xml_node
-        #puts subject.attributes
       end
 
-      #it { puts subject.xml_node }
       its(:name)  { should == 'Example Name' }
+      its(:name) { should be_instance_of(Xommelier::Schemas::XmlSchema::String) }
       its(:email) { should == 'name@example.com' }
-      its(:attributes) { should == {'name'=>'Example Name', 'email'=>'name@example.com', 'uri'=>nil} }
+      its(:email) { should be_instance_of(Xommelier::Schemas::Atom::Email) }
+      its(:attributes) do
+        should == {
+          'name'  =>  'Example Name',
+          'email' =>  'name@example.com'
+        }
+      end
+      it do
+        should == {
+          'name'  =>  'Example Name',
+          'email' =>  'name@example.com'
+        }
+      end
     end
   end
 end
