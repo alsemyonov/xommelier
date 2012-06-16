@@ -21,12 +21,6 @@ module Xommelier
             end
           end
 
-          # @return [Type]
-          def initialize(*args)
-            super(*args)
-            @attributes = Xml::Proxy.new(xml_node, self.class)
-          end
-
           def element_name
             @element_name ||= self.class.name.demodulize.underscore.dasherize
           end
@@ -40,33 +34,36 @@ module Xommelier
             nokogiri_xml.document.root.name
           end
 
-          protected
-
-          attr_reader :attributes
-          def attributes=(attrs)
-            @attributes.replace(attrs)
+          def attributes
+            @attributes ||= Xml::Proxy.new(xml_node, self.class)
           end
 
+          def attributes=(attrs)
+            attributes.replace!(attrs)
+          end
+
+          protected
+
           def write_attributes(attributes)
-            @attributes.merge!(attributes)
+            attributes.merge!(attributes)
           end
 
           def read_attribute(name)
-            @attributes[name]
+            attributes[name]
           end
           alias attribute read_attribute
 
           def write_attribute(name, value)
-            @attributes[name] = value
+            attributes[name] = value
           end
           alias attribute= write_attribute
 
           def attribute?(name)
-            @attributes[name].present?
+            attributes[name].present?
           end
 
           def reset_attribute(name)
-            @attributes.reset(name)
+            attributes.reset(name)
           end
 
           attr_writer :xml_node

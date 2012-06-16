@@ -23,6 +23,7 @@ module Xommelier
       def initialize(node, type)
         @node = node
         @type = type
+        @collections = {}
 
         fields.each do |name, field|
           self[field.name] = field.default if field.default.present?
@@ -41,9 +42,7 @@ module Xommelier
 
         nodes = field_nodes(field)
         if field.plural? && name == field.plural_method__name
-          nodes.map do |node|
-            field.type.new(node.content)
-          end
+          collection(field)
         elsif nodes.any?
           field.type.new(nodes.first.content)
         end
@@ -69,11 +68,7 @@ module Xommelier
           @node[field.name] = value.to_xml
         when :element
           if field.plural? && value.is_a?(Array)
-            value.each do |value|
-              @node.add_child(
-                @node.document.create_element(field.name, value.to_xml)
-              )
-            end
+            collection(field).replace(value)
           else
             @node.add_child(
               @node.document.create_element(field.name, value.to_xml)
@@ -97,7 +92,7 @@ module Xommelier
         fields.map { |name, field| field.name if key?(field) }.compact
       end
 
-      def value
+      def values
         keys.map { |key| self[key] }
       end
 
@@ -116,11 +111,11 @@ module Xommelier
         end
       end
 
-      def replace(attrs)
+      def replace!(attrs)
         keys.each do |key|
           delete(key)
         end
-        merge(attrs)
+        merge!(attrs)
       end
 
       def merge!(attrs)
@@ -147,6 +142,12 @@ module Xommelier
         field = field(name)
         @node.xpath(field.xpath, field.xmlns.to_hash)
       end
+
+      def collection(field)
+        @collection[field] ||= Collection.new(@node, field)
+      end
     end
   end
 end
+
+require 'xommelier/xml/proxy/collection'
