@@ -22,6 +22,22 @@ module Xommelier
       element :feed, type: :feedType
       element :entry, type: :entryType
 
+      attribute_group :commonAttributes, name: "commonAttributes" do
+        any_attribute ns: "##other"
+      end
+
+      complex_type :uriType do
+        simple_content base: ns.xs.anyURI do
+          attribute_group ref: :commonAttributes
+        end
+      end
+
+      complex_type :dateTimeType do
+        simple_content base: ns.xs.dateTime do
+          attribute_group ref: :commonAttributes
+        end
+      end
+
       # The Atom text construct is defined in section 3.1 of the format spec.
       class Text < XmlSchema::AnyType
         type_name :textType
@@ -52,45 +68,56 @@ module Xommelier
 
       # Schema definition for an email address.
       simple_type :emailType, base: ns.xs.normalizedString, pattern: /\w+@(\w+\.)+\w+/
+
       # The Atom feed construct is defined in section 4.1.1 of the format spec.
-      complex_type :feedType do
-        choice min: 3, max: :unbounded do
-          element :author, type: :personType, min: 0, max: :unbounded
-          element :category, type: :categoryType, min: 0, max: :unbounded
-          element :contributor, type: :personType, min: 0, max: :unbounded
-          element :generator, type: :generatorType, min: 0, max: 1
-          element :icon, type: :iconType, min: 0, max: 1
-          element :id, type: :idType, min: 1, max: 1
-          element :link, type: :linkType, min: 0, max: :unbounded
-          element :logo, type: :logoType, min: 0, max: 1
-          element :rights, type: :textType, min: 0, max: 1
-          element :subtitle, type: :textType, min: 0, max: 1
-          element :title, type: :textType, min: 1, max: 1
-          element :updated, type: :dateTimeType, min: 1, max: 1
-          element :entry, type: :entryType, min: 0, max: :unbounded
-          any ns: "##other", min: 0, max: :unbounded
+      class Feed < XmlSchema::AnyType
+        type_name :feedType
+
+        complex_type do
+          choice min: 3, max: :unbounded do
+            element :author, type: :personType, min: 0, max: :unbounded
+            element :category, type: :categoryType, min: 0, max: :unbounded
+            element :contributor, type: :personType, min: 0, max: :unbounded
+            element :generator, type: :generatorType, min: 0, max: 1
+            element :icon, type: :iconType, min: 0, max: 1
+            element :id, type: :idType, min: 1, max: 1
+            element :link, type: :linkType, min: 0, max: :unbounded
+            element :logo, type: :logoType, min: 0, max: 1
+            element :rights, type: :textType, min: 0, max: 1
+            element :subtitle, type: :textType, min: 0, max: 1
+            element :title, type: :textType, min: 1, max: 1
+            element :updated, type: :dateTimeType, min: 1, max: 1
+            element :entry, type: :entryType, min: 0, max: :unbounded
+            any ns: "##other", min: 0, max: :unbounded
+          end
+          attribute_group ref: :commonAttributes
         end
-        attribute_group ref: :commonAttributes
       end
+
       # The Atom entry construct is defined in section 4.1.2 of the format spec.
-      complex_type :entryType do
-        choice max: :unbounded do
-          element :author, type: :personType, min: 0, max: :unbounded
-          element :category, type: :categoryType, min: 0, max: :unbounded
-          element :content, type: :contentType, min: 0, max: 1
-          element :contributor, type: :personType, min: 0, max: :unbounded
-          element :id, type: :idType, min: 1, max: 1
-          element :link, type: :linkType, min: 0, max: :unbounded
-          element :published, type: :dateTimeType, min: 0, max: 1
-          element :rights, type: :textType, min: 0, max: 1
-          element :source, type: :textType, min: 0, max: 1
-          element :summary, type: :textType, min: 0, max: 1
-          element :title, type: :textType, min: 1, max: 1
-          element :updated, type: :dateTimeType, min: 1, max: 1
-          any ns: "##other", min: 0, max: :unbounded
+      class Entry < XmlSchema::AnyType
+        type_name :entryType
+
+        complex_type do
+          choice max: :unbounded do
+            element :author, type: :personType, min: 0, max: :unbounded
+            element :category, type: :categoryType, min: 0, max: :unbounded
+            element :content, type: :contentType, min: 0, max: 1
+            element :contributor, type: :personType, min: 0, max: :unbounded
+            element :id, type: :idType, min: 1, max: 1
+            element :link, type: :linkType, min: 0, max: :unbounded
+            element :published, type: :dateTimeType, min: 0, max: 1
+            element :rights, type: :textType, min: 0, max: 1
+            element :source, type: :textType, min: 0, max: 1
+            element :summary, type: :textType, min: 0, max: 1
+            element :title, type: :textType, min: 1, max: 1
+            element :updated, type: :dateTimeType, min: 1, max: 1
+            any ns: "##other", min: 0, max: :unbounded
+          end
+          attribute_group ref: :commonAttributes
         end
-        attribute_group ref: :commonAttributes
       end
+
       # The Atom content construct is defined in section 4.1.3 of the format spec.
       complex_type :contentType, mixed: true do
         sequence do
@@ -100,6 +127,7 @@ module Xommelier
         attribute :src, type: ns.xs.anyURI
         attribute_group ref: :commonAttributes
       end
+
       # The Atom cagegory construct is defined in section 4.2.2 of the format spec.
       complex_type :categoryType do
         attribute :term, type: ns.xs.string, required: true
@@ -107,6 +135,7 @@ module Xommelier
         attribute :label, type: ns.xs.string, required: false
         attribute_group ref: :commonAttributes
       end
+
       # The Atom generator element is defined in section 4.2.4 of the format spec.
       complex_type :generatorType do
         simple_content base: ns.xs.string do
@@ -115,18 +144,21 @@ module Xommelier
           attribute_group ref: :commonAttributes
         end
       end
+
       # The Atom icon construct is defined in section 4.2.5 of the format spec.
       complex_type :iconType do
         simple_content base: ns.xs.anyURI do
           attribute_group ref: :commonAttributes
         end
       end
+
       # The Atom id construct is defined in section 4.2.6 of the format spec.
       complex_type :idType do
         simple_content base: ns.xs.anyURI do
           attribute_group ref: :commonAttributes
         end
       end
+
       # The Atom link construct is defined in section 3.4 of the format spec.
       complex_type :linkType, mixed: true do
         attribute :href, type: ns.xs.anyURI, required: true
@@ -137,12 +169,14 @@ module Xommelier
         attribute :length, type: ns.xs.positiveInteger, required: false
         attribute_group ref: :commonAttributes
       end
+
       # The Atom logo construct is defined in section 4.2.8 of the format spec.
       complex_type :logoType do
         simple_content base: ns.xs.anyURI do
           attribute_group ref: :commonAttributes
         end
       end
+
       # The Atom source construct is defined in section 4.2.11 of the format spec.
       complex_type :sourceType do
         choice max: :unbounded do
@@ -161,19 +195,6 @@ module Xommelier
           any ns: "##other", min: 0, max: :unbounded
         end
         attribute_group ref: :commonAttributes
-      end
-      complex_type :uriType do
-        simple_content base: ns.xs.anyURI do
-          attribute_group ref: :commonAttributes
-        end
-      end
-      complex_type :dateTimeType do
-        simple_content base: ns.xs.dateTime do
-          attribute_group ref: :commonAttributes
-        end
-      end
-      attribute_group :commonAttributes, name: "commonAttributes" do
-        any_attribute ns: "##other"
       end
     end
   end
