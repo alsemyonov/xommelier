@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Xommelier by alsemyonov</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Xommelier</h1>
+          <h2>WIP; XML&lt;-&gt;Object mapper in Ruby with included definitions for standard formats (Atom, RSS, etc)</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/alsemyonov/xommelier/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/alsemyonov/xommelier/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/alsemyonov/xommelier" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>Xommelier is an XML Sommelier</h1>
+
+<h2>Overview</h2>
+
+<p>Xommelier is an XML Object Mapper. You could describe some namespace (e.g. Atom) in ruby DSL and use it for parsing XML to Ruby objects or for building XML from Ruby objects.</p>
+
+<p>Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom::History} module for implementation of <a href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a> namespace, Atom Threading, and Feed Paging and Archiving extensions</p>
+
+<p>Xommelier is work in progress: <a href="http://travis-ci.org/alsemyonov/xommelier"><img src="https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master" alt="Build Status"></a></p>
+
+<h2>Examples with Atom</h2>
+
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">'xommelier/atom/full'</span>
+</pre></div>
+
+<h3>Reading a feed</h3>
+
+<div class="highlight"><pre><span class="n">feed</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Feed</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'spec/fixtures/feed.atom.xml'</span><span class="p">))</span>
+<span class="nb">puts</span> <span class="n">feed</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">updated</span>
+
+<span class="n">feed</span><span class="o">.</span><span class="n">entries</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="n">feed</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">published</span><span class="p">,</span> <span class="n">feed</span><span class="o">.</span><span class="n">updated</span>
+  <span class="nb">puts</span> <span class="n">feed</span><span class="o">.</span><span class="n">content</span> <span class="o">||</span> <span class="n">feed</span><span class="o">.</span><span class="n">summary</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>Building a feed</h3>
+
+<div class="highlight"><pre><span class="n">feed</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Feed</span><span class="o">.</span><span class="n">new</span>
+<span class="n">feed</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="s1">'http://example.com/blog'</span>
+<span class="n">feed</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">'Example.com blog'</span>
+<span class="n">feed</span><span class="o">.</span><span class="n">complete</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">History</span><span class="o">::</span><span class="no">Complete</span><span class="o">.</span><span class="n">new</span>
+
+<span class="n">entry</span> <span class="o">=</span> <span class="n">feed</span><span class="o">.</span><span class="n">entry</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Entry</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="s1">'http://example.com/blog/2012/03/05'</span><span class="p">,</span>
+  <span class="n">title</span><span class="p">:</span> <span class="s2">"Happy Xommelier's day!"</span><span class="p">,</span>
+  <span class="n">updated</span><span class="p">:</span> <span class="mi">5</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span>
+<span class="p">)</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">entry</span><span class="o">|</span>
+  <span class="n">entry</span><span class="o">.</span><span class="n">link</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Link</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+    <span class="n">href</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+    <span class="n">rel</span><span class="p">:</span>  <span class="s1">'alternate'</span><span class="p">,</span>
+    <span class="n">type</span><span class="p">:</span> <span class="s1">'text/html'</span>
+  <span class="p">)</span>
+  <span class="n">entry</span><span class="o">.</span><span class="n">links</span> <span class="o">&lt;&lt;</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Link</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+    <span class="n">href</span><span class="p">:</span>  <span class="s2">"</span><span class="si">#{</span><span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/comments.atom"</span><span class="p">,</span>
+    <span class="n">rel</span><span class="p">:</span>   <span class="s1">'replies'</span><span class="p">,</span>
+    <span class="n">type</span><span class="p">:</span>  <span class="s1">'application/atom+xml'</span><span class="p">,</span>
+    <span class="n">count</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># Add Comments</span>
+<span class="mi">3</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+  <span class="n">feed</span><span class="o">.</span><span class="n">entries</span> <span class="o">&lt;&lt;</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Entry</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="s2">"http://example.com/blog/2012/03/05#comment_</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+    <span class="n">title</span><span class="p">:</span> <span class="p">(</span><span class="s1">'Hooray! '</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">,</span>
+    <span class="n">updated</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span> <span class="o">-</span> <span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">days</span><span class="o">.</span><span class="n">ago</span>
+  <span class="p">)</span><span class="o">.</span><span class="n">tap</span> <span class="k">do</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+    <span class="n">comment</span><span class="o">.</span><span class="n">in_reply_to</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Threading</span><span class="o">::</span><span class="no">InReplyTo</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+      <span class="n">ref</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+      <span class="n">href</span><span class="p">:</span> <span class="n">entry</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">href</span>
+    <span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">puts</span> <span class="n">feed</span><span class="o">.</span><span class="n">to_xml</span>
+</pre></div>
+
+<p>will output:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;feed</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/2005/Atom"</span> <span class="na">xmlns:thr=</span><span class="s">"http://purl.org/syndication/thread/1.0"</span> <span class="na">xmlns:fh=</span><span class="s">"http://purl.org/syndication/history/1.0"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;id&gt;</span>http://example.com/blog<span class="nt">&lt;/id&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Example.com blog<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;fh:complete/&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;id&gt;</span>http://example.com/blog/2012/03/05<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Happy Xommelier's day!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-02-29T07:52:51+04:00<span class="nt">&lt;/updated&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"http://example.com/blog/2012/03/05"</span> <span class="na">rel=</span><span class="s">"alternate"</span> <span class="na">type=</span><span class="s">"text/html"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"http://example.com/blog/2012/03/05/comments.atom"</span> <span class="na">rel=</span><span class="s">"replies"</span> <span class="na">type=</span><span class="s">"application/atom+xml"</span> <span class="na">thr:count=</span><span class="s">"5"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;id&gt;</span>http://example.com/blog/2012/03/05#comment_0<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Hooray!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-02-29T07:52:51+04:00<span class="nt">&lt;/updated&gt;</span>
+    <span class="nt">&lt;thr:in-reply-to</span> <span class="na">ref=</span><span class="s">"http://example.com/blog/2012/03/05"</span> <span class="na">href=</span><span class="s">"http://example.com/blog/2012/03/05"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;id&gt;</span>http://example.com/blog/2012/03/05#comment_1<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Hooray! Hooray!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-03-01T07:52:51+04:00<span class="nt">&lt;/updated&gt;</span>
+    <span class="nt">&lt;thr:in-reply-to</span> <span class="na">ref=</span><span class="s">"http://example.com/blog/2012/03/05"</span> <span class="na">href=</span><span class="s">"http://example.com/blog/2012/03/05"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;id&gt;</span>http://example.com/blog/2012/03/05#comment_2<span class="nt">&lt;/id&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Hooray! Hooray! Hooray!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-03-02T07:52:51+04:00<span class="nt">&lt;/updated&gt;</span>
+    <span class="nt">&lt;thr:in-reply-to</span> <span class="na">ref=</span><span class="s">"http://example.com/blog/2012/03/05"</span> <span class="na">href=</span><span class="s">"http://example.com/blog/2012/03/05"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+<span class="nt">&lt;/feed&gt;</span>
+</pre></div>
+
+<h3>Building from hash</h3>
+
+<div class="highlight"><pre><span class="n">feed</span> <span class="o">=</span> <span class="no">Xommelier</span><span class="o">::</span><span class="no">Atom</span><span class="o">::</span><span class="no">Feed</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+  <span class="p">{</span>
+    <span class="n">title</span><span class="p">:</span> <span class="s1">'Xommelier nest elements'</span><span class="p">,</span>
+    <span class="n">subtitle</span><span class="p">:</span> <span class="s1">'Xommelier is able to build complex objects from very nested hash'</span><span class="p">,</span>
+    <span class="n">author</span><span class="p">:</span> <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Alexander'</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s1">'al@semyonov.us'</span><span class="p">},</span>
+    <span class="n">updated</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">utc</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mo">04</span><span class="p">,</span> <span class="mo">04</span><span class="p">,</span> <span class="mo">04</span><span class="p">,</span> <span class="mo">04</span><span class="p">),</span>
+    <span class="n">contributors</span><span class="p">:</span> <span class="o">[</span>
+      <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Ivan'</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s1">'ivan@example.com'</span><span class="p">},</span>
+      <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Pyotr'</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s1">'pyotr@example.com'</span><span class="p">},</span>
+      <span class="p">{</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Sidor'</span><span class="p">,</span> <span class="n">email</span><span class="p">:</span> <span class="s1">'sidor@example.com'</span><span class="p">},</span>
+    <span class="o">]</span><span class="p">,</span>
+    <span class="n">entries</span><span class="p">:</span> <span class="o">[</span>
+      <span class="p">{</span><span class="n">title</span><span class="p">:</span> <span class="s1">'First article'</span><span class="p">,</span> <span class="n">updated</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">utc</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">01</span><span class="p">,</span> <span class="mo">01</span><span class="p">)},</span>
+      <span class="p">{</span><span class="n">title</span><span class="p">:</span> <span class="s1">'Second article'</span><span class="p">,</span> <span class="n">updated</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">utc</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mo">02</span><span class="p">,</span> <span class="mo">02</span><span class="p">)},</span>
+      <span class="p">{</span><span class="n">title</span><span class="p">:</span> <span class="s1">'Third article'</span><span class="p">,</span> <span class="n">updated</span><span class="p">:</span> <span class="no">Time</span><span class="o">.</span><span class="n">utc</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mo">03</span><span class="p">,</span> <span class="mo">03</span><span class="p">,</span> <span class="mo">03</span><span class="p">,</span> <span class="mo">03</span><span class="p">)},</span>
+    <span class="o">]</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">feed</span><span class="o">.</span><span class="n">author</span> <span class="c1"># Xommelier::Atom::Person</span>
+<span class="n">feed</span><span class="o">.</span><span class="n">contributors</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1"># Xommelier::Atom::Person</span>
+<span class="n">feed</span><span class="o">.</span><span class="n">entries</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1"># Xommelier::Atom::Entry</span>
+
+<span class="nb">puts</span> <span class="n">feed</span><span class="o">.</span><span class="n">to_xml</span>
+</pre></div>
+
+<p>will output</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;feed</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/2005/Atom"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Xommelier nest elements<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;subtitle&gt;</span>Xommelier is able to build complex objects from very nested hash<span class="nt">&lt;/subtitle&gt;</span>
+  <span class="nt">&lt;author&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Alexander<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;email&gt;</span>al@semyonov.us<span class="nt">&lt;/email&gt;</span>
+  <span class="nt">&lt;/author&gt;</span>
+  <span class="nt">&lt;updated&gt;</span>2012-04-04T04:04:00Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;contributor&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Ivan<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;email&gt;</span>ivan@example.com<span class="nt">&lt;/email&gt;</span>
+  <span class="nt">&lt;/contributor&gt;</span>
+  <span class="nt">&lt;contributor&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Pyotr<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;email&gt;</span>pyotr@example.com<span class="nt">&lt;/email&gt;</span>
+  <span class="nt">&lt;/contributor&gt;</span>
+  <span class="nt">&lt;contributor&gt;</span>
+    <span class="nt">&lt;name&gt;</span>Sidor<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;email&gt;</span>sidor@example.com<span class="nt">&lt;/email&gt;</span>
+  <span class="nt">&lt;/contributor&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;title&gt;</span>First article<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-01-01T01:01:00Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Second article<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-02-02T02:02:00Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+  <span class="nt">&lt;entry&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Third article<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;updated&gt;</span>2012-03-03T03:03:00Z<span class="nt">&lt;/updated&gt;</span>
+  <span class="nt">&lt;/entry&gt;</span>
+<span class="nt">&lt;/feed&gt;</span>
+</pre></div>
+
+<h2>Built in XML namespaces:</h2>
+
+<ol>
+<li>{Xommelier::Atom} - <a href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a>
+</li>
+<li>{Xommelier::Atom::Threading} - <a href="http://purl.org/syndication/thread/1.0">http://purl.org/syndication/thread/1.0</a>
+</li>
+<li>{Xommelier::Atom::History} - <a href="http://purl.org/syndication/history/1.0">http://purl.org/syndication/history/1.0</a>
+</li>
+<li>{Xommelier::OpenSearch} - <a href="http://a9.com/-/spec/opensearch/1.1/">http://a9.com/-/spec/opensearch/1.1/</a>
+</li>
+</ol><h2>TODO</h2>
+
+<ul>
+<li>Validating built XML against RelaxNG</li>
+<li>Converting XML Schema, RelaxNG, RelaxNG Compact and DTD into Xommelier Ruby DSL</li>
+<li>ActiveRecord-like automatic loading of XML Schema, RelaxNG, RelaxNG Compact and DTD without needing to write it down into ruby code</li>
+</ul><h2>Contributors</h2>
+
+<ul>
+<li>Artyom Semyonov</li>
+</ul><p>© Alexander Semyonov, 2011-2012. See MIT-LICENSE for details</p>
+        </section>
+
+        <footer>
+          Xommelier is maintained by <a href="https://github.com/alsemyonov">alsemyonov</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-1497958-7");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
