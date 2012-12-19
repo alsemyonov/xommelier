@@ -29,11 +29,11 @@ module Xommelier
         @errors = []
 
         self.class.attributes.each do |name, options|
-          send("#{name}=", options[:default]) if options[:default]
+          send("#{name}=", options[:default]) if options.key?(:default)
         end
 
         self.class.elements.each do |name, options|
-          send("#{name}=", options[:default]) if options[:default]
+          send("#{name}=", options[:default]) if options.key?(:default)
         end
 
         case contents
