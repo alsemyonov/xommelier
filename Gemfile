@@ -21,7 +21,7 @@ group :development do
   gem 'guard-bundler'
   gem 'rb-inotify'
   gem 'libnotify'
-  gem 'ruby_gntp'
+  gem 'terminal-notifier-guard'
   gem 'rb-fsevent'
 end
 
