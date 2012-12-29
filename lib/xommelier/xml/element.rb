@@ -49,7 +49,7 @@ module Xommelier
       def options=(options = {})
         @options = options
         unless @options[:validate]
-          @options[:validate] = !!xmlns.schema
+          @options[:validate] = !!xmlns.try(:schema)
         end
         @options.delete(:type)
       end

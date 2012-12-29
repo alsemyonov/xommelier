@@ -12,7 +12,7 @@ module Xommelier
         end
       end
 
-      attr_reader :uri, :options, :as, :elements, :attributes
+      attr_reader :uri, :options, :elements, :attributes
       alias to_s uri
 
       def initialize(uri, options = {}, &block)
@@ -25,6 +25,10 @@ module Xommelier
 
         self.options = options
         scoped(&block) if block_given?
+      end
+
+      def as
+        @as unless default?
       end
 
       def ns
@@ -67,6 +71,10 @@ module Xommelier
           options[:ns] ||= self
           elements.find_or_create(name, options, &block)
         end
+      end
+
+      def default?
+        uri.to_s == DEFAULT_NS
       end
 
       def to_hash

@@ -22,13 +22,17 @@ module Xommelier
           alias_method :parse, :from_xml
           alias_method :from_xommelier, :from_xml
 
+          def ns_element(ns, element)
+            [ns, element].compact.join(':')
+          end
+
           def element_xpath(xmldoc = nil, name = nil)
-            "#{xmlns_xpath(xmldoc)}:#{name || element_name}"
+            ns_element(xmlns_xpath(xmldoc), name || element_name)
           end
 
           def xmlns_xpath(xml_document = nil)
             if xml_document
-              prefix = xml_document.namespaces.key(xmlns.uri)
+              prefix = xml_document.namespaces.key(xmlns.try(:uri))
               (prefix =~ /:/) ? prefix[6..-1] : prefix
             else
               xmlns.as
@@ -49,7 +53,7 @@ module Xommelier
           end
 
           self.class.attributes.each do |name, options|
-            send(name, @_xml_node[name])
+            deserialize_attribute(name, options)
           end
 
           self.class.elements.each do |name, options|
@@ -130,6 +134,8 @@ module Xommelier
 
         protected
 
+        delegate :ns_element, to: 'self.class'
+
         def element_xpath(xmldoc = self.xml_document, name = nil)
           self.class.element_xpath(xmldoc, name)
         end
@@ -160,10 +166,20 @@ module Xommelier
           attributes[name] = value.to_xommelier
         end
 
+        def deserialize_attribute(name, options = nil)
+          options ||= self.element_options(name)
+          ns = options[:ns]
+          if ns.default? || ns == xmlns
+            send(name, @_xml_node[options[:attribute_name]])
+          else
+            send(name, @_xml_node.attribute_with_ns(options[:attribute_name].to_s, ns.uri.to_s).try(:value))
+          end
+        end
+
         def deserialize_element(name, options = nil)
           options ||= self.element_options(name)
           type = options[:type]
-          nodes = @_xml_node.xpath("./#{options[:ns].as}:#{options[:element_name]}", options[:ns].to_hash)
+          nodes = @_xml_node.xpath("./#{ns_element(options[:ns].as, options[:element_name])}", options[:ns].to_hash)
           if nodes.any?
             case options[:count]
             when :any, :many
