@@ -8,6 +8,8 @@ Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom:
 
 Xommelier is work in progress: [![Build Status](https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
+[![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/alsemyonov/xommelier)
+
 ## Examples with Atom
 
 ```ruby
