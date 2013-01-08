@@ -13,6 +13,7 @@ module Xommelier
     autoload :Link,      'xommelier/atom/link'
     autoload :Person,    'xommelier/atom/person'
     autoload :Category,  'xommelier/atom/category'
+    autoload :Content,   'xommelier/atom/content'
     autoload :Generator, 'xommelier/atom/generator'
     autoload :Source,    'xommelier/atom/source'
     autoload :Feed,      'xommelier/atom/feed'

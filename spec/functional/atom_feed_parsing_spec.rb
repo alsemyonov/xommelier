@@ -89,12 +89,15 @@ describe 'Atom feed' do
       it { entry.contributors[0].name.should == 'Sam Ruby' }
       it { entry.contributors[1].name.should == 'Joe Gregorio' }
       its(:summary) { should == 'Some text.' }
-      its(:content) { should ~ /#{Regexp.escape('[Update: The Atom draft is fiished.]')}/ }
-      pending 'should parse text-based elements\' attributes' do
+      context 'Content' do
         subject { entry.content }
+        it { should =~ /#{Regexp.escape('[Update: The Atom draft is finished.]')}/ }
+        its(:text) do
+          should == "\n      <div xmlns=\"http://www.w3.org/1999/xhtml\">\n        <p><i>[Update: The Atom draft is finished.]</i></p>\n      </div>\n    "
+        end
         its(:type) { should == 'xhtml' }
         its(:lang) { should == 'en' }
-        its(:base) { should == 'http://diveintomark.org/' }
+        its(:base) { should == URI.parse('http://diveintomark.org/') }
         its(:content) { should ~ Regexp.new(Regexp.escape('<p><i>[Update: The Atom draft is fiished.]</i></p>')) }
       end
       its(:total) { should == 1 }

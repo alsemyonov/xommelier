@@ -12,7 +12,7 @@ module Xommelier
       element :updated, type: Time
 
       may do
-        element :content
+        element :content, type: Content
         element :published, type: Time
         element :rights
         element :source
