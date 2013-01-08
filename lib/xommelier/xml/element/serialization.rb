@@ -48,8 +48,8 @@ module Xommelier
           @_xml_node = options.delete(:node) { xml.at_xpath(element_xpath(xml.document, element_name)) }
           validate if options[:validate]
 
-          if text? && @_xml_node.text?
-            self.text = @_xml_node.text
+          if text? && @_xml_node.inner_html.present?
+            self.text = @_xml_node.inner_html
           end
 
           self.class.attributes.each do |name, options|
@@ -129,6 +129,38 @@ module Xommelier
               end
               hash[name] = value
             end
+          end
+        end
+
+        def <=>(other)
+          if text? && other.is_a?(String)
+            text.to_s <=> other
+          else
+            super
+          end
+        end
+
+        def ==(other)
+          if text? && other.is_a?(String)
+            text.to_s == other
+          else
+            super
+          end
+        end
+
+        def =~(other)
+          if text? && other.is_a?(Regexp)
+            text.to_s =~ other
+          else
+            super
+          end
+        end
+
+        def to_s
+          if text?
+            text.to_s
+          else
+            super
           end
         end
 

@@ -37,7 +37,7 @@ describe 'Atom feed' do
     its(:rights) { should == '© Mark Pilgrim, 2003' }
     describe 'Generator' do
       subject { feed.generator }
-      pending 'Make Xommelier::Xml::Element.to_s respond with #text.to_s' do
+      context '#to_s' do
         it { should == 'Example Toolkit' }
         its(:text)  { should == 'Example Toolkit' }
       end

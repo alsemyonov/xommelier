@@ -68,7 +68,6 @@ module Xommelier
           def inherited(child)
             child.elements    = elements.dup
             child.attributes  = attributes.dup
-            child.send(:include, Xml::CommonAttributes)
           end
 
           # Defines containing element
@@ -171,6 +170,7 @@ module Xommelier
               read_text
             end
             alias_method :text=, :text
+            alias_attribute :content, :text
           end
         end
 
