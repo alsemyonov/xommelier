@@ -72,7 +72,7 @@ module Xommelier
             builder = options.delete(:builder)
             attribute_values = {}
             namespaces = builder.doc.namespaces
-            prefix = options[:prefix] || builder.doc.namespaces.key(xmlns.uri)[6..-1].presence
+            prefix = options[:prefix] || namespaces.key(xmlns.uri).try(:[], 6..-1).presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
             attribute_values = children_namespaces.inject({xmlns: xmlns.uri}) do |hash, ns|
@@ -240,7 +240,7 @@ module Xommelier
             xmlns = options[:overriden_xmlns] || self.xmlns
             prefix = if options[:prefix]
                        options[:prefix]
-                     elsif options[:ns].try(:!=, xmlns)
+                     elsif !(options[:ns] == xmlns)
                        xml.doc.namespaces.key(options[:ns].uri)[6..-1].presence
                      else
                        nil

@@ -20,6 +20,11 @@ module Xommelier
 
       attr_reader :options
 
+      def self.schema
+        containing_module.schema
+      end
+      delegate :schema, to: 'self.class'
+
       def initialize(contents = {}, options = {})
         self.options = options
 
@@ -68,10 +73,12 @@ module Xommelier
       def validate
         @errors = []
         to_xml unless xml_document
-        if xmlns.schema
-          xmlns.schema.validate(xml_document).each do |error|
+        if schema
+          schema.validate(xml_document).each do |error|
             @errors << error
           end
+        else
+          raise 'NOSCHEMA'
         end
       end
 
