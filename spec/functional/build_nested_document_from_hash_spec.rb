@@ -26,7 +26,7 @@ describe 'Build document from nested hash' do
 
   subject { doc }
 
-  its(:to_xml) { should == load_xml_file('nested_atom').read }
+  its(:to_xml) { should == load_xml_file('nested_atom') }
   it { should have(1).authors }
   it { should have(3).contributors }
   it { should have(3).entries }

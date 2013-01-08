@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Atom feed building' do
-  let(:feed) do
+  subject(:feed) do
     Xommelier::Atom::Feed.new.tap do |feed|
       feed.id = 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'
       feed.title = 'Example Feed'
@@ -19,21 +19,13 @@ describe 'Atom feed building' do
     end
   end
 
-  let(:built_xml)  { feed.to_xml }
-  let(:parsed_xml) { Nokogiri::XML(built_xml) }
+  let(:parsed_xml) { Nokogiri::XML(feed.to_xml) }
   let(:rng)        { Nokogiri::XML::RelaxNG(load_xml_file('atom.rng')) }
-  let(:xsd)        { Nokogiri::XML::Schema(load_xml_file('atom.xsd')) }
+  let(:xsd)        { Xommelier::Atom.schema }
 
-  subject { built_xml }
+  it { should be_valid }
 
-  it { feed.should be_valid }
-
-  it { should == load_xml_file('simple_feed.atom').read }
-  it do
-    rng.validate(parsed_xml).each do |error|
-      pp error
-    end
-  end
+  its(:to_xml) { should == load_xml_file('simple_feed.atom') }
   it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
   it('should conform to XML Schema') { xsd.valid?(parsed_xml).should == true }
 end

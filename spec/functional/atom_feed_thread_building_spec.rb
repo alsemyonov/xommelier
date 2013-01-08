@@ -35,6 +35,6 @@ describe 'Atom feed building' do
 
   subject { built_xml }
 
-  it { should == load_xml_file('multi_namespace_feed.atom').read }
+  it { should == load_xml_file('multi_namespace_feed.atom') }
   it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
 end

@@ -8,6 +8,7 @@ Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each {|f| require f}
 
 ATOM_XMLNS = 'http://www.w3.org/2005/Atom'
 
+#noinspection RubyResolve
 RSpec.configure do |config|
   config.mock_with :rspec
   config.order = 'random'
