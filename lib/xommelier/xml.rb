@@ -51,14 +51,15 @@ module Xommelier
       instance_variable_set :@_xmlns, nil
     end
 
+    # Define XML default namespace
     extend ClassMethods
     xmlns DEFAULT_NS, as: :xml
 
-    module CommonAttributes
-      def self.included(base)
-        base.attribute :lang, ns: Xml.xmlns
-        base.attribute :base, type: Uri, ns: Xml.xmlns
-      end
+    # Inject common XML attributes to every XML element
+    require 'xommelier/xml/element'
+    class Element
+      attribute :lang, ns: Xml.xmlns, as: 'xml:lang'
+      attribute :base, type: Uri, ns: Xml.xmlns, as: 'xml:base'
     end
   end
 end
