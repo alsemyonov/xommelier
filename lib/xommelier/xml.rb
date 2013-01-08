@@ -20,7 +20,7 @@ module Xommelier
           options[:module] ||= self
           instance_variable_set(:@_xmlns, Xommelier::Xml::Namespace.new(uri, options, &block))
         end
-        instance_variable_get(:@_xmlns)
+        instance_variable_get(:@_xmlns) || Xml.xmlns
       end
 
       def schema(schema = nil)
