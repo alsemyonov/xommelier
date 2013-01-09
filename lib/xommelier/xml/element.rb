@@ -20,11 +20,6 @@ module Xommelier
 
       attr_reader :options
 
-      def self.schema
-        containing_module.schema
-      end
-      delegate :schema, to: 'self.class'
-
       def initialize(contents = {}, options = {})
         self.options = options
 
@@ -78,7 +73,7 @@ module Xommelier
             @errors << error
           end
         else
-          raise 'NOSCHEMA'
+          raise NoSchemaError.new(self)
         end
       end
 

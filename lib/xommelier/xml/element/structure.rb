@@ -14,16 +14,15 @@ module Xommelier
 
         included do
           class_attribute :elements, :attributes
-          attr_writer :element_name
 
           self.elements = {}
           self.attributes = {}
 
-          class << self
-            include SingletonClassMethods
-          end
+          attr_writer :element_name
 
-          delegate :xmlns, to: 'self.class'
+          extend SingletonClassMethods
+
+          delegate :xmlns, :schema, to: 'self.class'
         end
 
         module SingletonClassMethods
@@ -43,6 +42,10 @@ module Xommelier
             @xmlns ||= find_namespace
           end
           alias_method :xmlns=, :xmlns
+
+          def schema
+            containing_module.schema
+          end
 
           def element_name(element_name = nil)
             @element_name = element_name if element_name
