@@ -4,14 +4,14 @@
     <title>Example Feed</title>
     <link>http://example.com</link>
     <managingEditor>john.doe@example.com</managingEditor>
-    <pubDate>Tue, 10 Jun 2003 08:00:00 +0400</pubDate>
-    <lastBuildDate>Sat, 13 Dec 2003 21:30:02 +0300</lastBuildDate>
+    <pubDate>Tue, 10 Jun 2003 04:00:00 -0000</pubDate>
+    <lastBuildDate>Sat, 13 Dec 2003 18:30:02 -0000</lastBuildDate>
     <item>
       <guid>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</guid>
       <title>RSS-Powered Robots Run Amok</title>
       <description>Some text.</description>
       <link>http://example.org/2003/12/13/atom03</link>
-      <pubDate>Sat, 13 Dec 2003 21:30:02 +0300</pubDate>
+      <pubDate>Sat, 13 Dec 2003 18:30:02 -0000</pubDate>
     </item>
   </channel>
 </rss>

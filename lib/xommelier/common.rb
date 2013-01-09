@@ -17,7 +17,7 @@ module Xommelier
       end
 
       def to_xommelier
-        rfc822
+        utc.rfc822
       end
     end
   end
