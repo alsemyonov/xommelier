@@ -7,7 +7,6 @@ module Xommelier
     include Xommelier::Xml
 
     xmlns 'http://www.w3.org/2005/Atom', as: :atom
-    #roots :Feed, :Entry
 
     # Elements
     autoload :Link,      'xommelier/atom/link'

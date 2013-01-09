@@ -5,8 +5,6 @@ module Xommelier
     class Entry < Xml::Element
       include LinksExtension
 
-      root
-
       element :id, unique: true
       element :title
       element :updated, type: Time

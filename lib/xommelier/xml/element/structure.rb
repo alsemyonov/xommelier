@@ -112,8 +112,6 @@ module Xommelier
             with_options(count: :may) { |may| may.instance_eval(&block) }
           end
 
-          def root; end
-
           private
 
           def define_element_accessors(name)
