@@ -1,4 +1,5 @@
 require 'xommelier/xml/element'
+require 'xommelier/xml/element/structure/property'
 require 'active_support/concern'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/with_options'
@@ -15,7 +16,7 @@ module Xommelier
         included do
           class_attribute :elements, :attributes
 
-          self.elements = {}
+          self.elements   = {}
           self.attributes = {}
 
           attr_writer :element_name
@@ -41,6 +42,7 @@ module Xommelier
             end
             @xmlns ||= find_namespace
           end
+
           alias_method :xmlns=, :xmlns
 
           def schema
@@ -69,29 +71,27 @@ module Xommelier
 
         module ClassMethods
           def inherited(child)
-            child.elements    = elements.dup
-            child.attributes  = attributes.dup
+            child.elements   = elements.dup
+            child.attributes = attributes.dup
           end
 
           # Defines containing element
           # @example
           #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
-            options[:element_name] = options.delete(:as) { name }
-            options[:ns] ||= if options[:type].try(:<, Xml::Element)
-                               options[:type].xmlns
-                             else
-                               xmlns
-                             end
-            elements[name] = DEFAULT_ELEMENT_OPTIONS.merge(options)
+            options[:ns]   ||= if options[:type].try(:<, Xml::Element)
+                                 options[:type].xmlns
+                               else
+                                 xmlns
+                               end
+            elements[name] = Element.new(name, options)
             define_element_accessors(name)
           end
 
           # Defines containing attribute
           def attribute(name, options = {})
-            options[:attribute_name] = options.delete(:as) { name }
-            options[:ns] ||= xmlns
-            attributes[name] = DEFAULT_OPTIONS.merge(options)
+            options[:ns]     ||= xmlns
+            attributes[name] = Attribute.new(name, options)
             define_attribute_accessors(name)
           end
 
@@ -101,7 +101,7 @@ module Xommelier
           end
 
           def any(&block)
-            with_options(count: :any)  { |any| any.instance_eval(&block) }
+            with_options(count: :any) { |any| any.instance_eval(&block) }
           end
 
           def many(&block)
@@ -115,67 +115,67 @@ module Xommelier
           private
 
           def define_element_accessors(name)
-            element_options = elements[name]
-            case element_options[:count]
-            when :one, :may
-              name = name.to_sym
-              define_method(name) do |*args|
-                if args[0]
-                  write_element(name, args[0])
-                end
-                read_element(name)
-              end
-              alias_method "#{name}=", name
-            when :many, :any
-              plural = name.to_s.pluralize.to_sym
-              element_options[:plural] = plural
+            element = elements[name]
+            if element.multiple?
+              # Define plural accessors
+              plural = element.plural
 
-              define_method(plural) do |*args|
-                if args.any?
-                  args.flatten.each_with_index do |object, index|
-                    write_element(name, object, index)
-                  end
-                end
+              rw_accessor(plural) do |*args|
+                args.flatten.each_with_index do |object, index|
+                  write_element(name, object, index)
+                end if args.any?
+
                 @elements[name] ||= []
               end
-              alias_method "#{plural}=", plural
 
-              unless plural == name
-                define_method(name) do |*args|
-                  if args[0]
-                    send(plural, [args[0]])
-                  else
-                    send(plural)[0]
-                  end
+              # Define singular accessors for first element
+              unless element.numbers_equal?
+                rw_accessor(name) do |*args|
+                  send(plural, [args[0]]) if args[0]
+                  send(plural)[0]
                 end
-                alias_method "#{name}=", name
+              end
+            else
+              # Define singular accessors
+              name = name.to_sym
+              rw_accessor(name) do |*args|
+                write_element(name, args[0]) if args[0]
+                read_element(name)
               end
             end
           end
 
           def define_attribute_accessors(name)
-            define_method(name) do |*args|
-              if args[0]
-                write_attribute(name.to_s, args[0])
-              end
+            rw_accessor(name) do |*args|
+              write_attribute(name.to_s, args[0]) if args[0]
               read_attribute(name)
             end
-            alias_method "#{name}=", name
           end
 
           def define_text_accessors
-            define_method(:text) do |*args|
-              if args[0]
-                write_text(args[0])
-              end
+            rw_accessor(:text) do |*args|
+              write_text(args[0]) if args[0]
               read_text
             end
-            alias_method :text=, :text
             alias_attribute :content, :text
+          end
+
+          protected
+
+          # Defines read-write accessor for +name+ and provides alias for write-only version
+          def rw_accessor(name, &block)
+            define_method(name, &block)
+            alias_method "#{name}=", name
           end
         end
 
         protected
+
+        def set_default_values
+          self.class.attributes.merge(self.class.elements).each do |name, property|
+            send("#{name}=", property.default) if property.default?
+          end
+        end
 
         def options=(options = {})
           if @options.key?(:element_name)
@@ -185,12 +185,11 @@ module Xommelier
         end
 
         def element_name(value = nil)
-          if value
-            @element_name = value
-          end
+          @element_name = value if value
           @element_name ||= self.class.element_name
         end
 
+        # @return [Xommelier::Xml::Element::Structure::Element]
         def element_options(name)
           self.class.elements[name.to_sym]
         end
@@ -200,7 +199,7 @@ module Xommelier
         end
 
         def write_element(name, value, index = nil)
-          type = element_options(name)[:type]
+          type = element_options(name).type
           unless value.is_a?(type)
             value = if (type < Xommelier::Xml::Element) && !value.is_a?(Nokogiri::XML::Node)
                       type.new(value)
@@ -209,7 +208,7 @@ module Xommelier
                     end
           end
           if index
-            @elements[name.to_sym] ||= []
+            @elements[name.to_sym]        ||= []
             @elements[name.to_sym][index] = value
           else
             @elements[name.to_sym] = value
@@ -220,6 +219,7 @@ module Xommelier
           @elements.delete(name.to_sym)
         end
 
+        # @return [Xommelier::Xml::Element::Structure::Attribute]
         def attribute_options(name)
           self.class.attributes[name.to_sym]
         end
@@ -229,7 +229,7 @@ module Xommelier
         end
 
         def write_attribute(name, value)
-          type = attribute_options(name)[:type]
+          type = attribute_options(name).type
           value = type.from_xommelier(value) unless value.is_a?(type)
           @attributes[name.to_sym] = value
         end

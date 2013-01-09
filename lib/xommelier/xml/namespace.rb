@@ -81,8 +81,12 @@ module Xommelier
         {as.to_s => uri.to_s}
       end
 
+      def attribute_name
+        default? ? 'xmlns' : "xmlns:#{as}"
+      end
+
       def inspect
-        %(xmlns:#{as}="#{uri}")
+        %(#{attribute_name}="#{uri}")
       end
     end
   end

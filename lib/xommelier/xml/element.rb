@@ -7,13 +7,6 @@ require 'active_support/core_ext/class/attribute'
 
 module Xommelier
   module Xml
-    DEFAULT_OPTIONS = {
-      type: String
-    }
-    DEFAULT_ELEMENT_OPTIONS = DEFAULT_OPTIONS.merge(
-      count: :one
-    )
-
     class Element
       include Xommelier::Xml::Element::Structure
       include Xommelier::Xml::Element::Serialization
@@ -28,13 +21,7 @@ module Xommelier
         @text = nil
         @errors = []
 
-        self.class.attributes.each do |name, options|
-          send("#{name}=", options[:default]) if options.key?(:default)
-        end
-
-        self.class.elements.each do |name, options|
-          send("#{name}=", options[:default]) if options.key?(:default)
-        end
+        set_default_values
 
         case contents
         when Hash
