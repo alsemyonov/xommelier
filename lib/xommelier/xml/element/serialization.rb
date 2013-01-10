@@ -101,7 +101,7 @@ module Xommelier
               send(element_name, attribute_values) do |xml|
             self.class.elements.each do |name, element|
               value = elements.fetch(name, options[:default])
-              if value
+              unless value == nil
                 element.override(xmlns: xmlns) do
                   serialize_element(name, value, xml, element)
                 end
