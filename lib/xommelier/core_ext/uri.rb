@@ -9,10 +9,14 @@ end
 
 class Uri < String
   def self.from_xommelier(value)
-    if value.is_a?(URI::Generic)
+    return if value == nil
+    case value
+    when URI::Generic
       value
-    else
+    when String
       URI.parse(value)
+    else
+      raise Xommelier::TypeError.new(value, Uri)
     end
   end
 end

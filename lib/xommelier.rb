@@ -17,6 +17,13 @@ module Xommelier
       super("Cannot validate #{object} because no schema provided for validation.")
     end
   end
+
+  # Typecasting error
+  class TypeError < Error
+    def initialize(object, type)
+      super("Cannot typecast #{object.inspect} to #{type}")
+    end
+  end
 end
 
 require 'xommelier/xml'
