@@ -95,7 +95,7 @@ module Xommelier
         end
 
         def search_url
-          links.find { |link| link.rel == 'search' && link.type == MIME_TYPE }.try(:href)
+          detect_linked_href(rel: 'search', type: MIME_TYPE)
         end
       end
     end
