@@ -8,10 +8,28 @@ module Xommelier
     include Xml
 
     xmlns 'http://a9.com/-/spec/opensearch/1.1/', as: :opensearch
+    schema
 
-    class Url < Xml::Element
-      element_name :Url
+    # @abstract
+    class Element < Xml::Element
+      def self.attribute(name, options = {})
+        options[:as] ||= name.to_s.camelcase(:lower)
+        super
+      end
 
+      def self.element(name, options = {})
+        options[:as] ||= name.to_s.camelcase(:upper)
+        super
+      end
+
+      class << self
+        def find_element_name
+          name.demodulize
+        end
+      end
+    end
+
+    class Url < Element
       attribute :template
       attribute :type
 
@@ -22,9 +40,7 @@ module Xommelier
       end
     end
 
-    class Image < Xml::Element
-      element_name :Image
-
+    class Image < Element
       may do
         attribute :height, type: Integer
         attribute :width, type: Integer
@@ -34,49 +50,46 @@ module Xommelier
       text type: Uri
     end
 
-    class Query < Xml::Element
-      element_name :Query
-
-      element :role#, type: Enum[:request, :example, :related, :correction, :subset, :superset]
+    class Query < Element
+      attribute :role#, type: Enum[:request, :example, :related, :correction, :subset, :superset]
 
       may do
-        element :title
-        element :total_results, type: Integer, as: 'totalResults'
-        element :search_terms, as: 'searchTerms', default: 'Xommelier'
-        element :count, type: Integer
-        element :start_index, type: Boolean, as: 'startIndex'
-        element :start_page, type: Boolean, as: 'startPage'
-        element :language
-        element :input_encoding, as: 'inputEncoding'
-        element :output_encoding, as: 'outputEncoding'
+        attribute :title
+        attribute :total_results, type: Integer
+        attribute :search_terms, default: 'Xommelier'
+        attribute :count, type: Integer
+        attribute :start_index, type: Boolean
+        attribute :start_page, type: Boolean
+        attribute :language
+        attribute :input_encoding
+        attribute :output_encoding
       end
     end
 
-    class Description < Xml::Element
-      element_name :OpenSearchDescription
+    class Description < Element
+      element_name 'OpenSearchDescription'
 
-      element :short_name, as: :ShortName
-      element :description, as: :Description
+      element :short_name
+      element :description
 
-      many do
-        element :url, type: Url, as: Url.element_name
-      end
+      element :url, type: Url, count: :many
+      element :query, type: Query, count: :any
 
       may do
-        element :tags,        as: :Tags
-        element :contacts,    as: :Contacts
-        element :long_name,   as: :LongName
-        element :developer,   as: :Developer
-        element :attribution, as: :Attribution
-        element :syndication_right, type: Symbol, as: :SyndicatioeRight, default: :open #, type: Enum[:open, :limited, :private, :closed]
-        element :adult_content, type: Boolean, as: :AdultContent
-        element :language, as: :Language, default: '*'
-        element :input_encoding, as: :InputEncoding, default: 'UTF-8'
-        element :output_encoding, as: :OutputEncoding, default: 'UTF-8'
+        element :tags
+        element :contact
+        element :long_name
+        element :developer
+        element :attribution
+        element :syndication_right, type: String, default: 'open' #, type: Enum[:open, :limited, :private, :closed]
+        element :adult_content, type: Boolean
+        element :language, default: '*'
+        element :input_encoding, default: 'UTF-8'
+        element :output_encoding, default: 'UTF-8'
       end
 
       any do
-        element :image, type: Image, as: Image.element_name
+        element :image, type: Image
       end
     end
   end
@@ -84,10 +97,12 @@ module Xommelier
   if defined?(Atom)
     module Atom
       class Feed
+        include LinksExtension
+
         may do
-          element :totalResults, type: Integer, ns: OpenSearch.xmlns
-          element :startIndex, type: Integer, ns: OpenSearch.xmlns
-          element :itemsPerPage, type: Integer, ns: OpenSearch.xmlns
+          element :total_results, type: Integer, ns: OpenSearch.xmlns, as: 'totalResults'
+          element :start_index, type: Integer, ns: OpenSearch.xmlns, as: 'startIndex'
+          element :items_per_page, type: Integer, ns: OpenSearch.xmlns, as: 'itemsPerPage'
         end
 
         any do
