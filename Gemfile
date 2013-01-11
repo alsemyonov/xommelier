@@ -3,11 +3,6 @@ source 'http://rubygems.org'
 # Specify your gem's dependencies in xommelier.gemspec
 gemspec
 
-group :development, :test do
-  gem 'rake'
-  gem 'rspec'
-end
-
 group :development do
   gem 'ripl'
   gem 'ripl-auto_indent',  require: 'ripl/auto_indent'
@@ -28,3 +23,5 @@ end
 group :documentation do
   gem 'yard'
 end
+
+gem 'simplecov', require: false, group: :test

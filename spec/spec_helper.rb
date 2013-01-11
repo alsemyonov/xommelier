@@ -1,6 +1,10 @@
 SPEC_ROOT = File.expand_path('../..', __FILE__)
+require 'simplecov'
 require 'bundler/setup'
 require 'rspec'
+
+SimpleCov.start
+
 require 'xommelier'
 require 'namespaced_module'
 
