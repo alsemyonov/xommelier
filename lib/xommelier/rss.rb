@@ -6,9 +6,54 @@ module Xommelier
   module RSS
     include Xommelier::Xml
 
-    # TODO RSS Email simple type if needed
-    # class EmailAddress < String
-    # end
+    # The RECOMMENDED format for e-mail addresses in RSS elements is: username@hostname.tld (Real Name)
+    # http://www.rssboard.org/rss-profile#data-types-email
+    class EmailAddress < String
+      def self.from_xommelier(string)
+        email = new(string)
+        email.name?
+        email
+      end
+
+      def name?
+        @has_name ||= begin
+          address, name = strip.split(/\s+/, 2)
+
+          if name.present? && name =~ /\(([\w ]+)\)\s?/
+            replace(address)
+            @name = $1.to_s
+            true
+          else
+            false
+          end
+        end
+      end
+
+      def address
+        to_s
+      end
+
+      def address=(address)
+        replace(address)
+      end
+
+      def name
+        @name if name?
+      end
+
+      def name=(name)
+        @has_name = name.present?
+        @name = name
+      end
+
+      def to_xommelier
+        if name?
+          "#{address} (#{name})"
+        else
+          address
+        end
+      end
+    end
 
     class Element < Xml::Element
       def self.element(name, options = {})
@@ -125,7 +170,7 @@ module Xommelier
       element :link, type: Uri
 
       # Email address of the author of the item.
-      element :author#, type: EmailAddress
+      element :author, type: EmailAddress
 
       # Includes the item in one or more categories.
       element :category, type: Category, count: :any
@@ -164,10 +209,10 @@ module Xommelier
         element :copyright
 
         # Email address for person responsible for editorial content.
-        element :managing_editor#, type: EmailAddress
+        element :managing_editor, type: EmailAddress
 
         # Email address for person responsible for technical issues relating to channel.
-        element :web_master#, type: EmailAddress
+        element :web_master, type: EmailAddress
 
         # The publication date for the content in the channel.
         # All date-times in RSS conform to the Date and Time Specification of RFC 822, with the exception

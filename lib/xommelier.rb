@@ -4,6 +4,8 @@ require 'xommelier/core_ext'
 module Xommelier
   autoload :Atom,       'xommelier/atom'
   autoload :OpenSearch, 'xommelier/open_search'
+  autoload :OPML, 'xommelier/opml'
+  autoload :RSS, 'xommelier/rss'
 
   # Standard Xommelier Error
   class Error < ::StandardError
