@@ -4,10 +4,20 @@ module Xommelier
   module Atom
     class Source < Xml::Element
       may do
-        element :generator, :icon, :id, :logo, :rights, :subtitle, :title, :updated
+        element :generator
+        element :icon
+        element :id
+        element :logo
+        element :rights
+        element :subtitle
+        element :title
+        element :updated
       end
       any do
-        element :author, :category, :contributor, :link
+        element :author
+        element :category
+        element :contributor
+        element :link
       end
     end
   end
