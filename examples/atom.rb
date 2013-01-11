@@ -7,8 +7,8 @@ feed = Xommelier::Atom::Feed.parse(open('spec/fixtures/feed.atom.xml'))
 puts feed.id, feed.title, feed.updated
 
 feed.entries do |entry|
-  puts feed.id, feed.title, feed.published, feed.updated
-  puts feed.content || feed.summary
+  puts entry.id, entry.title, entry.published, entry.updated
+  puts entry.content || entry.summary
 end
 
 # Building a feed
@@ -19,7 +19,7 @@ feed.complete = Xommelier::Atom::History::Complete.new
 
 entry = feed.entry = Xommelier::Atom::Entry.new(
   id: 'http://example.com/blog/2012/03/05',
-  title: "Happy Xommelier's day!",
+  title: 'Happy Xommelier\'s day!',
   updated: 5.days.ago
 ).tap do |entry|
   entry.link = Xommelier::Atom::Link.new(href: entry.id, rel: 'alternate', type: 'text/html')

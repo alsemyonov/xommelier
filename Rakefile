@@ -5,7 +5,7 @@ begin
   YARD::Rake::YardocTask.new(:doc)
 rescue LoadError
   task :doc do
-    abort "YARD is not available. In order to run yardoc, you must: gem install yard"
+    abort 'YARD is not available. In order to run yardoc, you must: gem install yard'
   end
 end
 
@@ -14,7 +14,7 @@ begin
   RSpec::Core::RakeTask.new(:spec)
 rescue LoadError
   task :spec do
-    abort "RSpec is not available. In order to run specs, you must: gem install rspec"
+    abort 'RSpec is not available. In order to run specs, you must: gem install rspec'
   end
 end
 

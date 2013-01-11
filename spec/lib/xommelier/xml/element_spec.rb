@@ -35,11 +35,11 @@ describe Xommelier::Xml::Element do
 
     describe 'with many simple subelements' do
       subject do
-        NamespacedModule::RootWithManySimpleSubelements.new(foos: ['bar', 'baz'])
+        NamespacedModule::RootWithManySimpleSubelements.new(foos: %w(bar baz))
       end
 
       it { should respond_to(:foo) }
-      it { subject.foos.should == ['bar', 'baz'] }
+      it { subject.foos.should == %w(bar baz) }
       it { subject.foo.should == 'bar' }
       it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
     end

@@ -4,6 +4,7 @@ require 'rspec'
 require 'xommelier'
 require 'namespaced_module'
 
+#noinspection RubyResolve
 Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each {|f| require f}
 
 ATOM_XMLNS = 'http://www.w3.org/2005/Atom'
