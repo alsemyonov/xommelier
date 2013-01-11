@@ -1,11 +1,10 @@
 # coding: utf-8
 require 'spec_helper'
 require 'active_support/core_ext/numeric/time'
-require 'xommelier/atom/threading'
-require 'xommelier/atom/history'
+require 'xommelier/atom/full'
 
-describe 'Atom feed' do
-  describe 'parsing' do
+describe Xommelier::Atom::Feed do
+  describe '.parse' do
     let(:atom_xml) { load_xml_file('feed.atom') }
     let(:feed) { Xommelier::Atom::Feed.parse(atom_xml) }
 
