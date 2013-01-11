@@ -10,10 +10,6 @@ module Xommelier
     DEFAULT_NS = 'http://www.w3.org/XML/1998/namespace'
 
     module ClassMethods
-      def ns
-        Xommelier::Xml::Namespace.registry
-      end
-
       # Defines namespace used in formats
       def xmlns(uri = nil, options = {}, &block)
         if uri
