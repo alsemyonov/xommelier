@@ -28,6 +28,10 @@ module Xommelier
             options[:type]
           end
 
+          def complex_type?
+            type < Xml::Element
+          end
+
           # @return [true, false] has default value?
           def default?
             options.key?(:default) && required?

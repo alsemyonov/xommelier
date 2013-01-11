@@ -84,8 +84,9 @@ module Xommelier
                                else
                                  xmlns
                                end
-            elements[name] = Element.new(name, options)
-            define_element_accessors(name)
+            element = Element.new(name, options)
+            elements[name] = element
+            define_element_accessors(element)
           end
 
           # Defines containing attribute
@@ -114,8 +115,8 @@ module Xommelier
 
           private
 
-          def define_element_accessors(name)
-            element = elements[name]
+          def define_element_accessors(element)
+            name = element.name
             if element.multiple?
               # Define plural accessors
               plural = element.plural
@@ -123,7 +124,7 @@ module Xommelier
               rw_accessor(plural) do |*args|
                 args.flatten.each_with_index do |object, index|
                   write_element(name, object, index)
-                end if args.any?
+                end if args.length > 0
 
                 @elements[name] ||= []
               end
@@ -131,15 +132,14 @@ module Xommelier
               # Define singular accessors for first element
               unless element.numbers_equal?
                 rw_accessor(name) do |*args|
-                  send(plural, [args[0]]) if args[0]
+                  send(plural, [args[0]]) if args.length == 1
                   send(plural)[0]
                 end
               end
             else
               # Define singular accessors
-              name = name.to_sym
               rw_accessor(name) do |*args|
-                write_element(name, args[0]) if args[0]
+                write_element(name, args[0]) if args.length == 1
                 read_element(name)
               end
             end
@@ -147,14 +147,14 @@ module Xommelier
 
           def define_attribute_accessors(name)
             rw_accessor(name) do |*args|
-              write_attribute(name.to_s, args[0]) if args[0]
+              write_attribute(name, args[0]) if args.length == 1
               read_attribute(name)
             end
           end
 
           def define_text_accessors
             rw_accessor(:text) do |*args|
-              write_text(args[0]) if args[0]
+              write_text(args[0]) if args.length == 1
               read_text
             end
             alias_attribute :content, :text
@@ -198,19 +198,20 @@ module Xommelier
         end
 
         def write_element(name, value, index = nil)
-          type = element_options(name).type
+          element = element_options(name)
+          type = element.type
           unless value.is_a?(type)
-            value = if (type < Xommelier::Xml::Element) && !value.is_a?(Nokogiri::XML::Node)
+            value = if element.complex_type? && !value.is_a?(Nokogiri::XML::Node)
                       type.new(value)
                     else
                       type.from_xommelier(value)
                     end
           end
           if index
-            @elements[name.to_sym]        ||= []
-            @elements[name.to_sym][index] = value
+            @elements[element.name]        ||= []
+            @elements[element.name][index] = value
           else
-            @elements[name.to_sym] = value
+            @elements[element.name] = value
           end
         end
 

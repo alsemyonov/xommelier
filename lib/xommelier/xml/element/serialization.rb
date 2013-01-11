@@ -116,19 +116,20 @@ module Xommelier
         def to_hash
           attributes.dup.tap do |hash|
             @elements.each do |name, value|
-              options = element_options(name)
-              type = options.type
-              value = Array.wrap(value)
-              if type < Xml::Element
-                value = value.map(&:to_hash)
-              end
-              if value.count > 1
-                name = name.to_s.pluralize.to_sym
+              element = element_options(name)
+              if element.multiple?
+                if value.count > 1
+                  name = element.plural
+                  value = value.map { |v| v.to_hash } if element.complex_type?
+                else
+                  value = value.first.to_hash
+                end
               else
-                value = value.first
+                value = value.to_hash if element.complex_type?
               end
               hash[name] = value
             end
+            hash[:text] = text if text?
           end
         end
 
@@ -177,7 +178,7 @@ module Xommelier
             element = self.class.elements[name]
             result << element.ns
             result += attributes.keys.map { |attr_name| attribute_options(attr_name).ns }
-            if element.type < Xml::Element
+            if element.complex_type?
               Array(children).each do |child|
                 result += child.children_namespaces
               end
@@ -224,7 +225,7 @@ module Xommelier
         # @param [Nokogiri::XML::Node] node
         # @param [Xommelier::Xml::Element::Structure::Element] options
         def typecast_element(node, options)
-          if options.type < Xml::Element
+          if options.complex_type?
             options.type.from_xommelier(xml_document, node: node)
           else
             options.type.from_xommelier(node.text)
