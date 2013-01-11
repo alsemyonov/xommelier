@@ -1,0 +1,39 @@
+<xs:schema version="1.0"
+           targetNamespace="http://purl.org/syndication/thread/1.0"
+           xmlns="http://purl.org/syndication/thread/1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="in-reply-to">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[http://tools.ietf.org/html/rfc4685#section-3]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="ref" type="xs:string" />
+      <xs:attribute name="href" type="xs:anyURI" />
+      <xs:attribute name="type" type="xs:string" />
+      <xs:attribute name="source" type="xs:anyURI" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="total" type="xs:nonNegativeInteger">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[http://tools.ietf.org/html/rfc4685#section-5]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:attribute name="count" type="xs:nonNegativeInteger">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<link rel="replies" thr:count="3"> described in http://tools.ietf.org/html/rfc4685#section-4]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+  <xs:attribute name="updated" type="xs:dateTime">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[<link rel="replies" thr:updated="3"> described in http://tools.ietf.org/html/rfc4685#section-4]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:attribute>
+</xs:schema>

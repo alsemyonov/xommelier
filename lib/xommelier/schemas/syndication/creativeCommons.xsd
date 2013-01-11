@@ -1,0 +1,17 @@
+<xs:schema
+        targetNamespace="http://backend.userland.com/creativeCommonsRssModule"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="license" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[One element is defined.
+
+license -- if present as a sub-element of <channel>, indicates that the content of the RSS file is available under a license, indicated by a URL, which is the value of the license element. A list of some licenses that may be used in this context is on the Creative Commons website on this page, however the <license> element may point to licenses not authored by Creative Commons.
+
+You may also use the <license> element as a sub-element of <item>. When used this way it applies only to the content of that item. If an item has a license, and the channel does too, the license on the item applies, i.e. the inner license overrides the outer one.
+
+Multiple <license> elements are allowed, in either context, indicating that the content is available under multiple licenses.]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>

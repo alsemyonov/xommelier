@@ -1,0 +1,18 @@
+<xs:schema
+        targetNamespace="http://madskills.com/public/xml/rss/module/trackback/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ping" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[The trackback:ping is this feed item's TrackBack url.]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="about" type="xs:anyURI">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[The trackback:about is the original item that was pinged, letting the original author know that the information was syndicated using a TrackBack.]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
