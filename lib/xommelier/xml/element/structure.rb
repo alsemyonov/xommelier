@@ -96,7 +96,7 @@ module Xommelier
           end
 
           # Defines containing text
-          def text(options = {})
+          def text(*)
             define_text_accessors
           end
 
@@ -178,10 +178,9 @@ module Xommelier
         end
 
         def options=(options = {})
-          if @options.key?(:element_name)
-            element_name(@options.delete(:element_name))
+          if options.key?(:element_name)
+            element_name(options.delete(:element_name))
           end
-          super(options)
         end
 
         def element_name(value = nil)

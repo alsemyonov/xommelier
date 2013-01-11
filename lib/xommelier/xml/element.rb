@@ -34,6 +34,7 @@ module Xommelier
       end
 
       def options=(options = {})
+        super
         @options = options
         unless @options[:validate]
           @options[:validate] = !!xmlns.try(:schema)
