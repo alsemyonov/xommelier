@@ -3,7 +3,7 @@ class Numeric
     return nil if value.blank?
     begin
       value =~ /\./ ? Float(value) : Integer(value)
-    rescue ArgumentError => e
+    rescue ArgumentError
       value
     end
   end

@@ -3,7 +3,7 @@ class Float
     return nil if value.blank?
     begin
       Float(value)
-    rescue ArgumentError => e
+    rescue ArgumentError
       value
     end
   end
