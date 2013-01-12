@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 # Specify your gem's dependencies in xommelier.gemspec
 gemspec
 
-group :development do
+group :ide do
   gem 'ripl'
   gem 'ripl-auto_indent',  require: 'ripl/auto_indent'
   gem 'ripl-color_error',  require: 'ripl/color_error'
