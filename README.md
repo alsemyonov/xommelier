@@ -6,9 +6,14 @@ Xommelier is an XML Object Mapper. You could describe some namespace (e.g. Atom)
 
 Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom::History} module for implementation of http://www.w3.org/2005/Atom namespace, Atom Threading, and Feed Paging and Archiving extensions
 
-Xommelier is work in progress:
- [![Build Status](https://secure.travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
- [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/alsemyonov/xommelier)
+## Project links
+
+* [Sources](https://github.com/alsemyonov/xommelier)
+* [Documentation](http://rubydoc.info/gems/xommelier)
+* [Issue Tracker](https://github.com/alsemyonov/xommelier/issues)
+* [Wiki](https://github.com/alsemyonov/xommelier/wiki)
+* [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/alsemyonov/xommelier)
+* [![Build Status](https://travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
 ## Examples with Atom
 
