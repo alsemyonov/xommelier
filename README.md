@@ -14,6 +14,7 @@ Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom:
 * [Wiki](https://github.com/alsemyonov/xommelier/wiki)
 * [![Code Climate](https://codeclimate.com/github/alsemyonov/xommelier.png)](https://codeclimate.com/github/alsemyonov/xommelier)
 * [![Build Status](https://travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
+* [![Dependency Status](https://gemnasium.com/alsemyonov/xommelier.png)](https://gemnasium.com/alsemyonov/xommelier)
 
 ## Examples with Atom
 
