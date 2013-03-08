@@ -1,11 +1,15 @@
 require 'xommelier/version'
 require 'xommelier/core_ext'
+require 'active_support/dependencies/autoload'
 
 module Xommelier
-  autoload :Atom, 'xommelier/atom'
-  autoload :OpenSearch, 'xommelier/open_search'
+  extend ActiveSupport::Autoload
+
+  autoload :Atom
+  autoload :OpenSearch
   autoload :OPML, 'xommelier/opml'
   autoload :RSS, 'xommelier/rss'
+  autoload :Sitemap
 
   # Standard Xommelier Error
   class Error < ::StandardError

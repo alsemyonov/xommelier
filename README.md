@@ -12,7 +12,7 @@ Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom:
 * [Documentation](http://rubydoc.info/gems/xommelier)
 * [Issue Tracker](https://github.com/alsemyonov/xommelier/issues)
 * [Wiki](https://github.com/alsemyonov/xommelier/wiki)
-* [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/alsemyonov/xommelier)
+* [![Code Climate](https://codeclimate.com/github/alsemyonov/xommelier.png)](https://codeclimate.com/github/alsemyonov/xommelier)
 * [![Build Status](https://travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 
 ## Examples with Atom
