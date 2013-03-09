@@ -20,6 +20,7 @@ describe 'RSS feed building' do
     )
   end
 
+  it { subject.class.schema.should be_present }
   it { should be_valid }
   its(:to_xml) { should == load_xml_file('simple_feed.rss') }
 end

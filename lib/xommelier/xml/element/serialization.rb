@@ -45,7 +45,6 @@ module Xommelier
             xml = Nokogiri::XML(xml)
           end
           @_xml_node = options.delete(:node) { xml.at_xpath(element_xpath(xml.document, element_name)) }
-          validate if options[:validate]
 
           if text? && @_xml_node.inner_html.present?
             self.text = @_xml_node.inner_html

@@ -23,46 +23,16 @@ module Xommelier
 
           extend SingletonClassMethods
 
-          delegate :xmlns, :schema, to: 'self.class'
+          delegate :xmlns, to: 'self.class'
         end
 
         module SingletonClassMethods
-          def containing_module
-            @containing_module ||= ("::#{name.gsub(/::[^:]+$/, '')}").constantize
-          end
-
-          def xmlns(value = nil)
-            if value
-              @xmlns = case value
-                       when Module
-                         value.xmlns
-                       else
-                         value
-                       end
-            end
-            @xmlns ||= find_namespace
-          end
-
-          alias_method :xmlns=, :xmlns
-
-          def schema
-            containing_module.schema
-          end
-
           def element_name(element_name = nil)
             @element_name = element_name if element_name
             @element_name ||= find_element_name
           end
 
-          private
-
-          def find_namespace
-            if self == containing_module
-              Xommelier::Xml::DEFAULT_NS
-            else
-              containing_module.xmlns
-            end
-          end
+          protected
 
           def find_element_name
             name.demodulize.underscore.dasherize
@@ -70,6 +40,7 @@ module Xommelier
         end
 
         module ClassMethods
+          # @param [Xommelier::Xml::Element] child
           def inherited(child)
             child.elements   = elements.dup
             child.attributes = attributes.dup
@@ -89,23 +60,23 @@ module Xommelier
               options[:type] = options.delete(:ref)
 
               # Set element name from provided complex type
-              options[:as] ||= options[:type].element_name
+              options[:as]   ||= options[:type].element_name
 
               # Set attribute name from element name
-              name         ||= options[:as].underscore.to_sym
+              name           ||= options[:as].underscore.to_sym
             end
 
             # Try to define element name from
             options[:as] ||= name.to_s.camelize(:lower)
 
             # Set namespace from element type or wrapper xmlns
-            options[:ns]   ||= if referenceable?(options[:type])
-                                 options[:type].xmlns
-                               else
-                                 xmlns
-                               end
+            options[:ns] ||= if referenceable?(options[:type])
+                               options[:type].xmlns
+                             else
+                               xmlns
+                             end
 
-            element = Element.new(name, options)
+            element        = Element.new(name, options)
             elements[name] = element
             define_element_accessors(element)
           end
@@ -224,7 +195,7 @@ module Xommelier
 
         def write_element(name, value, index = nil)
           element = element_options(name)
-          type = element.type
+          type    = element.type
           unless value.is_a?(type)
             value = if element.complex_type? && !value.is_a?(Nokogiri::XML::Node)
                       type.new(value)

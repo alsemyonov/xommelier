@@ -57,12 +57,12 @@ module Xommelier
 
     class Element < Xml::Element
       def self.element(name, options = {})
-        options[:as] ||= name.to_s.camelcase(:lower)
+        options[:as] ||= name.to_s.camelize(:lower)
         super
       end
 
       def self.attribute(name, options = {})
-        options[:as] ||= name.to_s.camelcase(:lower)
+        options[:as] ||= name.to_s.camelize(:lower)
         super
       end
     end
