@@ -79,11 +79,32 @@ module Xommelier
           # @example
           #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
-            options[:ns]   ||= if options[:type].try(:<, Xml::Element)
+            # Set name, type and element name by reference if provided
+            name, options = nil, name if name.is_a?(Hash)
+
+            # Set type and element name from reference
+            if options.key?(:ref)
+              raise "#{options[:ref]} is not subclass of Xommelier::Element" unless referenceable?(options[:ref])
+
+              options[:type] = options.delete(:ref)
+
+              # Set element name from provided complex type
+              options[:as] ||= options[:type].element_name
+
+              # Set attribute name from element name
+              name         ||= options[:as].underscore.to_sym
+            end
+
+            # Try to define element name from
+            options[:as] ||= name.to_s.camelize(:lower)
+
+            # Set namespace from element type or wrapper xmlns
+            options[:ns]   ||= if referenceable?(options[:type])
                                  options[:type].xmlns
                                else
                                  xmlns
                                end
+
             element = Element.new(name, options)
             elements[name] = element
             define_element_accessors(element)
@@ -166,6 +187,10 @@ module Xommelier
           def rw_accessor(name, &block)
             define_method(name, &block)
             alias_method "#{name}=", name
+          end
+
+          def referenceable?(type)
+            type.is_a?(Class) && type < Xommelier::Xml::Element
           end
         end
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet href="xsd.xsl" type="text/xsl"?>
 <xs:schema targetNamespace="http://www.w3.org/2005/Atom" elementFormDefault="qualified"
 	attributeFormDefault="unqualified"
-	xmlns:atom="http://www.w3.org/2005/Atom" 
+	xmlns:atom="http://www.w3.org/2005/Atom"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:xml="http://www.w3.org/XML/1998/namespace">
 	<xs:annotation>

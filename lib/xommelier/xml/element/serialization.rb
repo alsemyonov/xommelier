@@ -133,6 +133,11 @@ module Xommelier
           end
         end
 
+        # @return [Nokogiri::XML::Node]
+        def to_nokogiri
+          ensure_xml_document.root
+        end
+
         def <=>(other)
           if text? && other.is_a?(String)
             text.to_s <=> other
@@ -189,6 +194,11 @@ module Xommelier
 
         def xml_document
           @_xml_node.try(:document)
+        end
+
+        def ensure_xml_document
+          to_xml unless xml_document
+          xml_document
         end
 
         def xmlns_xpath(xml_document = self.xml_document)
