@@ -1,6 +1,8 @@
 require 'xommelier/xml/element'
 require 'active_support/concern'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/hash/slice'
+require 'active_support/core_ext/hash/except'
 require 'nokogiri'
 
 module Xommelier
@@ -12,6 +14,7 @@ module Xommelier
         SERIALIZATION_OPTIONS = {
           encoding: 'utf-8'
         }
+        SAVE_OPTIONS = [:save_with, :indent_text, :indent]
 
         module ClassMethods
           def from_xml(xml, options = {})
@@ -62,6 +65,9 @@ module Xommelier
 
         def to_xml(options = {})
           options = SERIALIZATION_OPTIONS.merge(options)
+          save_options = options.slice(:encoding, *SAVE_OPTIONS)
+          options = options.except(*SAVE_OPTIONS)
+
           element_name = options.delete(:element_name) { self.element_name }
           element_name = element_name.to_s
           element_name << '_' if %w(text class id).include?(element_name)
@@ -108,7 +114,7 @@ module Xommelier
             end
             xml.text(@text) if respond_to?(:text)
           end.instance_variable_get(:@node)
-          builder.to_xml
+          builder.to_xml(save_options)
         end
         alias_method :to_xommelier, :to_xml
 
