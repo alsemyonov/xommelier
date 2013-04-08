@@ -27,7 +27,7 @@ module Xommelier
 
     class CategoryArray < Array
       def self.from_xommelier(value)
-        new(value.split(',').map { |category| Category.from_xommelier(category) })
+        new(value.to_s.split(',').map { |category| Category.from_xommelier(category) })
       end
 
       def to_xommelier
