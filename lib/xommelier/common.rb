@@ -12,7 +12,7 @@ module Xommelier
         when Time, Date, DateTime
           at(value.to_time)
         else
-          raise TypeError, "Invalid value #{value.inspect} for Time822"
+          raise TypeError.new(value, self)
         end
       end
 
