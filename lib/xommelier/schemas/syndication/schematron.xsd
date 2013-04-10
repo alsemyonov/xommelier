@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- schemaVersion of 2001/02/15 -->
 <xs:schema targetNamespace="http://www.ascc.net/xml/schematron" xmlns:sch="http://www.ascc.net/xml/schematron" xmlns="http://www.ascc.net/xml/schematron" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="+//IDN sinica.edu.tw//SGML W3C XML Schema for Schematron 1.5//EN">
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="../xml.xsd">
    	<xs:annotation>
 			<xs:documentation>
        		Get access to the xml: attribute groups for xml:lang

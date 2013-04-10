@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <?xml-stylesheet href="xsd.xsl" type="text/xsl"?>
 <xs:schema targetNamespace="http://www.w3.org/2005/Atom" elementFormDefault="qualified"
-	attributeFormDefault="unqualified"
-	xmlns:atom="http://www.w3.org/2005/Atom"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:xml="http://www.w3.org/XML/1998/namespace">
+           attributeFormDefault="unqualified"
+           xmlns:atom="http://www.w3.org/2005/Atom"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        >
 	<xs:annotation>
 		<xs:documentation>
 			This version of the Atom schema is based on version 1.0 of the format specifications,
 			found here http://www.atomenabled.org/developers/syndication/atom-format-spec.php.
 		</xs:documentation>
 	</xs:annotation>
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd" />
+	<xs:import namespace="http://purl.org/syndication/thread/1.0" schemaLocation="syndication/thr.xsd" />
+	<xs:import namespace="http://purl.org/syndication/history/1.0" schemaLocation="syndication/fh.xsd" />
 	<xs:annotation>
 		<xs:documentation>
 			An Atom document may have two root elements, feed and entry, as defined in section 2.
