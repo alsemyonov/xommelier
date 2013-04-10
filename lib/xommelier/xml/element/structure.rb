@@ -227,7 +227,7 @@ module Xommelier
         def write_attribute(name, value)
           type = attribute_options(name).type
           value = type.from_xommelier(value) unless value.is_a?(type)
-          @attributes[name.to_sym] = value
+          @attributes[name.to_sym] = value if value
         end
 
         def remove_attribute(name)
