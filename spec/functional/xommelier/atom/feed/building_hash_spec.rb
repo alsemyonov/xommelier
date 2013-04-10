@@ -33,5 +33,6 @@ describe Xommelier::Atom::Feed do
 
     its(:to_hash) { should == hash}
     its(:to_xml) { should == load_xml_file('nested_atom') }
+    it_behaves_like 'Valid XML Document'
   end
 end

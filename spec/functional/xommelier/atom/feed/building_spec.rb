@@ -24,7 +24,7 @@ describe Xommelier::Atom::Feed do
     let(:rng)        { Nokogiri::XML::RelaxNG(load_xml_file('atom.rng')) }
     let(:xsd)        { Xommelier::Atom.schema }
 
-    it { should be_valid }
+    it_behaves_like 'Valid XML Document'
 
     its(:to_xml) { should == load_xml_file('simple_feed.atom') }
     it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }

@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'xommelier/atom/full'
 
 describe 'Atom feed building' do
-  let(:feed) do
+  subject(:feed) do
     Xommelier::Atom::Feed.new.tap do |feed|
       feed.id = 'urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6'
       feed.title = 'Example Feed'
@@ -33,8 +33,7 @@ describe 'Atom feed building' do
   let(:rng)        { Nokogiri::XML::RelaxNG(load_xml_file('atom.rng')) }
   let(:xsd)        { Nokogiri::XML::Schema(load_xml_file('atom.xsd')) }
 
-  subject { built_xml }
-
-  it { should == load_xml_file('multi_namespace_feed.atom') }
+  its(:to_xml) { should == load_xml_file('multi_namespace_feed.atom') }
   it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
+  it_behaves_like 'Valid XML Document'
 end

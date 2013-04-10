@@ -30,7 +30,7 @@ describe Xommelier::OpenSearch::Description do
     subject(:description) { Xommelier::OpenSearch::Description.new(hash) }
 
     its(:to_hash) { should == hash }
-    it { should be_valid }
+    it_behaves_like 'Valid XML Document'
     its(:to_xml) { should == load_xml_file('opensearch.full') }
   end
 end
