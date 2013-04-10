@@ -1,6 +1,7 @@
+/bin
 *.gem
-.bundle
-Gemfile.lock
-pkg/*
+/.bundle
+/Gemfile.lock
+/pkg/*
 /doc
 /coverage
