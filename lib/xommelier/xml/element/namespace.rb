@@ -62,16 +62,12 @@ module Xommelier
         # Validates document
         def validate
           @schema_validation_errors = []
-          if self.class.schema
-            #document = ensure_xml_document
+          schema = self.class.schema
+          if schema
+            document = ensure_xml_document
             document = Nokogiri::XML(to_xml)
-            self.class.schema.validate(document).each do |error|
+            schema.validate(document).each do |error|
               @schema_validation_errors << error
-            end
-            if @schema_validation_errors.any?
-              puts self.class, self.class.schema_location, document
-              require 'pp'
-              pp @schema_validation_errors
             end
           else
             raise NoSchemaError.new(self)
