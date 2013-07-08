@@ -260,8 +260,8 @@ module Xommelier
             end
           else
             xmlns  = element.overridden_xmlns || self.xmlns
-            prefix = if xmlns != element.ns
-                       xml.doc.namespaces.key(element.ns.uri)[6..-1].presence
+            prefix = if xmlns != xml.doc.namespaces['xmlns']
+                       xml.doc.namespaces.key(element.ns.uri).try(:[], 6..-1).presence
                      end
             case value
             when Xommelier::Xml::Element
