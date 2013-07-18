@@ -1,3 +1,4 @@
+require 'rspec'
 shared_examples 'Valid XML Document' do
   it { subject.class.schema.should be_present }
   specify do

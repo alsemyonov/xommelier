@@ -35,8 +35,8 @@ module Xommelier
     # Inject common XML attributes to every XML element
     require 'xommelier/xml/element'
     class Element
-      attribute :lang, ns: Xml.xmlns, as: 'xml:lang'
-      attribute :base, type: Uri, ns: Xml.xmlns, as: 'xml:base'
+      attribute :lang, optional: true, xml: true
+      attribute :base, type: Uri, optional: true, xml: true
     end
   end
 end

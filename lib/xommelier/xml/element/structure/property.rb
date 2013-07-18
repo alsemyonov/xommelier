@@ -105,7 +105,9 @@ module Xommelier
         class Attribute < Property
           DEFAULTS = {
             type: String,
-            required: false
+            required: false,
+            optional: true,
+            xml: false
           }
 
           def node_type
@@ -116,8 +118,16 @@ module Xommelier
             options[:required]
           end
 
+          def xml?
+            options[:xml]
+          end
+
           def attribute_name
-            @attribute_name ||= options.delete(:as) { name }.to_s
+            @attribute_name ||= if xml?
+                                  "xml:#{name}"
+                                else
+                                  options.delete(:as) { name }.to_s
+                                end
           end
         end
 

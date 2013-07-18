@@ -22,6 +22,7 @@ module Xommelier
               doc.from_xml(xml, options)
             end
           end
+
           alias_method :parse, :from_xml
           alias_method :from_xommelier, :from_xml
 
@@ -61,6 +62,7 @@ module Xommelier
             deserialize_element(element)
           end
         end
+
         alias_method :from_xommelier, :from_xml
 
         def to_xml(options = {})
@@ -93,17 +95,13 @@ module Xommelier
             attribute = attribute_options(name)
             attribute_name = attribute.attribute_name
             ns = attribute.ns
-            if ns.uri != current_xmlns
-              if ns.as == :xml
-                attribute_name = "xml:#{attribute_name}"
-              elsif (attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence)
-                attribute_name = "#{attr_prefix}:#{attribute_name}"
-              end
+            if ns.uri != current_xmlns && (attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence)
+              attribute_name = "#{attr_prefix}:#{attribute_name}"
             end
-            serialize_attribute(attribute_name, value, attribute_values)
+            serialize_attribute(attribute_name, value, attribute_values) if (value != nil) || attribute.required?
           end
           @_xml_node = (prefix ? builder[prefix] : builder).
-              send(element_name, attribute_values) do |xml|
+            send(element_name, attribute_values) do |xml|
             self.class.elements.each do |name, element|
               value = elements.fetch(name, options[:default])
               unless value == nil
@@ -112,10 +110,11 @@ module Xommelier
                 end
               end
             end
-            xml.text(@text) if respond_to?(:text)
+            xml.text(@text) if text?
           end.instance_variable_get(:@node)
           builder.to_xml(save_options)
         end
+
         alias_method :to_xommelier, :to_xml
 
         def to_hash
@@ -217,7 +216,7 @@ module Xommelier
         # @param [Xommelier::Xml::Element::Structure::Attribute] attribute
         def deserialize_attribute(attribute)
           ns = attribute.ns
-          if ns.default? || ns == xmlns
+          if ns == xmlns || attribute.xml?
             send(attribute.writer, @_xml_node[attribute.attribute_name])
           else
             send(attribute.writer, @_xml_node.attribute_with_ns(attribute.attribute_name, ns.uri.to_s).try(:value))
@@ -259,17 +258,17 @@ module Xommelier
               end
             end
           else
-            xmlns  = element.overridden_xmlns || self.xmlns
+            xmlns = element.overridden_xmlns || self.xmlns
             prefix = if xmlns != xml.doc.namespaces['xmlns']
                        xml.doc.namespaces.key(element.ns.uri).try(:[], 6..-1).presence
                      end
             case value
             when Xommelier::Xml::Element
               value.to_xommelier(
-                builder:      xml,
+                builder: xml,
                 element_name: element.element_name,
-                prefix:       prefix,
-                ns:           element.ns
+                prefix: prefix,
+                ns: element.ns
               )
             else
               (prefix ? xml[prefix] : xml).send(element.serializable_element_name) do
