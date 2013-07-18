@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://github.com/alsemyonov/xommelier'
   s.summary     = %q{Xommelier is an XML Sommelier}
   s.description = %q{XML-Object Mapper with many built-in XML formats supported}
+  s.license     = 'MIT'
 
   s.rubyforge_project = 'xommelier'
 
