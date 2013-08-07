@@ -70,6 +70,14 @@ module Xommelier
                                            end
           end
 
+          def fixed
+            options[:fixed]
+          end
+
+          def fixed?
+            options.key?(:fixed)
+          end
+
           def required?
             options[:count] == :one || options[:count] == :many
           end

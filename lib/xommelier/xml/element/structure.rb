@@ -76,8 +76,14 @@ module Xommelier
                                xmlns
                              end
 
+            if options[:fixed]
+              options[:default] = options[:fixed]
+              options[:count] = :one
+            end
+
             element        = Element.new(name, options)
             elements[name] = element
+
             define_element_accessors(element)
           end
 
@@ -127,6 +133,12 @@ module Xommelier
                   send(plural, [args[0]]) if args.length == 1
                   send(plural)[0]
                 end
+              end
+            elsif element.fixed?
+              # Define singular pseudo-accessors
+              rw_accessor(name) do |*args|
+                write_element(name, element.fixed) if args.length == 1
+                element.fixed
               end
             else
               # Define singular accessors
