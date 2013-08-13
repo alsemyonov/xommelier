@@ -7,6 +7,7 @@ module Xommelier
     class Namespace
       attr_reader :uri, :options, :elements, :attributes
       alias to_s uri
+      alias href uri
 
       def initialize(uri, options = {}, &block)
         @uri     = uri

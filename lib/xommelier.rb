@@ -6,6 +6,7 @@ module Xommelier
   extend ActiveSupport::Autoload
 
   autoload :Atom
+  autoload :DS, 'xommelier/ds'
   autoload :OpenSearch
   autoload :OPML, 'xommelier/opml'
   autoload :RSS, 'xommelier/rss'
