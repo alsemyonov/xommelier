@@ -32,6 +32,21 @@ module Xommelier
         # TODO implement <choice /> logic
         yield
       end
+
+      def self.has_algorithm(map = {})
+        attribute :algorithm, type: Uri, required: true
+
+        const_set(:ALGORITHMS, map)
+        map.each do |name, algorithm|
+          define_singleton_method("new_#{name}") do |options = {}|
+            new(options.merge(algorithm: algorithm))
+          end
+        end
+
+        define_method(:algorithm_name) do
+          map.key(algorithm.to_s)
+        end
+      end
     end
 
     class SignatureValue < Element
@@ -42,13 +57,19 @@ module Xommelier
 
     class CanonicalizationMethod < Element
       any! ns: :any, count: :any
-      attribute :algorithm, type: Uri, required: true
+      has_algorithm(
+        omit_comments: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+        with_comments: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments'
+      )
     end
 
     class SignatureMethod < Element
       element :hmac_output_length, as: 'HMACOutputLength', type: Integer, count: :may
       any! ns: :other, count: :any
-      attribute :algorithm, type: Uri, required: true
+      has_algorithm(
+        rsa_sha1: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1',
+        dsa_sha1: 'http://www.w3.org/2000/09/xmldsig#dsa-sha1'
+      )
     end
 
     class Transform < Element
@@ -56,7 +77,11 @@ module Xommelier
         any! ns: :other
         element :xpath, as: 'XPath'
       end
-      attribute :algorithm, type: Uri, required: true
+      has_algorithm(
+        xslt: 'http://www.w3.org/TR/1999/REC-xslt-19991116',
+        xpath: 'http://www.w3.org/TR/1999/REC-xpath-19991116',
+        enveloped_signature: 'http://www.w3.org/2000/09/xmldsig#enveloped-signature'
+      )
     end
 
     class Transforms < Element
@@ -65,7 +90,9 @@ module Xommelier
 
     class DigestMethod < Element
       any! ns: :other, count: :any
-      attribute :algorithm, type: Uri, required: true
+      has_algorithm(
+        sha1: 'http://www.w3.org/2000/09/xmldsig#sha1'
+      )
     end
 
     class Reference < Element

@@ -1,3 +1,4 @@
+require 'xommelier'
 require 'xommelier/core_ext/string'
 require 'uri'
 
