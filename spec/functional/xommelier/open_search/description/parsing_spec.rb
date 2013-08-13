@@ -5,9 +5,7 @@ require 'xommelier/open_search'
 describe Xommelier::OpenSearch::Description do
   describe '.parse' do
     let(:osd_xml) { load_xml_file('opensearch.full') }
-    let(:description) { Xommelier::OpenSearch::Description.parse(osd_xml) }
-
-    subject { description }
+    subject(:description) { Xommelier::OpenSearch::Description.parse(osd_xml) }
 
     its(:adult_content) { should  be_false }
     its(:attribution) { should == "\n    Search data Copyright 2005, Example.com, Inc., All Rights Reserved\n  " }

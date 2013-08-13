@@ -6,9 +6,7 @@ require 'xommelier/rss'
 describe 'RSS feed' do
   describe 'parsing' do
     let(:rss_xml) { load_xml_file('feed.rss2.0') }
-    let(:feed) { Xommelier::RSS::Rss.parse(rss_xml) }
-
-    subject { feed }
+    subject(:feed) { Xommelier::RSS::Rss.parse(rss_xml) }
 
     it { should be_kind_of(Xommelier::RSS::Rss) }
 
@@ -25,8 +23,7 @@ describe 'RSS feed' do
 
     it { feed.should have(4).items }
     describe 'Item' do
-      let(:item) { feed.items[0] }
-      subject { item }
+      subject(:item) { feed.items[0] }
 
       its(:guid) { should be_an Xommelier::RSS::Guid }
       its('guid.text') { should == 'http://liftoff.msfc.nasa.gov/2003/06/03.html#item573' }

@@ -6,9 +6,7 @@ require 'xommelier/atom/full'
 describe Xommelier::Atom::Feed do
   describe '.parse' do
     let(:atom_xml) { load_xml_file('feed.atom') }
-    let(:feed) { Xommelier::Atom::Feed.parse(atom_xml) }
-
-    subject { feed }
+    subject(:feed) { Xommelier::Atom::Feed.parse(atom_xml) }
 
     it { should be_kind_of(Xommelier::Atom::Feed) }
     it { should respond_to(:complete?) }
@@ -50,8 +48,7 @@ describe Xommelier::Atom::Feed do
 
     it { feed.should have(2).entries }
     describe 'Entry' do
-      let(:entry) { feed.entries[0] }
-      subject { entry }
+      subject(:entry) { feed.entries[0] }
 
       its(:id)        { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' }
       its(:title)     { should == 'Atom-Powered Robots Run Amok' }
@@ -102,8 +99,7 @@ describe Xommelier::Atom::Feed do
       its(:total) { should == 1 }
 
       describe 'Comment' do
-        let(:comment) { feed.entries[1] }
-        subject { comment }
+        subject(:comment) { feed.entries[1] }
 
         its(:id) { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6b' }
         its(:title) { should == 'First comment' }
