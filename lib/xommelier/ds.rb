@@ -1,10 +1,43 @@
 require 'xommelier'
+require 'base64'
+require 'delegate'
 
 module Xommelier
   module DS
     include Xommelier::Xml
 
     xmlns 'http://www.w3.org/2000/09/xmldsig#', as: :ds
+    schema
+
+    class CryptoBinary < DelegateClass(String)
+      def self.from_xommelier(value)
+        return unless value
+        case value
+        when %r(\A[a-zA-Z0-9+/]={0,2}\Z)
+          new Base64.decode64(value)
+        when String
+          new value
+        else
+          new value.to_s
+        end
+      end
+
+      def inspect
+        %(#<#{self.class.name} "#{to_s}">)
+      end
+
+      def raw
+        __getobj__
+      end
+
+      def to_s
+        to_xommelier.to_s
+      end
+
+      def to_xommelier
+        Base64.encode64(raw)
+      end
+    end
 
     class Element < Xml::Element
       def self.find_element_name
@@ -113,22 +146,22 @@ module Xommelier
 
     class DSAKeyValue < Element
       sequence! count: :may do
-        element :p, as: 'P'
-        element :q, as: 'Q'
+        element :p, as: 'P', type: CryptoBinary
+        element :q, as: 'Q', type: CryptoBinary
       end
-      element :g, as: 'G', count: :may
-      element :y, as: 'Y'
-      element :j, as: 'J', count: :may
+      element :g, as: 'G', type: CryptoBinary, count: :may
+      element :y, as: 'Y', type: CryptoBinary
+      element :j, as: 'J', type: CryptoBinary, count: :may
       sequence! count: :may do
-        element :seed, as: 'Seed'
-        element :pgen_counter, as: 'PgenCounter'
+        element :seed, as: 'Seed', type: CryptoBinary
+        element :pgen_counter, as: 'PgenCounter', type: CryptoBinary
       end
     end
 
     class RSAKeyValue < Element
       sequence! do
-        element :modulus, as: 'Modulus'
-        element :exponent, as: 'Exponent'
+        element :modulus, as: 'Modulus', type: CryptoBinary
+        element :exponent, as: 'Exponent', type: CryptoBinary
       end
     end
 
