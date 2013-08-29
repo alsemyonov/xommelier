@@ -32,3 +32,4 @@ module Xommelier
 end
 
 require 'xommelier/xml'
+require 'xommelier/factory_girl'
