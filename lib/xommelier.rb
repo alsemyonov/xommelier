@@ -32,4 +32,4 @@ module Xommelier
 end
 
 require 'xommelier/xml'
-require 'xommelier/factory_girl'
+require 'xommelier/factory_girl' if defined?(FactoryGirl)
