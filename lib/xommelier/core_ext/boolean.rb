@@ -1,3 +1,11 @@
+# coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2011—2013, MIT License #
+# Authors: Alexander Semyonov <al@semyonov.us> #
+#          Artyom Semyonov <sevenov@gmail.com> #
+################################################
+
 require 'xommelier'
 
 class Boolean

@@ -1,0 +1,5 @@
+---
+commit_keyword: ! '#giteaucrat'
+copyright_owner: Alexander Semyonov
+copyright_format: © %{owner}, %{years}, %{license}
+license: MIT License

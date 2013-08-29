@@ -197,5 +197,6 @@ will output
 ## Contributors
 
 * Artyom Semyonov
+* Sergey Ukustov
 
 © Alexander Semyonov, 2011-2012. See MIT-LICENSE for details

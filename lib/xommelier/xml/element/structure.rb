@@ -1,3 +1,10 @@
+# coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2011—2013, MIT License #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'xommelier/xml/element'
 require 'xommelier/xml/element/structure/property'
 require 'active_support/concern'

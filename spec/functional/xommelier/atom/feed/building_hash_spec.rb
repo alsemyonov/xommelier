@@ -1,3 +1,10 @@
+# coding: utf-8
+
+################################################
+# © Alexander Semyonov, 2011—2013, MIT License #
+# Author: Alexander Semyonov <al@semyonov.us>  #
+################################################
+
 require 'spec_helper'
 
 describe Xommelier::Atom::Feed do
@@ -10,8 +17,7 @@ describe Xommelier::Atom::Feed do
         updated: Time.utc(2012, 04, 04, 04, 04),
         contributors: [
                  {name: 'Artyom', email: 'sevenov@gmail.com'},
-                 {name: 'Ivan', email: 'ivan@example.com'},
-                 {name: 'Pyotr', email: 'pyotr@example.com'},
+                 {name: 'Sergey', email: 'sergey@ukstv.me'},
                ],
         entries: [
                  {title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01)},
@@ -24,11 +30,11 @@ describe Xommelier::Atom::Feed do
     subject(:doc) { Xommelier::Atom::Feed.new(hash) }
 
     it { should have(1).authors }
-    it { should have(3).contributors }
+    it { should have(2).contributors }
     it { should have(3).entries }
 
     it { doc.author.should be_an(Xommelier::Atom::Person) }
-    it { doc.contributors[2].should be_an(Xommelier::Atom::Person) }
+    it { doc.contributors[1].should be_an(Xommelier::Atom::Person) }
     it { doc.entries[1].should be_an(Xommelier::Atom::Entry) }
 
     its(:to_hash) { should == hash}
