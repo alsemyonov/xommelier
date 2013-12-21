@@ -199,3 +199,7 @@ will output
 * Artyom Semyonov
 
 © Alexander Semyonov, 2011-2012. See MIT-LICENSE for details
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alsemyonov/xommelier/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
