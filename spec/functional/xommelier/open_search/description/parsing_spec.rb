@@ -13,7 +13,7 @@ describe Xommelier::OpenSearch::Description do
     let(:osd_xml) { load_xml_file('opensearch.full') }
     subject(:description) { Xommelier::OpenSearch::Description.parse(osd_xml) }
 
-    its(:adult_content) { should  be_false }
+    its(:adult_content) { should  be_falsey }
     its(:attribution) { should == "\n    Search data Copyright 2005, Example.com, Inc., All Rights Reserved\n  " }
     its(:contact) { should == 'admin@example.com' }
     its(:description) { should == 'Use Example.com to search the Web.' }
@@ -26,7 +26,7 @@ describe Xommelier::OpenSearch::Description do
     its(:syndication_right) { should == 'open' }
     its(:tags) { should == 'example web' }
 
-    it { should have(2).images }
+    its('images.size') { should == 2 }
     describe '#images' do
       it { subject.images[0].should == 'http://example.com/websearch.png' }
       it { subject.images[0].type.should == 'image/png' }
@@ -38,7 +38,7 @@ describe Xommelier::OpenSearch::Description do
       it { subject.images[1].width.should == 16 }
     end
 
-    it { should have(3).urls }
+    its('urls.size') { should == 3 }
     describe '#urls' do
       it { subject.urls[0].type.should == 'application/atom+xml' }
       it { subject.urls[0].template.should == 'http://example.com/?q={searchTerms}&pw={startPage?}&format=atom' }

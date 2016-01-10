@@ -27,7 +27,7 @@ describe 'RSS feed' do
     its(:managing_editor) { should == 'editor@example.com' }
     its(:web_master) { should == 'webmaster@example.com' }
 
-    it { feed.should have(4).items }
+    it { feed.items.size.should == 4 }
     describe 'Item' do
       subject(:item) { feed.items[0] }
 

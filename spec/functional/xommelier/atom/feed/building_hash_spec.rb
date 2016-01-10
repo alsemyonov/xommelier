@@ -7,7 +7,7 @@
 
 require 'spec_helper'
 
-describe Xommelier::Atom::Feed do
+RSpec.describe Xommelier::Atom::Feed do
   describe '.new(Hash)' do
     let(:hash) do
       {
@@ -29,9 +29,9 @@ describe Xommelier::Atom::Feed do
 
     subject(:doc) { Xommelier::Atom::Feed.new(hash) }
 
-    it { should have(1).authors }
-    it { should have(2).contributors }
-    it { should have(3).entries }
+    its('authors.size') { should == 1 }
+    its('contributors.size') { should == 2 }
+    its('entries.size') { should == 3 }
 
     it { doc.author.should be_an(Xommelier::Atom::Person) }
     it { doc.contributors[1].should be_an(Xommelier::Atom::Person) }

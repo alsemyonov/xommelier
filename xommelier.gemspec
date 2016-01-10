@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'tzinfo', '~> 1.1'
 
   s.add_development_dependency 'rspec', '~> 2.99.0'
+  s.add_development_dependency 'rspec-its', '~> 1.0.1'
   s.add_development_dependency 'rake', '~> 10.4.2'
   s.add_development_dependency 'yard', '~> 0.8.7.6'
   s.add_development_dependency 'simplecov', '~> 0.6.1'

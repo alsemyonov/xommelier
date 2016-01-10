@@ -9,6 +9,7 @@ require 'xommelier/xml/element'
 require 'xommelier/xml/element/structure/property'
 require 'active_support/concern'
 require 'active_support/core_ext/module/delegation'
+require 'active_support/core_ext/module/aliasing'
 require 'active_support/core_ext/object/with_options'
 require 'active_support/core_ext/object/try'
 require 'active_support/core_ext/string/inflections'
@@ -19,6 +20,7 @@ module Xommelier
     class Element
       module Structure
         extend ActiveSupport::Concern
+
 
         included do
           class_attribute :elements, :attributes

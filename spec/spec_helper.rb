@@ -9,11 +9,11 @@ SPEC_ROOT = File.expand_path('../..', __FILE__)
 require 'simplecov'
 require 'bundler/setup'
 require 'rspec'
+require 'rspec/its'
 
 SimpleCov.start
 
 require 'xommelier'
-require 'namespaced_module'
 
 #noinspection RubyResolve
 Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each {|f| require f}

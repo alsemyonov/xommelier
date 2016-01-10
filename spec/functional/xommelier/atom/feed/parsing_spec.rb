@@ -23,7 +23,7 @@ describe Xommelier::Atom::Feed do
     its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 20) }
     its(:subtitle)  { should == 'A <em>lot</em> of effort went into making this effortless' }
 
-    it { should have(3).links }
+    its('links.size') { should == 3 }
     its(:link) { should be_instance_of(Xommelier::Atom::Link) }
     it { feed.links[0].href.should == URI.parse('http://example.ru/') }
     it { feed.links[0].rel.should == 'alternate' }
@@ -35,8 +35,8 @@ describe Xommelier::Atom::Feed do
     its(:html_url) { should == URI.parse('http://example.ru/') }
     its(:next_feed_url) { should == URI.parse('http://example.ru/feed.atom?page=2') }
 
-    its(:archive) { should be_true }
-    its(:complete) { should be_false }
+    its(:archive) { should be_truthy }
+    its(:complete) { should be_falsey }
     its(:rights) { should == '© Mark Pilgrim, 2003' }
     describe 'Generator' do
       subject { feed.generator }
@@ -48,11 +48,11 @@ describe Xommelier::Atom::Feed do
       its(:version) { should == '1.0' }
     end
 
-    it { should have(1).authors }
+    its('authors.size') { should == 1 }
     its(:author) { should be_instance_of(Xommelier::Atom::Person) }
     it { feed.author.name.should == 'John Doe' }
 
-    it { feed.should have(2).entries }
+    it { feed.entries.size.should == 2 }
     describe 'Entry' do
       subject(:entry) { feed.entries[0] }
 
@@ -61,7 +61,7 @@ describe Xommelier::Atom::Feed do
       its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 02) }
       its(:published) { should == Time.utc(2003, 12, 13, 8, 29, 29) + 4.hours }
 
-      it { should have(3).links }
+      its('links.size') { should == 3 }
       its(:link) { should be_instance_of(Xommelier::Atom::Link) }
       it { entry.links[0].href.should == URI.parse('http://example.ru/2003/12/13/atom03') }
       it { entry.links[0].rel.should == 'alternate' }
@@ -78,7 +78,7 @@ describe Xommelier::Atom::Feed do
       its(:html_url) { should == URI.parse('http://example.ru/2003/12/13/atom03') }
       its(:replies_feed_url) { should == URI.parse('http://example.ru/2003/12/13/atom03/comments.atom') }
 
-      it { should have(1).authors }
+      its('authors.size') { should == 1 }
 
       describe 'Author' do
         subject { entry.author }
@@ -87,7 +87,7 @@ describe Xommelier::Atom::Feed do
         its(:email) { should == 'f8dy@example.com' }
       end
 
-      it { should have(2).contributors }
+      its('contributors.size') { should == 2 }
       it { entry.contributors[0].name.should == 'Sam Ruby' }
       it { entry.contributors[1].name.should == 'Joe Gregorio' }
       its(:summary) { should == 'Some text.' }
