@@ -1,5 +1,7 @@
+sudo: false
 language: ruby
+cache: bundler
 rvm:
   - 1.9.3
-before_install: gem install bundler
+  - 2.3.0
 bundler_args: --without ide documentation
