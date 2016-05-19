@@ -11,6 +11,6 @@ describe Xommelier::Xml::Element::Serialization do
   describe 'class' do
     subject { Xommelier::Atom::Feed }
 
-    it { should respond_to(:parse) }
+    it { is_expected.to respond_to(:parse) }
   end
 end

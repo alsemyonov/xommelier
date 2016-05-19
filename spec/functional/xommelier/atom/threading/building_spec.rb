@@ -41,6 +41,6 @@ describe 'Atom feed building' do
   let(:xsd)        { Nokogiri::XML::Schema(load_xml_file('atom.xsd')) }
 
   its(:to_xml) { should == load_xml_file('multi_namespace_feed.atom') }
-  it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
+  it('should conform to RelaxNG schema') { expect(rng.valid?(parsed_xml)).to eq(true) }
   it_behaves_like 'Valid XML Document'
 end

@@ -14,7 +14,7 @@ describe 'RSS feed' do
     let(:rss_xml) { load_xml_file('feed.rss2.0') }
     subject(:feed) { Xommelier::RSS::Rss.parse(rss_xml) }
 
-    it { should be_kind_of(Xommelier::RSS::Rss) }
+    it { is_expected.to be_kind_of(Xommelier::RSS::Rss) }
 
     its(:title) { should == 'Liftoff News' }
     its(:last_build_date) { should == Time.utc(2003, 6, 10, 9, 41, 01) }
@@ -27,7 +27,7 @@ describe 'RSS feed' do
     its(:managing_editor) { should == 'editor@example.com' }
     its(:web_master) { should == 'webmaster@example.com' }
 
-    it { feed.items.size.should == 4 }
+    it { expect(feed.items.size).to eq(4) }
     describe 'Item' do
       subject(:item) { feed.items[0] }
 

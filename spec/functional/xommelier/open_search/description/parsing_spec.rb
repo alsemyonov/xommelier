@@ -28,24 +28,24 @@ describe Xommelier::OpenSearch::Description do
 
     its('images.size') { should == 2 }
     describe '#images' do
-      it { subject.images[0].should == 'http://example.com/websearch.png' }
-      it { subject.images[0].type.should == 'image/png' }
-      it { subject.images[0].height.should == 64 }
-      it { subject.images[0].width.should == 64 }
-      it { subject.images[1].should == 'http://example.com/websearch.ico' }
-      it { subject.images[1].type.should == 'image/vnd.microsoft.icon' }
-      it { subject.images[1].height.should == 16 }
-      it { subject.images[1].width.should == 16 }
+      it { expect(subject.images[0]).to eq('http://example.com/websearch.png') }
+      it { expect(subject.images[0].type).to eq('image/png') }
+      it { expect(subject.images[0].height).to eq(64) }
+      it { expect(subject.images[0].width).to eq(64) }
+      it { expect(subject.images[1]).to eq('http://example.com/websearch.ico') }
+      it { expect(subject.images[1].type).to eq('image/vnd.microsoft.icon') }
+      it { expect(subject.images[1].height).to eq(16) }
+      it { expect(subject.images[1].width).to eq(16) }
     end
 
     its('urls.size') { should == 3 }
     describe '#urls' do
-      it { subject.urls[0].type.should == 'application/atom+xml' }
-      it { subject.urls[0].template.should == 'http://example.com/?q={searchTerms}&pw={startPage?}&format=atom' }
-      it { subject.urls[1].type.should == 'application/rss+xml' }
-      it { subject.urls[1].template.should == 'http://example.com/?q={searchTerms}&pw={startPage?}&format=rss' }
-      it { subject.urls[2].type.should == 'text/html' }
-      it { subject.urls[2].template.should == 'http://example.com/?q={searchTerms}&pw={startPage?}' }
+      it { expect(subject.urls[0].type).to eq('application/atom+xml') }
+      it { expect(subject.urls[0].template).to eq('http://example.com/?q={searchTerms}&pw={startPage?}&format=atom') }
+      it { expect(subject.urls[1].type).to eq('application/rss+xml') }
+      it { expect(subject.urls[1].template).to eq('http://example.com/?q={searchTerms}&pw={startPage?}&format=rss') }
+      it { expect(subject.urls[2].type).to eq('text/html') }
+      it { expect(subject.urls[2].template).to eq('http://example.com/?q={searchTerms}&pw={startPage?}') }
     end
   end
 end

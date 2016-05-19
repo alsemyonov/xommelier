@@ -11,33 +11,33 @@ describe Xommelier::Xml::Element do
   describe 'class' do
     subject { Xommelier::Atom::Link }
 
-    it { should respond_to(:xmlns) }
-    it { subject.xmlns.to_s.should == ATOM_XMLNS }
+    it { is_expected.to respond_to(:xmlns) }
+    it { expect(subject.xmlns.to_s).to eq(ATOM_XMLNS) }
 
-    it { should respond_to(:element_name) }
-    it { subject.element_name.should == 'link' }
+    it { is_expected.to respond_to(:element_name) }
+    it { expect(subject.element_name).to eq('link') }
   end
 
   describe 'instance' do
     subject { Xommelier::Atom::Link.new }
 
-    it { should respond_to(:to_xml) }
-    it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<link xmlns="#{ATOM_XMLNS}"/>\n) }
+    it { is_expected.to respond_to(:to_xml) }
+    it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<link xmlns="#{ATOM_XMLNS}"/>\n)) }
 
     describe 'with text' do
       subject { NamespacedModule::RootWithText.new('Text') }
 
-      it { should respond_to(:text) }
-      it { subject.text.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-text xmlns="http://example.org/">Text</root-with-text>\n) }
+      it { is_expected.to respond_to(:text) }
+      it { expect(subject.text).to eq('Text') }
+      it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<root-with-text xmlns="http://example.org/">Text</root-with-text>\n)) }
     end
 
     describe 'with simple subelements' do
       subject { Xommelier::Atom::Person.new(name: 'Ivan') }
 
-      it { should respond_to(:name) }
-      it { subject.name.should == 'Ivan' }
-      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<person xmlns="#{ATOM_XMLNS}">\n  <name>Ivan</name>\n</person>\n) }
+      it { is_expected.to respond_to(:name) }
+      it { expect(subject.name).to eq('Ivan') }
+      it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<person xmlns="#{ATOM_XMLNS}">\n  <name>Ivan</name>\n</person>\n)) }
     end
 
     describe 'with many simple subelements' do
@@ -45,18 +45,18 @@ describe Xommelier::Xml::Element do
         NamespacedModule::RootWithManySimpleSubelements.new(foos: %w(bar baz))
       end
 
-      it { should respond_to(:foo) }
-      it { subject.foos.should == %w(bar baz) }
-      it { subject.foo.should == 'bar' }
-      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n) }
+      it { is_expected.to respond_to(:foo) }
+      it { expect(subject.foos).to eq(%w(bar baz)) }
+      it { expect(subject.foo).to eq('bar') }
+      it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<root-with-many-simple-subelements xmlns="http://example.org/">\n  <foo>bar</foo>\n  <foo>baz</foo>\n</root-with-many-simple-subelements>\n)) }
     end
 
     describe 'with attribute' do
       subject { NamespacedModule::RootWithAttribute.new(another: 'Difference') }
 
-      it { should respond_to(:another) }
-      it { subject.another.should == 'Difference' }
-      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n) }
+      it { is_expected.to respond_to(:another) }
+      it { expect(subject.another).to eq('Difference') }
+      it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<root-with-attribute xmlns="http://example.org/" another="Difference"/>\n)) }
     end
 
     describe 'with subelements' do
@@ -69,13 +69,13 @@ describe Xommelier::Xml::Element do
         )
       end
 
-      it { should respond_to(:one) }
-      it { should respond_to(:two) }
-      it { should respond_to(:some) }
-      it { should respond_to(:another) }
-      it { subject.another.class.should == NamespacedModule::RootWithSimpleSubelement }
-      it { subject.another.some.should == 'Text' }
-      it { subject.to_xml.should == %(<?xml version="1.0" encoding="utf-8"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n) }
+      it { is_expected.to respond_to(:one) }
+      it { is_expected.to respond_to(:two) }
+      it { is_expected.to respond_to(:some) }
+      it { is_expected.to respond_to(:another) }
+      it { expect(subject.another.class).to eq(NamespacedModule::RootWithSimpleSubelement) }
+      it { expect(subject.another.some).to eq('Text') }
+      it { expect(subject.to_xml).to eq(%(<?xml version="1.0" encoding="utf-8"?>\n<root-with-subelement xmlns="http://example.org/" one="2011-08-15" two="2">\n  <some>Text</some>\n  <another>\n    <some>Text</some>\n  </another>\n</root-with-subelement>\n)) }
     end
   end
 end

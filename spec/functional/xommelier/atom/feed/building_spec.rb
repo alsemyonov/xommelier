@@ -34,7 +34,7 @@ describe Xommelier::Atom::Feed do
     it_behaves_like 'Valid XML Document'
 
     its(:to_xml) { should == load_xml_file('simple_feed.atom') }
-    it('should conform to RelaxNG schema') { rng.valid?(parsed_xml).should == true }
-    it('should conform to XML Schema') { xsd.valid?(parsed_xml).should == true }
+    it('should conform to RelaxNG schema') { expect(rng.valid?(parsed_xml)).to eq(true) }
+    it('should conform to XML Schema') { expect(xsd.valid?(parsed_xml)).to eq(true) }
   end
 end

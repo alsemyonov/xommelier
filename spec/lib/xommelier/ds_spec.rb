@@ -12,19 +12,19 @@ describe Xommelier::DS do
 end
 
 describe Xommelier::DS::Signature do
-  it { should respond_to(:signed_info) }
-  it { should respond_to(:signature_value) }
-  it { should respond_to(:key_info) }
+  it { is_expected.to respond_to(:signed_info) }
+  it { is_expected.to respond_to(:signature_value) }
+  it { is_expected.to respond_to(:key_info) }
 end
 
 describe Xommelier::DS::SignedInfo do
-  it { should respond_to(:canonicalization_method) }
-  it { should respond_to(:signature_method) }
-  it { should respond_to(:reference) }
+  it { is_expected.to respond_to(:canonicalization_method) }
+  it { is_expected.to respond_to(:signature_method) }
+  it { is_expected.to respond_to(:reference) }
 end
 
 describe Xommelier::DS::CanonicalizationMethod do
-  it { should respond_to(:algorithm) }
+  it { is_expected.to respond_to(:algorithm) }
 
   describe '.new_omit_comments' do
     subject { described_class.new_omit_comments }
@@ -38,7 +38,7 @@ describe Xommelier::DS::CanonicalizationMethod do
 end
 
 describe Xommelier::DS::SignatureMethod do
-  it { should respond_to(:hmac_output_length) }
+  it { is_expected.to respond_to(:hmac_output_length) }
 
   describe '.new_rsa_sha1' do
     subject { described_class.new_rsa_sha1 }
@@ -52,7 +52,7 @@ describe Xommelier::DS::SignatureMethod do
 end
 
 describe Xommelier::DS::Transform do
-  it { should respond_to(:xpath) }
+  it { is_expected.to respond_to(:xpath) }
 
   describe '.new_xslt' do
     subject { described_class.new_xslt }
@@ -81,9 +81,9 @@ describe Xommelier::DS::DigestMethod do
 end
 
 describe Xommelier::DS::Reference do
-  it { should respond_to(:digest_method) }
-  it { should respond_to(:digest_value) }
-  it { should respond_to(:uri) }
+  it { is_expected.to respond_to(:digest_method) }
+  it { is_expected.to respond_to(:digest_value) }
+  it { is_expected.to respond_to(:uri) }
 end
 
 describe Xommelier::DS::Signature, '(signature-example-rsa.xml)' do

@@ -33,9 +33,9 @@ RSpec.describe Xommelier::Atom::Feed do
     its('contributors.size') { should == 2 }
     its('entries.size') { should == 3 }
 
-    it { doc.author.should be_an(Xommelier::Atom::Person) }
-    it { doc.contributors[1].should be_an(Xommelier::Atom::Person) }
-    it { doc.entries[1].should be_an(Xommelier::Atom::Entry) }
+    it { expect(doc.author).to be_an(Xommelier::Atom::Person) }
+    it { expect(doc.contributors[1]).to be_an(Xommelier::Atom::Person) }
+    it { expect(doc.entries[1]).to be_an(Xommelier::Atom::Entry) }
 
     its(:to_hash) { should == hash}
     its(:to_xml) { should == load_xml_file('nested_atom') }

@@ -10,25 +10,25 @@ require 'spec_helper'
 describe Xommelier::Xml::Element::Structure do
   subject { NamespacedModule::RootWithSimpleSubelement }
 
-  it { should respond_to(:elements) }
-  it { should respond_to(:element) }
+  it { is_expected.to respond_to(:elements) }
+  it { is_expected.to respond_to(:element) }
   it 'defines subelement' do
-    NamespacedModule::RootWithSimpleSubelement.elements.should have_key(:some)
+    expect(NamespacedModule::RootWithSimpleSubelement.elements).to have_key(:some)
   end
 
-  it { should respond_to(:attributes) }
-  it { should respond_to(:attribute) }
+  it { is_expected.to respond_to(:attributes) }
+  it { is_expected.to respond_to(:attribute) }
   it 'defines attribute' do
-    NamespacedModule::RootWithAttribute.attributes.should have_key(:another)
+    expect(NamespacedModule::RootWithAttribute.attributes).to have_key(:another)
   end
 
-  it { should respond_to(:text) }
+  it { is_expected.to respond_to(:text) }
   it 'defines as containing text' do
-    NamespacedModule::RootWithText.new.should respond_to(:text)
+    expect(NamespacedModule::RootWithText.new).to respond_to(:text)
   end
 
-  it { should respond_to(:xmlns) }
-  it { NamespacedModule::RootWithText.xmlns.uri.should == 'http://example.org/'}
-  it { NamespacedModule::RootWithAttribute.xmlns.uri.should == 'http://example.org/'}
-  it { Xommelier::Atom::Feed.xmlns.uri.should == 'http://www.w3.org/2005/Atom'}
+  it { is_expected.to respond_to(:xmlns) }
+  it { expect(NamespacedModule::RootWithText.xmlns.uri).to eq('http://example.org/')}
+  it { expect(NamespacedModule::RootWithAttribute.xmlns.uri).to eq('http://example.org/')}
+  it { expect(Xommelier::Atom::Feed.xmlns.uri).to eq('http://www.w3.org/2005/Atom')}
 end
