@@ -4,4 +4,10 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in xommelier.gemspec
 gemspec
 
-gem 'simplecov', require: false, group: :test
+group :development do
+  gem 'pry'
+  if RUBY_VERSION >= '2'
+    gem 'pry-byebug'
+    gem 'byebug'
+  end
+end
