@@ -12,7 +12,8 @@ Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom:
 * [Documentation](http://rubydoc.info/gems/xommelier)
 * [Issue Tracker](https://github.com/alsemyonov/xommelier/issues)
 * [Wiki](https://github.com/alsemyonov/xommelier/wiki)
-* [![Code Climate](https://codeclimate.com/github/alsemyonov/xommelier.png)](https://codeclimate.com/github/alsemyonov/xommelier)
+* [![Code Climate](https://codeclimate.com/github/alsemyonov/xommelier/badges/gpa.svg)](https://codeclimate.com/github/alsemyonov/xommelier)
+* [![Test Coverage](https://codeclimate.com/github/alsemyonov/xommelier/badges/coverage.svg)](https://codeclimate.com/github/alsemyonov/xommelier/coverage)
 * [![Build Status](https://travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 * [![Dependency Status](https://gemnasium.com/alsemyonov/xommelier.png)](https://gemnasium.com/alsemyonov/xommelier)
 
