@@ -94,6 +94,7 @@ module Xommelier
             end
             attribute_values.delete("xmlns:#{xmlns.as}")
             attribute_values.delete('xmlns:xml')
+            attribute_values.delete(:xmlns) if self.xmlns.default?
             namespaces = attribute_values
             prefix = nil
           end

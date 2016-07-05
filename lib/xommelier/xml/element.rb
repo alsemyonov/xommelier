@@ -12,6 +12,7 @@ require 'xommelier/xml/element/serialization'
 require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/array/extract_options'
 require 'active_support/core_ext/class/attribute'
+require 'active_support/core_ext/module/delegation'
 
 module Xommelier
   module Xml
@@ -54,6 +55,8 @@ module Xommelier
       def inspect
         %(#<#{self.class.name}:0x#{object_id.to_s(16)} #{inspect_contents}>)
       end
+
+      delegate :match, to: :to_s
 
       private
 
