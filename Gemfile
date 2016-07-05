@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
-  gem 'pry'
   if RUBY_VERSION >= '2'
     gem 'pry-byebug'
     gem 'byebug'
