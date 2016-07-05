@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -15,7 +16,11 @@ module Xommelier
         return unless value
         case value
         when String
-          value = rfc2822(value) rescue parse(value)
+          value = begin
+                    rfc2822(value)
+                  rescue
+                    parse(value)
+                  end
           at(value)
         when Time, Date, DateTime
           at(value.to_time)

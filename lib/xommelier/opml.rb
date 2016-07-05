@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -20,7 +21,7 @@ module Xommelier
       end
 
       def category?
-        [0] == nil
+        [0].nil?
       end
 
       def tag?
@@ -38,7 +39,7 @@ module Xommelier
       end
 
       def to_xommelier
-        map { |category| category.to_xommelier }.join(',')
+        map(&:to_xommelier).join(',')
       end
     end
 
@@ -65,15 +66,14 @@ module Xommelier
         element :owner_email
         element :owner_id
         element :docs
-        #element :expansionState
-        #element :vertScrollState
-        #element :windowTop
-        #element :windowLeft
-        #element :windowBottom
-        #element :windowRight
+        # element :expansionState
+        # element :vertScrollState
+        # element :windowTop
+        # element :windowLeft
+        # element :windowBottom
+        # element :windowRight
       end
     end
-
 
     class Outline < Element
       attribute :text
@@ -100,7 +100,7 @@ module Xommelier
       end
 
       def each_outline(&block)
-        block.call(self)
+        yield(self)
         outlines.each do |outline|
           outline.each_outline(&block)
         end

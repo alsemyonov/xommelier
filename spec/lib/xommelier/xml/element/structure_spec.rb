@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -28,7 +29,7 @@ describe Xommelier::Xml::Element::Structure do
   end
 
   it { is_expected.to respond_to(:xmlns) }
-  it { expect(NamespacedModule::RootWithText.xmlns.uri).to eq('http://example.org/')}
-  it { expect(NamespacedModule::RootWithAttribute.xmlns.uri).to eq('http://example.org/')}
-  it { expect(Xommelier::Atom::Feed.xmlns.uri).to eq('http://www.w3.org/2005/Atom')}
+  it { expect(NamespacedModule::RootWithText.xmlns.uri).to eq('http://example.org/') }
+  it { expect(NamespacedModule::RootWithAttribute.xmlns.uri).to eq('http://example.org/') }
+  it { expect(Xommelier::Atom::Feed.xmlns.uri).to eq('http://www.w3.org/2005/Atom') }
 end

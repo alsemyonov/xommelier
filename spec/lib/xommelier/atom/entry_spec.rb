@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -9,7 +10,7 @@ require 'spec_helper'
 
 describe Xommelier::Atom::Entry do
   describe 'instance' do
-    subject { Xommelier::Atom::Entry.new }
+    subject { described_class.new }
 
     [:id, :title, :updated].each do |must_field|
       it { is_expected.to respond_to(must_field) }

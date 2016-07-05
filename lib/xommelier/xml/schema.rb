@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -59,7 +60,7 @@ module Xommelier
       protected
 
       def _available_schemas
-        @_available_schemas ||= $:.map do |path|
+        @_available_schemas ||= $LOAD_PATH.map do |path|
           Dir[File.join(path, 'xommelier/schemas', '*.xsd')]
         end.flatten.uniq
       end

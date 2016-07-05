@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -58,7 +59,7 @@ module Xommelier
     end
 
     class Query < Element
-      attribute :role#, type: Enum[:request, :example, :related, :correction, :subset, :superset]
+      attribute :role # , type: Enum[:request, :example, :related, :correction, :subset, :superset]
 
       may do
         attribute :title
@@ -88,7 +89,7 @@ module Xommelier
         element :long_name
         element :developer
         element :attribution
-        element :syndication_right, type: String, default: 'open' #, type: Enum[:open, :limited, :private, :closed]
+        element :syndication_right, type: String, default: 'open' # , type: Enum[:open, :limited, :private, :closed]
         element :adult_content, type: Boolean
         element :language, default: '*'
         element :input_encoding, default: 'UTF-8'

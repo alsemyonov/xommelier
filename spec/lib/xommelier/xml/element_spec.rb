@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -65,7 +66,7 @@ describe Xommelier::Xml::Element do
           one: Date.new(2011, 8, 15),
           two: '2',
           some: 'Text',
-          another: {some: 'Text'}
+          another: { some: 'Text' }
         )
       end
 

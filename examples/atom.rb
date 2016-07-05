@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'xommelier/atom'
 require 'xommelier/atom/threading'
 require 'active_support/core_ext'

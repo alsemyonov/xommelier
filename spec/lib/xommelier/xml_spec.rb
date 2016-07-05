@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -8,10 +9,4 @@
 require 'spec_helper'
 
 describe Xommelier::Xml do
-end
-
-describe Xommelier::Atom do
-  it { is_expected.to respond_to(:xmlns) }
-  it { expect(subject.xmlns.to_s).to eq(ATOM_XMLNS) }
-  its(:schema) { should_not be_nil }
 end

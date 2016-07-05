@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -7,6 +8,7 @@
 
 require 'xommelier/xml/element'
 require 'active_support/concern'
+require 'active_support/core_ext/module/delegation'
 
 module Xommelier
   module Xml
@@ -32,20 +34,16 @@ module Xommelier
           end
 
           # @return [Nokogiri::XML::Schema] schema associated with element's namespace or module
-          def schema
-            containing_module.schema
-          end
+          delegate :schema, to: :containing_module
 
           # @return [String] path to schema file
-          def schema_location
-            containing_module.schema_location
-          end
+          delegate :schema_location, to: :containing_module
 
           protected
 
           # @return [Module, Class]
           def containing_module
-            @containing_module ||= ("::#{name.gsub(/::[^:]+$/, '')}").constantize
+            @containing_module ||= "::#{name.gsub(/::[^:]+$/, '')}".constantize
           end
 
           # @return [Xommelier::Xml::Namespace]
@@ -76,7 +74,7 @@ module Xommelier
               @schema_validation_errors << error
             end
           else
-            raise NoSchemaError.new(self)
+            raise NoSchemaError, self
           end
         end
       end

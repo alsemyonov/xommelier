@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -20,7 +21,6 @@ module Xommelier
     class Element
       module Structure
         extend ActiveSupport::Concern
-
 
         included do
           class_attribute :elements, :attributes
@@ -60,7 +60,10 @@ module Xommelier
           #   element :author, type: Xommelier::Atom::Person
           def element(name, options = {})
             # Set name, type and element name by reference if provided
-            name, options = nil, name if name.is_a?(Hash)
+            if name.is_a?(Hash)
+              options = name
+              name = nil
+            end
 
             # Set type and element name from reference
             if options.key?(:ref)
@@ -98,7 +101,7 @@ module Xommelier
 
           # Defines containing attribute
           def attribute(name, options = {})
-            options[:ns]     ||= xmlns
+            options[:ns] ||= xmlns
             attributes[name] = Attribute.new(name, options)
             define_attribute_accessors(name)
           end
@@ -131,7 +134,7 @@ module Xommelier
               rw_accessor(plural) do |*args|
                 args.flatten.each_with_index do |object, index|
                   write_element(name, object, index)
-                end if args.length > 0
+                end unless args.empty?
 
                 @elements[name] ||= []
               end
@@ -195,9 +198,7 @@ module Xommelier
         end
 
         def options=(options = {})
-          if options.key?(:element_name)
-            element_name(options.delete(:element_name))
-          end
+          element_name(options.delete(:element_name)) if options.key?(:element_name)
         end
 
         def element_name(value = nil)
@@ -225,7 +226,7 @@ module Xommelier
                     end
           end
           if index
-            @elements[element.name]        ||= []
+            @elements[element.name] ||= []
             @elements[element.name][index] = value
           else
             @elements[element.name] = value

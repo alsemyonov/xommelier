@@ -6,14 +6,10 @@
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
-require 'date'
+require 'spec_helper'
 
-class Date
-  def self.from_xommelier(value)
-    xmlschema(value)
-  end
-
-  def to_xommelier
-    xmlschema
-  end
+describe Xommelier::DS::Reference do
+  it { is_expected.to respond_to(:digest_method) }
+  it { is_expected.to respond_to(:digest_value) }
+  it { is_expected.to respond_to(:uri) }
 end

@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -9,11 +10,11 @@
 require 'xommelier'
 
 class Boolean
-  #noinspection RubyStringKeysInHashInspection,RubyDuplicatedKeysInHashInspection
+  # noinspection RubyStringKeysInHashInspection,RubyDuplicatedKeysInHashInspection
   BOOLEAN_MAP = {
     true => true, 'true' => true, 'TRUE' => true, '1' => true, '1.0' => true, 1 => true, 1.0 => true,
     false => false, 'false' => false, 'FALSE' => false, '0' => false, '0.0' => false, 0 => false, 0.0 => false, nil => false, '' => false
-  }
+  }.freeze
 
   def self.from_xommelier(value)
     BOOLEAN_MAP[value]

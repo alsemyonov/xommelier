@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -20,8 +21,8 @@ module Xommelier
 
         SERIALIZATION_OPTIONS = {
           encoding: 'utf-8'
-        }
-        SAVE_OPTIONS = [:save_with, :indent_text, :indent]
+        }.freeze
+        SAVE_OPTIONS = [:save_with, :indent_text, :indent].freeze
 
         module ClassMethods
           def from_xml(xml, options = {})
@@ -30,8 +31,8 @@ module Xommelier
             end
           end
 
-          alias_method :parse, :from_xml
-          alias_method :from_xommelier, :from_xml
+          alias parse from_xml
+          alias from_xommelier from_xml
 
           def ns_element(ns, element)
             [ns, element].compact.join(':')
@@ -52,9 +53,7 @@ module Xommelier
         end
 
         def from_xml(xml, options = {})
-          if IO === xml || String === xml
-            xml = Nokogiri::XML(xml)
-          end
+          xml = Nokogiri::XML(xml) if IO === xml || String === xml
           @_xml_node = options.delete(:node) { xml.at_xpath(element_xpath(xml.document, element_name)) }
 
           if text? && @_xml_node.inner_html.present?
@@ -70,7 +69,7 @@ module Xommelier
           end
         end
 
-        alias_method :from_xommelier, :from_xml
+        alias from_xommelier from_xml
 
         def to_xml(options = {})
           options = SERIALIZATION_OPTIONS.merge(options)
@@ -88,7 +87,7 @@ module Xommelier
             prefix = options[:prefix] || namespaces.key(xmlns.uri).try(:[], 6..-1).presence
           else # Root element
             builder = Nokogiri::XML::Builder.new(options)
-            attribute_values = children_namespaces.inject({xmlns: xmlns.uri}) do |hash, ns|
+            attribute_values = children_namespaces.inject(xmlns: xmlns.uri) do |hash, ns|
               hash["xmlns:#{ns.as}"] = ns.uri
               hash
             end
@@ -106,16 +105,15 @@ module Xommelier
             if ns.uri != current_xmlns && (attr_prefix = namespaces.key(ns.uri).try(:[], 6..-1).presence)
               attribute_name = "#{attr_prefix}:#{attribute_name}"
             end
-            serialize_attribute(attribute_name, value, attribute_values) if (value != nil) || attribute.required?
+            serialize_attribute(attribute_name, value, attribute_values) if !value.nil? || attribute.required?
           end
-          @_xml_node = (prefix ? builder[prefix] : builder).
-            send(element_name, attribute_values) do |xml|
+          @_xml_node = (prefix ? builder[prefix] : builder)
+                       .send(element_name, attribute_values) do |xml|
             self.class.elements.each do |name, element|
               value = elements.fetch(name, options[:default])
-              unless value == nil
-                element.override(xmlns: xmlns) do
-                  serialize_element(name, value, xml, element)
-                end
+              next if value.nil?
+              element.override(xmlns: xmlns) do
+                serialize_element(name, value, xml, element)
               end
             end
             xml.text(@text) if text?
@@ -123,7 +121,7 @@ module Xommelier
           builder.to_xml(save_options)
         end
 
-        alias_method :to_xommelier, :to_xml
+        alias to_xommelier to_xml
 
         def to_hash
           attributes.dup.tap do |hash|
@@ -132,7 +130,7 @@ module Xommelier
               if element.multiple?
                 if value.count > 1
                   name = element.plural
-                  value = value.map { |v| v.to_hash } if element.complex_type?
+                  value = value.map(&:to_hash) if element.complex_type?
                 else
                   value = value.first.to_hash
                 end
@@ -186,7 +184,7 @@ module Xommelier
 
         delegate :ns_element, to: 'self.class'
 
-        def element_xpath(xml_doc = self.xml_document, name = nil)
+        def element_xpath(xml_doc = xml_document, name = nil)
           self.class.element_xpath(xml_doc, name)
         end
 

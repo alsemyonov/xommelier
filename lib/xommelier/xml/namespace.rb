@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -60,7 +61,7 @@ module Xommelier
       end
 
       def to_hash
-        {as.to_s => uri.to_s}
+        { as.to_s => uri.to_s }
       end
 
       def attribute_name

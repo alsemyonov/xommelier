@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -17,7 +18,7 @@ end
 
 class Uri < String
   def self.from_xommelier(value)
-    return if value == nil
+    return if value.nil?
     case value
     when URI::Generic
       value

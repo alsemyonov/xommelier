@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -13,21 +14,21 @@ RSpec.describe Xommelier::Atom::Feed do
       {
         title: 'Xommelier nest elements',
         subtitle: 'Xommelier is able to build complex objects from very nested hash',
-        author: {name: 'Alexander', email: 'al@semyonov.us'},
-        updated: Time.utc(2012, 04, 04, 04, 04),
+        author: { name: 'Alexander', email: 'al@semyonov.us' },
+        updated: Time.utc(2012, 4, 4, 4, 4),
         contributors: [
-                 {name: 'Artyom', email: 'sevenov@gmail.com'},
-                 {name: 'Sergey', email: 'sergey@ukstv.me'},
-               ],
+          { name: 'Artyom', email: 'sevenov@gmail.com' },
+          { name: 'Sergey', email: 'sergey@ukstv.me' }
+        ],
         entries: [
-                 {title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01)},
-                 {title: 'Second article', updated: Time.utc(2012, 02, 02, 02, 02)},
-                 {title: 'Third article', updated: Time.utc(2012, 03, 03, 03, 03)},
-               ]
+          { title: 'First article', updated: Time.utc(2012, 1, 1, 1, 1) },
+          { title: 'Second article', updated: Time.utc(2012, 2, 2, 2, 2) },
+          { title: 'Third article', updated: Time.utc(2012, 3, 3, 3, 3) }
+        ]
       }
     end
 
-    subject(:doc) { Xommelier::Atom::Feed.new(hash) }
+    subject(:doc) { described_class.new(hash) }
 
     its('authors.size') { should == 1 }
     its('contributors.size') { should == 2 }
@@ -37,7 +38,7 @@ RSpec.describe Xommelier::Atom::Feed do
     it { expect(doc.contributors[1]).to be_an(Xommelier::Atom::Person) }
     it { expect(doc.entries[1]).to be_an(Xommelier::Atom::Entry) }
 
-    its(:to_hash) { should == hash}
+    its(:to_hash) { should == hash }
     its(:to_xml) { should == load_xml_file('nested_atom') }
     it_behaves_like 'Valid XML Document'
   end

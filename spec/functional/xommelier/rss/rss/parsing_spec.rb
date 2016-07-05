@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -9,7 +10,7 @@ require 'spec_helper'
 require 'active_support/core_ext/numeric/time'
 require 'xommelier/rss'
 
-describe 'RSS feed' do
+describe Xommelier::RSS do
   describe 'parsing' do
     let(:rss_xml) { load_xml_file('feed.rss2.0') }
     subject(:feed) { Xommelier::RSS::Rss.parse(rss_xml) }
@@ -17,8 +18,8 @@ describe 'RSS feed' do
     it { is_expected.to be_kind_of(Xommelier::RSS::Rss) }
 
     its(:title) { should == 'Liftoff News' }
-    its(:last_build_date) { should == Time.utc(2003, 6, 10, 9, 41, 01) }
-    its(:pub_date) { should == Time.utc(2003, 6, 10, 04) }
+    its(:last_build_date) { should == Time.utc(2003, 6, 10, 9, 41, 1) }
+    its(:pub_date) { should == Time.utc(2003, 6, 10, 4) }
     its(:description) { should == 'Liftoff to Space Exploration.' }
     its(:link) { should == URI.parse('http://liftoff.msfc.nasa.gov/') }
     its(:docs) { should == 'http://blogs.law.harvard.edu/tech/rss' }

@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -28,7 +29,7 @@ module Xommelier
 
           if name.present? && name =~ /\(([\w ]+)\)\s?/
             replace(address)
-            @name = $1.to_s
+            @name = Regexp.last_match(1).to_s
             true
           else
             false
@@ -103,10 +104,10 @@ module Xommelier
 
       may do
         # The width of the image in pixels.
-        element :width, type: Integer, default: 88#, max: 144
+        element :width, type: Integer, default: 88 # , max: 144
 
         # The height of the image in pixels.
-        element :height, type: Integer, default: 31#, max: 400
+        element :height, type: Integer, default: 31 # , max: 400
 
         # Text that is included in the TITLE attribute of the link formed around the image in the HTML rendering.
         element :description
@@ -121,14 +122,14 @@ module Xommelier
       any do
         # A time in GMT when aggregators should not request the channel data.
         # The hour beginning at midnight is hour zero.
-        element :hour, type: Integer#, in: 0..23
+        element :hour, type: Integer # , in: 0..23
       end
     end
 
     class SkipDaysList < Element
       any do
         # A day when aggregators should not request the channel data.
-        element :day# in: %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
+        element :day # in: %w(Monday Tuesday Wednesday Thursday Friday Saturday Sunday)
       end
     end
 
@@ -151,7 +152,7 @@ module Xommelier
       text
     end
 
-    # TODO RSS Source complex type
+    # TODO: RSS Source complex type
     class Source < Element
       attribute :url, type: Uri
 
@@ -202,7 +203,7 @@ module Xommelier
       element :title
 
       # The URL to the HTML website corresponding to the channel.
-      element :link, type: Uri #, type: XS::AnyUri
+      element :link, type: Uri # , type: XS::AnyUri
 
       # Phrase or sentence describing the channel.
       element :description
@@ -210,7 +211,7 @@ module Xommelier
       may do
         # The language the channel is written in. This allows aggregators to group all Italian language sites,
         # for example, on a single page.
-        element :language #, type: XS::Language
+        element :language # , type: XS::Language
 
         # Copyright notice for content in the channel.
         element :copyright
@@ -276,9 +277,9 @@ module Xommelier
 
       element :channel, type: Channel, default: {}
 
-      #noinspection RubyResolve
+      # noinspection RubyResolve
       def method_missing(method_name, *args)
-        if channel.respond_to?(method_name) then
+        if channel.respond_to?(method_name)
           channel.send(method_name, *args)
         else
           super

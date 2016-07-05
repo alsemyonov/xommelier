@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -45,7 +46,7 @@ module Xommelier
           end
 
           def inspect
-            "#<Xommelier::X::E::S::#{self.class.name.demodulize}:0x#{object_id.to_s(16)} #{instance_variables.map { |ivar| "#{ivar}=#{instance_variable_get(ivar).inspect}"}.join(' ')}>"
+            "#<Xommelier::X::E::S::#{self.class.name.demodulize}:0x#{object_id.to_s(16)} #{instance_variables.map { |ivar| "#{ivar}=#{instance_variable_get(ivar).inspect}" }.join(' ')}>"
           end
 
           protected
@@ -59,7 +60,7 @@ module Xommelier
           DEFAULTS = {
             type: String,
             count: :one
-          }
+          }.freeze
 
           def node_type
             :element
@@ -123,7 +124,7 @@ module Xommelier
             required: false,
             optional: true,
             xml: false
-          }
+          }.freeze
 
           def node_type
             :attribute
@@ -149,7 +150,7 @@ module Xommelier
         class Text < Property
           DEFAULTS = {
             type: String
-          }
+          }.freeze
 
           def node_type
             :text

@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -12,9 +13,9 @@ require 'xommelier/atom/full'
 describe Xommelier::Atom::Feed do
   describe '.parse' do
     let(:atom_xml) { load_xml_file('feed.atom') }
-    subject(:feed) { Xommelier::Atom::Feed.parse(atom_xml) }
+    subject(:feed) { described_class.parse(atom_xml) }
 
-    it { is_expected.to be_kind_of(Xommelier::Atom::Feed) }
+    it { is_expected.to be_kind_of(described_class) }
     it { is_expected.to respond_to(:complete?) }
     it { is_expected.to respond_to(:archive?) }
 
@@ -42,7 +43,7 @@ describe Xommelier::Atom::Feed do
       subject { feed.generator }
       context '#to_s' do
         it { is_expected.to eq('Example Toolkit') }
-        its(:text)  { should == 'Example Toolkit' }
+        its(:text) { should == 'Example Toolkit' }
       end
       its(:uri)     { should == URI.parse('http://example.com/') }
       its(:version) { should == '1.0' }
@@ -58,7 +59,7 @@ describe Xommelier::Atom::Feed do
 
       its(:id)        { should == 'urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a' }
       its(:title)     { should == 'Atom-Powered Robots Run Amok' }
-      its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 02) }
+      its(:updated)   { should == Time.utc(2003, 12, 13, 18, 30, 2) }
       its(:published) { should == Time.utc(2003, 12, 13, 8, 29, 29) + 4.hours }
 
       its('links.size') { should == 3 }
@@ -82,7 +83,7 @@ describe Xommelier::Atom::Feed do
 
       describe 'Author' do
         subject { entry.author }
-        its(:name) { should == 'Mark Pilgrim'}
+        its(:name) { should == 'Mark Pilgrim' }
         its(:uri) { should == URI.parse('http://example.org/') }
         its(:email) { should == 'f8dy@example.com' }
       end

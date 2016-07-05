@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -46,9 +47,7 @@ module Xommelier
       def options=(options = {})
         super
         @options = options
-        unless @options[:validate]
-          @options[:validate] = !!xmlns.try(:schema)
-        end
+        @options[:validate] = !!xmlns.try(:schema) unless @options[:validate]
         @options.delete(:type)
       end
 
@@ -69,7 +68,7 @@ module Xommelier
       end
 
       def inspect_elements
-        "#{@elements.map { |name, value| "@#{name}=#{value.inspect}" }.join(' ')}" if @elements.any?
+        @elements.map { |name, value| "@#{name}=#{value.inspect}" }.join(' ').to_s if @elements.any?
       end
 
       def inspect_text

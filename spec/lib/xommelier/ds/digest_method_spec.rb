@@ -6,14 +6,11 @@
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
-require 'date'
+require 'spec_helper'
 
-class Date
-  def self.from_xommelier(value)
-    xmlschema(value)
-  end
-
-  def to_xommelier
-    xmlschema
+describe Xommelier::DS::DigestMethod do
+  describe '.new_sha1' do
+    subject { described_class.new_sha1 }
+    its('algorithm.to_s') { should == 'http://www.w3.org/2000/09/xmldsig#sha1' }
   end
 end

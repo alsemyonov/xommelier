@@ -6,14 +6,10 @@
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
-require 'date'
+require 'spec_helper'
 
-class Date
-  def self.from_xommelier(value)
-    xmlschema(value)
-  end
-
-  def to_xommelier
-    xmlschema
-  end
+describe Xommelier::Atom do
+  it { is_expected.to respond_to(:xmlns) }
+  it { expect(subject.xmlns.to_s).to eq(ATOM_XMLNS) }
+  its(:schema) { should_not be_nil }
 end

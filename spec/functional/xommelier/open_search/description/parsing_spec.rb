@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -11,7 +12,7 @@ require 'xommelier/open_search'
 describe Xommelier::OpenSearch::Description do
   describe '.parse' do
     let(:osd_xml) { load_xml_file('opensearch.full') }
-    subject(:description) { Xommelier::OpenSearch::Description.parse(osd_xml) }
+    subject(:description) { described_class.parse(osd_xml) }
 
     its(:adult_content) { should  be_falsey }
     its(:attribution) { should == "\n    Search data Copyright 2005, Example.com, Inc., All Rights Reserved\n  " }

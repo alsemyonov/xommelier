@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -7,7 +8,7 @@
 
 require 'xommelier'
 require 'base64'
-require 'delegate'
+require 'active_support/core_ext/module/delegation'
 
 module Xommelier
   module DS
@@ -30,16 +31,14 @@ module Xommelier
       end
 
       def inspect
-        %(#<#{self.class.name} "#{to_s}">)
+        %(#<#{self.class.name} "#{self}">)
       end
 
       def raw
         __getobj__
       end
 
-      def to_s
-        to_xommelier.to_s
-      end
+      delegate :to_s, to: :to_xommelier
 
       def to_xommelier
         Base64.encode64(raw)
@@ -57,19 +56,19 @@ module Xommelier
         super(name, options)
       end
 
-      def self.any!(options = {})
-        # TODO implement <any /> logic
+      def self.any!(_options = {})
+        # TODO: implement <any /> logic
       end
 
-      def self.choice!(options = {})
-        # TODO implement <choice /> logic
+      def self.choice!(_options = {})
+        # TODO: implement <choice /> logic
         may do
           yield
         end
       end
 
-      def self.sequence!(options = {})
-        # TODO implement <choice /> logic
+      def self.sequence!(_options = {})
+        # TODO: implement <choice /> logic
         yield
       end
 

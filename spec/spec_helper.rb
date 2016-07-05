@@ -1,4 +1,5 @@
 # coding: utf-8
+# frozen_string_literal: true
 
 ################################################
 # © Alexander Semyonov, 2011—2013, MIT License #
@@ -15,12 +16,12 @@ SimpleCov.start
 
 require 'xommelier'
 
-#noinspection RubyResolve
+# noinspection RubyResolve
 Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
 
 ATOM_XMLNS = 'http://www.w3.org/2005/Atom'
 
-#noinspection RubyResolve
+# noinspection RubyResolve
 RSpec.configure do |config|
   config.mock_with :rspec
   config.order = 'random'
