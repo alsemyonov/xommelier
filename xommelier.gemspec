@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.executables   = `git ls-files -- exe/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = %w(lib)
 
   s.add_dependency 'nokogiri', '~> 1.6.8'
@@ -30,4 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'yard', '~> 0.8.7.6'
   s.add_development_dependency 'simplecov', '~> 0.6.1'
   s.add_development_dependency 'redcarpet', '>= 3.2.3'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'pry-byebug'
+  s.add_development_dependency 'byebug'
 end

@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'xommelier'
-require 'nokogiri'
-require 'ripl'
+require 'pry'
+require 'pry-byebug'
 require 'pp'
 
 SPEC_ROOT = File.expand_path('..', __FILE__)
 
-Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each {|f| require f}
+Dir[File.join(SPEC_ROOT, 'spec/support/**/*.rb')].each { |f| require f }
 
-Ripl.start
+Pry.start
