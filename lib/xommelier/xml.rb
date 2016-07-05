@@ -16,7 +16,7 @@ module Xommelier
   module Xml
     extend ActiveSupport::Concern
 
-    DEFAULT_NS = 'http://www.w3.org/XML/1998/namespace'
+    DEFAULT_NS = 'http://www.w3.org/XML/1998/namespace'.freeze
 
     module ClassMethods
       include Schema

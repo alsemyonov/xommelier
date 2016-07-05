@@ -11,7 +11,7 @@ require 'xommelier'
 module Xommelier
   # Implements http://www.opensearch.org/Specifications/OpenSearch/1.1#Url_rel_values
   module OpenSearch
-    MIME_TYPE = 'application/opensearchdescription+xml'
+    MIME_TYPE = 'application/opensearchdescription+xml'.freeze
 
     include Xml
 
