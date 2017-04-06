@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- exe/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = %w(lib)
 
-  s.add_dependency 'nokogiri', '~> 1.6.8'
+  s.add_dependency 'nokogiri', '~> 1.7.1'
   s.add_dependency 'activesupport', '~> 4.2.2'
   s.add_dependency 'activemodel'
   s.add_dependency 'tzinfo', '~> 1.1'
