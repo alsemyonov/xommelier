@@ -9,7 +9,7 @@
 SPEC_ROOT = File.expand_path('../..', __FILE__)
 require 'simplecov'
 require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
+# CodeClimate::TestReporter.start
 require 'bundler/setup'
 require 'rspec'
 require 'rspec/its'

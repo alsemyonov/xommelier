@@ -30,8 +30,8 @@ feed = Xommelier::Atom::Feed.parse(open('spec/fixtures/feed.atom.xml'))
 puts feed.id, feed.title, feed.updated
 
 feed.entries do |entry|
-  puts feed.id, feed.title, feed.published, feed.updated
-  puts feed.content || feed.summary
+  puts entry.id, entry.title, entry.published, entry.updated
+  puts entry.content || entry.summary
 end
 ```
 
@@ -121,24 +121,24 @@ feed = Xommelier::Atom::Feed.new(
   {
     title: 'Xommelier nest elements',
     subtitle: 'Xommelier is able to build complex objects from very nested hash',
-    author: {name: 'Alexander', email: 'al@semyonov.us'},
+    author: { name: 'Alexander', email: 'al@semyonov.us' },
     updated: Time.utc(2012, 04, 04, 04, 04),
     contributors: [
-      {name: 'Ivan', email: 'ivan@example.com'},
-      {name: 'Pyotr', email: 'pyotr@example.com'},
-      {name: 'Sidor', email: 'sidor@example.com'},
+      { name: 'Ivan', email: 'ivan@example.com' },
+      { name: 'Pyotr', email: 'pyotr@example.com' },
+      { name: 'Sidor', email: 'sidor@example.com' },
     ],
     entries: [
-      {title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01)},
-      {title: 'Second article', updated: Time.utc(2012, 02, 02, 02, 02)},
-      {title: 'Third article', updated: Time.utc(2012, 03, 03, 03, 03)},
+      { title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01) },
+      { title: 'Second article', updated: Time.utc(2012, 02, 02, 02, 02) },
+      { title: 'Third article', updated: Time.utc(2012, 03, 03, 03, 03) },
     ]
   }
 )
 
-feed.author # Xommelier::Atom::Person
-feed.contributors[1] # Xommelier::Atom::Person
-feed.entries[2] # Xommelier::Atom::Entry
+Xommelier::Atom::Person === feed.author           #=> true
+Xommelier::Atom::Person === feed.contributors[1]  #=> true
+Xommelier::Atom::Entry === feed.entries[2]        #=> true
 
 puts feed.to_xml
 ```
@@ -197,8 +197,8 @@ will output
 
 ## Contributors
 
-* Artyom Semyonov
-* Sergey Ukustov
+* Art Semyonov, [@artps](https://github.com/artps)
+* Sergey Ukustov, [@ukstv](https://github.com/ukstv)
 
 © Alexander Semyonov, 2011-2012. See MIT-LICENSE for details
 
