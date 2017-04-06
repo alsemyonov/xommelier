@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:fh="http://purl.org/syndication/history/1.0" xmlns:thr="http://purl.org/syndication/thread/1.0">
+  <id>http://example.com/blog</id>
+  <title>Example.com blog</title>
+  <entry>
+    <id>http://example.com/blog/2012/03/05</id>
+    <title>Happy Xommelier's day!</title>
+    <updated>2017-04-02T00:34:38+03:00</updated>
+    <link href="http://example.com/blog/2012/03/05" rel="alternate" type="text/html"/>
+    <link href="http://example.com/blog/2012/03/05/comments.atom" rel="replies" type="application/atom+xml" thr:count="5"/>
+  </entry>
+  <entry>
+    <id>http://example.com/blog/2012/03/05#comment_0</id>
+    <title>Hooray!</title>
+    <updated>2017-04-02T00:34:38+03:00</updated>
+    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
+  </entry>
+  <entry>
+    <id>http://example.com/blog/2012/03/05#comment_1</id>
+    <title>Hooray! Hooray!</title>
+    <updated>2017-04-03T00:34:38+03:00</updated>
+    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
+  </entry>
+  <entry>
+    <id>http://example.com/blog/2012/03/05#comment_2</id>
+    <title>Hooray! Hooray! Hooray!</title>
+    <updated>2017-04-04T00:34:38+03:00</updated>
+    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
+  </entry>
+  <fh:complete/>
+</feed>

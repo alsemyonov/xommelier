@@ -17,7 +17,7 @@ Bundler/OrderedGems:
 # Offense count: 1
 Lint/ShadowingOuterLocalVariable:
   Exclude:
-    - 'examples/atom.rb'
+    - 'example/atom.rb'
 
 # Offense count: 9
 Metrics/AbcSize:
@@ -177,8 +177,8 @@ Style/EmptyLineAfterMagicComment:
     - 'bin/console'
     - 'bin/rake'
     - 'bin/rubocop'
-    - 'examples/atom.rb'
-    - 'examples/xml.rb'
+    - 'example/atom.rb'
+    - 'example/xml.rb'
 
 # Offense count: 2
 # Configuration parameters: MinBodyLength.

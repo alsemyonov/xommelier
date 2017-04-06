@@ -17,170 +17,13 @@ Look into {Xommelier::Atom}, {Xommelier::Atom::Threading}, and {Xommelier::Atom:
 * [![Build Status](https://travis-ci.org/alsemyonov/xommelier.png?branch=master)](http://travis-ci.org/alsemyonov/xommelier)
 * [![Dependency Status](https://gemnasium.com/alsemyonov/xommelier.png)](https://gemnasium.com/alsemyonov/xommelier)
 
-## Examples with Atom
+## Examples
 
-```ruby
-require 'xommelier/atom/full'
-```
+See `examples` dir for examples of:
 
-### Reading a feed
-
-```ruby
-feed = Xommelier::Atom::Feed.parse(open('spec/fixtures/feed.atom.xml'))
-puts feed.id, feed.title, feed.updated
-
-feed.entries do |entry|
-  puts entry.id, entry.title, entry.published, entry.updated
-  puts entry.content || entry.summary
-end
-```
-
-### Building a feed
-
-```ruby
-feed = Xommelier::Atom::Feed.new
-feed.id = 'http://example.com/blog'
-feed.title = 'Example.com blog'
-feed.complete = Xommelier::Atom::History::Complete.new
-
-entry = feed.entry = Xommelier::Atom::Entry.new(
-  id: 'http://example.com/blog/2012/03/05',
-  title: "Happy Xommelier's day!",
-  updated: 5.days.ago
-).tap do |entry|
-  entry.link = Xommelier::Atom::Link.new(
-    href: entry.id,
-    rel:  'alternate',
-    type: 'text/html'
-  )
-  entry.links << Xommelier::Atom::Link.new(
-    href:  "#{entry.id}/comments.atom",
-    rel:   'replies',
-    type:  'application/atom+xml',
-    count: 5
-  )
-end
-
-# Add Comments
-3.times do |i|
-  feed.entries << Xommelier::Atom::Entry.new(
-    id: "http://example.com/blog/2012/03/05#comment_#{i}",
-    title: ('Hooray! ' * (i + 1)).strip,
-    updated: (5 - i).days.ago
-  ).tap do |comment|
-    comment.in_reply_to = Xommelier::Atom::Threading::InReplyTo.new(
-      ref: entry.id,
-      href: entry.link.href
-    )
-  end
-end
-
-puts feed.to_xml
-```
-
-will output:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:fh="http://purl.org/syndication/history/1.0">
-  <id>http://example.com/blog</id>
-  <title>Example.com blog</title>
-  <fh:complete/>
-  <entry>
-    <id>http://example.com/blog/2012/03/05</id>
-    <title>Happy Xommelier's day!</title>
-    <updated>2012-02-29T07:52:51+04:00</updated>
-    <link href="http://example.com/blog/2012/03/05" rel="alternate" type="text/html"/>
-    <link href="http://example.com/blog/2012/03/05/comments.atom" rel="replies" type="application/atom+xml" thr:count="5"/>
-  </entry>
-  <entry>
-    <id>http://example.com/blog/2012/03/05#comment_0</id>
-    <title>Hooray!</title>
-    <updated>2012-02-29T07:52:51+04:00</updated>
-    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
-  </entry>
-  <entry>
-    <id>http://example.com/blog/2012/03/05#comment_1</id>
-    <title>Hooray! Hooray!</title>
-    <updated>2012-03-01T07:52:51+04:00</updated>
-    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
-  </entry>
-  <entry>
-    <id>http://example.com/blog/2012/03/05#comment_2</id>
-    <title>Hooray! Hooray! Hooray!</title>
-    <updated>2012-03-02T07:52:51+04:00</updated>
-    <thr:in-reply-to ref="http://example.com/blog/2012/03/05" href="http://example.com/blog/2012/03/05"/>
-  </entry>
-</feed>
-```
-
-### Building from hash
-
-```ruby
-feed = Xommelier::Atom::Feed.new(
-  {
-    title: 'Xommelier nest elements',
-    subtitle: 'Xommelier is able to build complex objects from very nested hash',
-    author: { name: 'Alex', email: 'al@semyonov.us' },
-    updated: Time.utc(2012, 04, 04, 04, 04),
-    contributors: [
-      { name: 'Ivan', email: 'ivan@example.com' },
-      { name: 'Pyotr', email: 'pyotr@example.com' },
-      { name: 'Sidor', email: 'sidor@example.com' },
-    ],
-    entries: [
-      { title: 'First article', updated: Time.utc(2012, 01, 01, 01, 01) },
-      { title: 'Second article', updated: Time.utc(2012, 02, 02, 02, 02) },
-      { title: 'Third article', updated: Time.utc(2012, 03, 03, 03, 03) },
-    ]
-  }
-)
-
-Xommelier::Atom::Person === feed.author           #=> true
-Xommelier::Atom::Person === feed.contributors[1]  #=> true
-Xommelier::Atom::Entry === feed.entries[2]        #=> true
-
-puts feed.to_xml
-```
-
-will output
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Xommelier nest elements</title>
-  <subtitle>Xommelier is able to build complex objects from very nested hash</subtitle>
-  <author>
-    <name>Alex</name>
-    <email>al@semyonov.us</email>
-  </author>
-  <updated>2012-04-04T04:04:00Z</updated>
-  <contributor>
-    <name>Ivan</name>
-    <email>ivan@example.com</email>
-  </contributor>
-  <contributor>
-    <name>Pyotr</name>
-    <email>pyotr@example.com</email>
-  </contributor>
-  <contributor>
-    <name>Sidor</name>
-    <email>sidor@example.com</email>
-  </contributor>
-  <entry>
-    <title>First article</title>
-    <updated>2012-01-01T01:01:00Z</updated>
-  </entry>
-  <entry>
-    <title>Second article</title>
-    <updated>2012-02-02T02:02:00Z</updated>
-  </entry>
-  <entry>
-    <title>Third article</title>
-    <updated>2012-03-03T03:03:00Z</updated>
-  </entry>
-</feed>
-```
+* reading an Atom feed;
+* building an Atom feed;
+* building an Atom feed from hash;
 
 ## Built in XML namespaces:
 
@@ -191,6 +34,7 @@ will output
 
 ## TODO
 
+* Rebuild on top of ROM
 * Validating built XML against RelaxNG
 * Converting XML Schema, RelaxNG, RelaxNG Compact and DTD into Xommelier Ruby DSL
 * ActiveRecord-like automatic loading of XML Schema, RelaxNG, RelaxNG Compact and DTD without needing to write it down into ruby code

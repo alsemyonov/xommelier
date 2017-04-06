@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors = ['Alexander Semyonov']
   s.email = %w[al@semyonov.us]
   s.homepage = 'https://gitlab.com/alsemyonov/xommelier'
-  s.summary = 'Xommelier is an XML Sommelier'
+  s.summary = 'Xommelier. The XML Sommelier'
   s.description = 'XML-Object Mapper with many built-in XML formats supported'
   s.license = 'MIT'
 

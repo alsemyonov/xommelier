@@ -1,2 +1,6 @@
 --title=Xommelier
 --markup=markdown
+--files=example/building_an_atom_feed.rb
+--files=example/building_an_atom_feed_using_hash.rb
+--files=example/reading_an_atom_feed.rb
+--readme=README.md

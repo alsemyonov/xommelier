@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Xommelier nest elements</title>
+  <updated>2012-04-04T04:04:00Z</updated>
+  <subtitle>Xommelier is able to build complex objects from very nested hash</subtitle>
+  <author>
+    <name>Alex</name>
+    <email>al@semyonov.us</email>
+  </author>
+  <contributor>
+    <name>Ivan</name>
+    <email>ivan@example.com</email>
+  </contributor>
+  <contributor>
+    <name>Pyotr</name>
+    <email>pyotr@example.com</email>
+  </contributor>
+  <contributor>
+    <name>Sidor</name>
+    <email>sidor@example.com</email>
+  </contributor>
+  <entry>
+    <title>First article</title>
+    <updated>2012-01-01T01:01:00Z</updated>
+  </entry>
+  <entry>
+    <title>Second article</title>
+    <updated>2012-02-02T02:02:00Z</updated>
+  </entry>
+  <entry>
+    <title>Third article</title>
+    <updated>2012-03-03T03:03:00Z</updated>
+  </entry>
+</feed>
