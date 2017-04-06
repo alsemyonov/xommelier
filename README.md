@@ -121,7 +121,7 @@ feed = Xommelier::Atom::Feed.new(
   {
     title: 'Xommelier nest elements',
     subtitle: 'Xommelier is able to build complex objects from very nested hash',
-    author: { name: 'Alexander', email: 'al@semyonov.us' },
+    author: { name: 'Alex', email: 'al@semyonov.us' },
     updated: Time.utc(2012, 04, 04, 04, 04),
     contributors: [
       { name: 'Ivan', email: 'ivan@example.com' },
@@ -151,7 +151,7 @@ will output
   <title>Xommelier nest elements</title>
   <subtitle>Xommelier is able to build complex objects from very nested hash</subtitle>
   <author>
-    <name>Alexander</name>
+    <name>Alex</name>
     <email>al@semyonov.us</email>
   </author>
   <updated>2012-04-04T04:04:00Z</updated>
@@ -200,8 +200,6 @@ will output
 * Art Semyonov, [@artps](https://github.com/artps)
 * Sergey Ukustov, [@ukstv](https://github.com/ukstv)
 
-© Alexander Semyonov, 2011-2012. See MIT-LICENSE for details
-
+© Alex Semyonov, 2011-2017. See LICENSE for details
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/alsemyonov/xommelier/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
