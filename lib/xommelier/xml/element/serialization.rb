@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 ################################################
@@ -56,9 +55,7 @@ module Xommelier
           xml = Nokogiri::XML(xml) if IO === xml || String === xml
           @_xml_node = options.delete(:node) { xml.at_xpath(element_xpath(xml.document, element_name)) }
 
-          if text? && @_xml_node.inner_html.present?
-            self.text = @_xml_node.inner_html
-          end
+          self.text = @_xml_node.inner_html if text? && @_xml_node.inner_html.present?
 
           self.class.attributes.values.each do |attribute|
             deserialize_attribute(attribute)
@@ -265,9 +262,7 @@ module Xommelier
             end
           else
             xmlns = element.overridden_xmlns || self.xmlns
-            prefix = if xmlns != xml.doc.namespaces['xmlns']
-                       xml.doc.namespaces.key(element.ns.uri).try(:[], 6..-1).presence
-                     end
+            prefix = (xml.doc.namespaces.key(element.ns.uri).try(:[], 6..-1).presence if xmlns != xml.doc.namespaces['xmlns'])
             case value
             when Xommelier::Xml::Element
               value.to_xommelier(

@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 ################################################
@@ -41,7 +40,7 @@ describe Xommelier::Atom::Feed do
     its(:rights) { should == '© Mark Pilgrim, 2003' }
     describe 'Generator' do
       subject { feed.generator }
-      context '#to_s' do
+      describe '#to_s' do
         it { is_expected.to eq('Example Toolkit') }
         its(:text) { should == 'Example Toolkit' }
       end
@@ -92,7 +91,7 @@ describe Xommelier::Atom::Feed do
       it { expect(entry.contributors[0].name).to eq('Sam Ruby') }
       it { expect(entry.contributors[1].name).to eq('Joe Gregorio') }
       its(:summary) { should == 'Some text.' }
-      context 'Content' do
+      describe 'Content' do
         subject { entry.content }
         it { is_expected.to match(/#{Regexp.escape('[Update: The Atom draft is finished.]')}/) }
         its(:text) do

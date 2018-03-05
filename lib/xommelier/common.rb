@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 ################################################
@@ -18,7 +17,7 @@ module Xommelier
         when String
           value = begin
                     rfc2822(value)
-                  rescue
+                  rescue StandardError
                     parse(value)
                   end
           at(value)

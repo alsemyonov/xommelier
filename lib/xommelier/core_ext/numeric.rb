@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 ################################################
@@ -10,7 +9,7 @@ class Numeric
   def self.from_xommelier(value)
     return nil if value.blank?
     begin
-      value =~ /\./ ? Float(value) : Integer(value)
+      value.match?(/\./) ? Float(value) : Integer(value)
     rescue ArgumentError
       value
     end

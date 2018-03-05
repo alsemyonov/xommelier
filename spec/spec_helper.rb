@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 ################################################
@@ -6,7 +5,7 @@
 # Author: Alexander Semyonov <al@semyonov.us>  #
 ################################################
 
-SPEC_ROOT = File.expand_path('../..', __FILE__)
+SPEC_ROOT = File.expand_path('..', __dir__)
 require 'simplecov'
 require 'codeclimate-test-reporter'
 # CodeClimate::TestReporter.start
