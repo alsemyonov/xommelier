@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- exe/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = %w[lib]
 
-  s.add_dependency 'nokogiri', '~> 1.7.1'
+  s.add_dependency 'nokogiri', '~> 1.8.1'
   s.add_dependency 'activesupport', '>= 4.2.2'
   s.add_dependency 'activemodel'
   s.add_dependency 'tzinfo', '~> 1.2'
@@ -34,5 +34,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '~> 0.48'
   s.add_development_dependency 'rubocop-rspec'
   s.add_development_dependency 'simplecov', '~> 0.13.0'
-  s.add_development_dependency 'yard', '~> 0.9.8'
+  s.add_development_dependency 'yard', '~> 0.9.11'
 end
