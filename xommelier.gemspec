@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activemodel'
   s.add_dependency 'activesupport', '>= 4.2.2'
-  s.add_dependency 'nokogiri', '~> 1.8.1'
+  s.add_dependency 'nokogiri', '~> 1.8.3'
   s.add_dependency 'tzinfo', '~> 1.2'
 
   s.add_development_dependency 'bundler-audit'
