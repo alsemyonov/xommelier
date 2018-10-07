@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push Pathname(__dir__).join('lib')
-require 'xommelier/version'
+require_relative 'lib/xommelier/version'
 
 Gem::Specification.new do |s|
   s.name = 'xommelier'
